@@ -20,4 +20,5 @@ git remote add origin https://github.com/yourusername/webBanQuanAoTheThao.git
 git push origin main
 
 # Pull code từ GitHub về
-git push origin main
+
+git pull origin main
