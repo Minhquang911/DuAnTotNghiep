@@ -8,6 +8,7 @@ Route::get('/', function () {
 });
 Route::prefix('admin')->group(function () {
     Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions.index');
+    Route::get('/promotions/create', [PromotionController::class, 'create'])->name('promotions.create');
     Route::post('/promotions', [PromotionController::class, 'store'])->name('promotions.store');
     Route::get('/promotions/{id}/edit', [PromotionController::class, 'edit'])->name('promotions.edit');
     Route::put('/promotions/{id}', [PromotionController::class, 'update'])->name('promotions.update');

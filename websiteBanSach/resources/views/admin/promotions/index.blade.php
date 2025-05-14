@@ -1,31 +1,14 @@
+{{-- resources/views/admin/promotions/index.blade.php --}}
 @extends('admin.layout.AdminLayout')
 @section('title', 'Quản lý mã khuyến mãi')
 
 @section('content')
-<h3>Quản lý mã khuyến mãi</h3>
+<h3>Danh sách mã khuyến mãi</h3>
+
+<a href="{{ route('promotions.create') }}" class="btn btn-success mb-3">+ Thêm mới</a>
 
 @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
 @if(session('error')) <div class="alert alert-danger">{{ session('error') }}</div> @endif
-
-<form method="POST" action="{{ isset($promotion) ? route('promotions.update', $promotion->id) : route('promotions.store') }}">
-    @csrf
-    @if(isset($promotion)) @method('PUT') @endif
-    <div class="row g-2 mb-3">
-        <div class="col-md-2"><input name="code" class="form-control" placeholder="Mã" value="{{ $promotion->code ?? '' }}" required></div>
-        <div class="col-md-2"><select name="discount_type" class="form-select">
-            <option value="percent" {{ (isset($promotion) && $promotion->discount_type == 'percent') ? 'selected' : '' }}>%</option>
-            <option value="fixed" {{ (isset($promotion) && $promotion->discount_type == 'fixed') ? 'selected' : '' }}>VNĐ</option>
-        </select></div>
-        <div class="col-md-2"><input name="discount_value" type="number" step="0.01" class="form-control" placeholder="Giá trị" value="{{ $promotion->discount_value ?? '' }}" required></div>
-        <div class="col-md-2"><input name="min_order_amount" type="number" step="0.01" class="form-control" placeholder="Tối thiểu" value="{{ $promotion->min_order_amount ?? '' }}"></div>
-        <div class="col-md-2"><input name="max_usage" type="number" class="form-control" placeholder="Lượt dùng" value="{{ $promotion->max_usage ?? '' }}"></div>
-        <div class="col-md-2">
-            <button class="btn btn-{{ isset($promotion) ? 'warning' : 'primary' }} w-100">
-                {{ isset($promotion) ? 'Cập nhật' : 'Thêm mã' }}
-            </button>
-        </div>
-    </div>
-</form>
 
 <table class="table table-bordered">
     <thead>
