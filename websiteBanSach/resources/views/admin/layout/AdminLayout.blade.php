@@ -68,13 +68,19 @@
       @include('admin.layout.blocks.header')
       <!--end::Header-->
       <!--begin::Sidebar-->
+     
       @include('admin.layout.blocks.aside')
       <!--end::Sidebar-->
       <!--begin::App Main-->
-      @yield('content')
+      <div class="content-wrapper px-4 pt-3">
+        <section class="content">
+            @yield('content')
+        </section>
+      </div>
       <!--end::App Main-->
       <!--begin::Footer-->
       @include('admin.layout.blocks.footer')
+       
       <!--end::Footer-->
     </div>
     <!--end::App Wrapper-->
