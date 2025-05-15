@@ -12,7 +12,10 @@ class PromotionController extends Controller
         $promotions = Promotion::latest()->get();
         return view('admin.promotions.index', compact('promotions'));
     }
-
+    public function create()
+    {
+        return view('admin.promotions.create');
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -21,19 +24,25 @@ class PromotionController extends Controller
             'discount_value' => 'required|numeric|min:0',
         ]);
         Promotion::create($request->all());
-        return back()->with('success', 'Tạo mã thành công');
+        return redirect()->route('promotions.index')->with('success', 'Tạo mã thành công');
     }
 
     public function edit($id)
     {
         $promotion = Promotion::findOrFail($id);
-        $promotions = Promotion::latest()->get();
-        return view('admin.promotions.index', compact('promotions', 'promotion'));
+        return view('admin.promotions.edit', compact('promotion'));
     }
 
     public function update(Request $request, $id)
     {
         $promotion = Promotion::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|unique:promotions,code,' . $promotion->id,
+            'discount_type' => 'required|in:percent,fixed',
+            'discount_value' => 'required|numeric|min:0',
+        ]);
+
         $promotion->update($request->all());
         return redirect()->route('promotions.index')->with('success', 'Cập nhật mã thành công');
     }
