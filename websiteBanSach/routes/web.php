@@ -19,4 +19,9 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
+
+        Route::get('orders/search', [OrderController::class, 'search'])->name('orders.search');
+        Route::resource('orders', OrderController::class);
+        Route::resource('order-statuses', OrderStatusController::class);
+
 });
