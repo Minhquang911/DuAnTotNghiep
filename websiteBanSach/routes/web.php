@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderStatusController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
