@@ -1,9 +1,6 @@
 <?php
-
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PromotionController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderStatusController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,13 +14,14 @@ Route::prefix('admin')->group(function () {
     Route::put('/promotions/{id}', [PromotionController::class, 'update'])->name('promotions.update');
     Route::delete('/promotions/{id}', [PromotionController::class, 'destroy'])->name('promotions.destroy');
     Route::post('/promotions/apply', [PromotionController::class, 'apply'])->name('promotions.apply');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');         // Danh sách
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // Form tạo mới
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');         // Xử lý tạo mới
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');  // Form sửa
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');   // Xử lý cập nhật
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Xóa
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('categories', CategoryController::class);
 
-        Route::get('orders/search', [OrderController::class, 'search'])->name('orders.search');
-        Route::resource('orders', OrderController::class);
-        Route::resource('order-statuses', OrderStatusController::class);
-
-});
