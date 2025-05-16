@@ -1,5 +1,8 @@
 # Clone repository về máy
-git clone https://github.com/yourusername/webBanQuanAoTheThao.git
+git clone https://
+
+# Thêm remote repository
+git remote add origin https://
 
 # Di chuyển vào thư mục dự án
 cd webBanQuanAoTheThao
@@ -12,9 +15,6 @@ git add .
 
 # Commit các thay đổi
 git commit -m "Initial commit"
-
-# Thêm remote repository
-git remote add origin https://github.com/yourusername/webBanQuanAoTheThao.git
 
 # Push code lên GitHub
 git push origin main
