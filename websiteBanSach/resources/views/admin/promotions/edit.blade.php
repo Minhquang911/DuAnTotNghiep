@@ -1,4 +1,3 @@
-{{-- resources/views/admin/promotions/edit.blade.php --}}
 @extends('admin.layout.AdminLayout')
 @section('title', 'Chỉnh sửa mã khuyến mãi')
 
@@ -22,6 +21,8 @@
         <div class="col-md-2"><input name="discount_value" type="number" step="0.01" class="form-control" placeholder="Giá trị" value="{{ $promotion->discount_value }}" required></div>
         <div class="col-md-2"><input name="min_order_amount" type="number" step="0.01" class="form-control" placeholder="Tối thiểu" value="{{ $promotion->min_order_amount }}"></div>
         <div class="col-md-2"><input name="max_usage" type="number" class="form-control" placeholder="Lượt dùng" value="{{ $promotion->max_usage }}"></div>
+        <div class="col-md-2"><input name="start_date" type="date" class="form-control" value="{{ $promotion->start_date }}"></div>
+        <div class="col-md-2"><input name="end_date" type="date" class="form-control" value="{{ $promotion->end_date }}"></div>
         <div class="col-md-2">
             <button class="btn btn-warning w-100">Cập nhật</button>
         </div>
