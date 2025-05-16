@@ -15,6 +15,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/promotions/{id}/edit', [PromotionController::class, 'edit'])->name('promotions.edit');
     Route::put('/promotions/{id}', [PromotionController::class, 'update'])->name('promotions.update');
     Route::delete('/promotions/{id}', [PromotionController::class, 'destroy'])->name('promotions.destroy');
+    Route::patch('/promotions/{id}/toggle', [PromotionController::class, 'toggle'])->name('promotions.toggle');
     Route::post('/promotions/apply', [PromotionController::class, 'apply'])->name('promotions.apply');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');         // Danh sách
