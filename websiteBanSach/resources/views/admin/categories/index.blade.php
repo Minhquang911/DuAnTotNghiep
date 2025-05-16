@@ -30,11 +30,11 @@
     <tbody>
         @forelse($categories as $category)
         <tr>
-            <td>{{ $category->category_id }}</td>
+            <td>{{ $category->id }}</td>
             <td>{{ $category->name }}</td>
             <td class="d-flex gap-1">
-                <a href="{{ route('categories.edit', $category->category_id) }}" class="btn btn-warning btn-sm">Sửa</a>
-                <form action="{{ route('categories.destroy', $category->category_id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Xác nhận xoá?')">
+                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Sửa</a>
+                <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Xác nhận xoá?')">
                     @csrf @method('DELETE')
                     <button class="btn btn-danger btn-sm">Xoá</button>
                 </form>
