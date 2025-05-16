@@ -16,15 +16,19 @@ class PromotionController extends Controller
     {
         return view('admin.promotions.create');
     }
-    public function store(Request $request)
+   public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required|unique:promotions,code,' . ($promotion->id ?? 'null'),
+            'code' => 'required|unique:promotions,code',
             'discount_type' => 'required|in:percent,fixed',
             'discount_value' => 'required|numeric|min:0',
+            'max_discount_amount' => 'nullable|numeric|min:0',
+            'min_order_amount' => 'nullable|numeric|min:0',
+            'max_usage' => 'nullable|integer|min:0',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
+
         Promotion::create($request->all());
         return redirect()->route('promotions.index')->with('success', 'Tạo mã thành công');
     }
@@ -40,9 +44,12 @@ class PromotionController extends Controller
         $promotion = Promotion::findOrFail($id);
 
         $request->validate([
-            'code' => 'required|unique:promotions,code,' . ($promotion->id ?? 'null'),
+            'code' => 'required|unique:promotions,code,' . $promotion->id,
             'discount_type' => 'required|in:percent,fixed',
             'discount_value' => 'required|numeric|min:0',
+            'max_discount_amount' => 'nullable|numeric|min:0',
+            'min_order_amount' => 'nullable|numeric|min:0',
+            'max_usage' => 'nullable|integer|min:0',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
@@ -55,6 +62,14 @@ class PromotionController extends Controller
     {
         Promotion::destroy($id);
         return back()->with('success', 'Đã xoá mã khuyến mãi');
+    }
+    public function toggle($id)
+    {
+        $promo = Promotion::findOrFail($id);
+        $promo->is_active = !$promo->is_active;
+        $promo->save();
+
+        return back()->with('success', 'Đã cập nhật trạng thái thành công');
     }
 
     public function apply(Request $request)
