@@ -27,6 +27,8 @@ Route::prefix('admin')->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');   
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy'); 
+    Route::patch('/admin/users/{id}/toggle-block', [UserController::class, 'toggleBlock'])->name('users.toggleBlock');
+    Route::patch('/admin/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');       
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');       

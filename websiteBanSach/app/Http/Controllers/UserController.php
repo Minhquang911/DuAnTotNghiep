@@ -84,4 +84,23 @@ public function show($id)
         User::destroy($id);
         return redirect()->route('users.index')->with('success', 'Xóa người dùng thành công');
     }
+
+    public function toggleBlock($id)
+{
+    $user = User::findOrFail($id);
+    $user->is_blocked = !$user->is_blocked;
+    $user->save();
+
+    return redirect()->back()->with('success', 'Trạng thái tài khoản đã được cập nhật.');
+}
+
+public function resetPassword($id)
+{
+    $user = User::findOrFail($id);
+    $user->password = Hash::make('12345678');
+    $user->save();
+
+    return redirect()->back()->with('success', 'Đã reset mật khẩu về 12345678.');
+}
+
 }
