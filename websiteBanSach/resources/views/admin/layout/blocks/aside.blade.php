@@ -52,6 +52,12 @@
                                 <p>Quản lý danh mục</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('books.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-book"></i>
+                                <p>Quản lý sách</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
