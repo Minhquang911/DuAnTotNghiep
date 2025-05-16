@@ -37,16 +37,16 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('success', 'Danh mục đã được thêm thành công');
     }
 
-    public function edit($category_id)
+    public function edit($id)
     {
-        $category = Category::findOrFail($category_id);
+        $category = Category::findOrFail($id);
         return view('admin.categories.edit', compact('category'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:categories,name,' . $id . ',category_id',
+            'name' => 'required|unique:categories,name,' . $id . ',id',
         ]);
 
         $category = Category::findOrFail($id);
@@ -55,9 +55,9 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('success', 'Cập nhật thành công');
     }
 
-    public function destroy($category_id)
+    public function destroy($id)
     {
-        Category::destroy($category_id);
+        Category::destroy($id);
         return back()->with('success', 'Danh mục đã được xóa');
     }
 }

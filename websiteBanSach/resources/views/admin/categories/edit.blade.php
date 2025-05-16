@@ -11,7 +11,7 @@
         </div>
     @endif
 
-    <form action="{{ route('categories.update', $category->category_id) }}" method="POST">
+    <form action="{{ route('categories.update', $category->id) }}" method="POST">
         @csrf
         @method('PUT')
     
