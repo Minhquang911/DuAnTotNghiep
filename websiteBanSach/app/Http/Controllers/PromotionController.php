@@ -19,9 +19,11 @@ class PromotionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required|unique:promotions',
+            'code' => 'required|unique:promotions,code,' . ($promotion->id ?? 'null'),
             'discount_type' => 'required|in:percent,fixed',
             'discount_value' => 'required|numeric|min:0',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
         Promotion::create($request->all());
         return redirect()->route('promotions.index')->with('success', 'Tạo mã thành công');
@@ -38,9 +40,11 @@ class PromotionController extends Controller
         $promotion = Promotion::findOrFail($id);
 
         $request->validate([
-            'code' => 'required|unique:promotions,code,' . $promotion->id,
+            'code' => 'required|unique:promotions,code,' . ($promotion->id ?? 'null'),
             'discount_type' => 'required|in:percent,fixed',
             'discount_value' => 'required|numeric|min:0',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
         $promotion->update($request->all());
