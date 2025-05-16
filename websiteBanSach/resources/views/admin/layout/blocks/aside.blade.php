@@ -46,6 +46,12 @@
                                 <p>Quản lý khuyến mãi</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('categories.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Quản lý danh mục</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
