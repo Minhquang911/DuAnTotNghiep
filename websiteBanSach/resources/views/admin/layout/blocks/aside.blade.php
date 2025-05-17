@@ -58,6 +58,12 @@
                                 <p>Quản lý sách</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('order_statuses.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Quản lý trạng thái </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
