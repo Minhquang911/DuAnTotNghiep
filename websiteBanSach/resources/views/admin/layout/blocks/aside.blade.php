@@ -23,47 +23,42 @@
                     <a href="#" class="nav-link active">
                         <i class="nav-icon bi bi-speedometer"></i>
                         <p>
-                            Dashboard
+                            Quản lý
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="./index.html" class="nav-link active">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ route('users.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
+                                <i class="nav-icon bi bi-people"></i> <!-- Quản lý người dùng -->
                                 <p>Quản lý người dùng</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('promotions.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
+                                <i class="nav-icon bi bi-tag"></i> <!-- Quản lý khuyến mãi -->
                                 <p>Quản lý khuyến mãi</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('categories.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
+                                <i class="nav-icon bi bi-folder"></i> <!-- Quản lý danh mục -->
                                 <p>Quản lý danh mục</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('books.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-book"></i>
+                                <i class="nav-icon bi bi-book"></i> <!-- Quản lý sách -->
                                 <p>Quản lý sách</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('order_statuses.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Quản lý trạng thái </p>
+                                <i class="nav-icon bi bi-card-checklist"></i> <!-- Quản lý trạng thái -->
+                                <p>Quản lý trạng thái đơn hàng</p>
                             </a>
                         </li>
+
                     </ul>
                 </li>
             </ul>
