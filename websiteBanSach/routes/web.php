@@ -5,7 +5,7 @@ use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\OrderStatusController;
-
+use App\Http\Controllers\BannerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,4 +55,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/order-statuses/{id}/edit', [OrderStatusController::class, 'edit'])->name('order_statuses.edit');
     Route::put('/order-statuses/{id}', [OrderStatusController::class, 'update'])->name('order_statuses.update');
     Route::delete('/order-statuses/{id}', [OrderStatusController::class, 'destroy'])->name('order_statuses.destroy');
+
+    // Banner
+    Route::resource('banners', BannerController::class);
 });
