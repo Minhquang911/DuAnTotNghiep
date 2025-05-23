@@ -12,10 +12,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Chạy RoleSeeder trước để tạo các vai trò
-        $this->call(RoleSeeder::class);
-        
-        // Sau đó chạy UserSeeder để tạo người dùng với vai trò tương ứng
-        $this->call(UserSeeder::class);
+        $this->call([
+            RoleSeeder::class,
+            UserSeeder::class,
+            CategorySeeder::class,
+            PublisherSeeder::class,
+            BannerSeeder::class,
+            PromotionSeeder::class,
+            FormatSeeder::class,
+            LanguageSeeder::class,
+            ProductSeeder::class,
+            ProductVariantSeeder::class,
+            CommentSeeder::class,
+            RatingSeeder::class,
+        ]);
     }
 }
