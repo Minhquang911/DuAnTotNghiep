@@ -1,10 +1,22 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\HomeController;
 use App\Http\Middleware\CheckRole;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\FormatController;
+use App\Http\Controllers\Admin\RatingController;
+use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\LanguageController;
+use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\Admin\PublisherController;
+use App\Http\Controllers\Admin\ProductVariantController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,13 +26,67 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Các route cho admin
-Route::prefix('admin')->middleware(['auth', CheckRole::class.':admin'])->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
-});
+Route::middleware(['auth', CheckRole::class . ':admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+
+        // Quản lý tài khoản người dùng
+        Route::resource('users', UserController::class);
+        Route::post('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
+
+        // Quản lý danh mục
+        Route::resource('categories', CategoryController::class);
+        Route::post('/categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('admin.categories.toggle-status');
+
+        // Quản lý nhà xuất bản
+        Route::resource('publishers', PublisherController::class);
+        Route::post('/publishers/{publisher}/toggle-status', [PublisherController::class, 'toggleStatus'])->name('admin.publishers.toggle-status');
+
+        // Quản lý banner
+        Route::resource('banners', BannerController::class);
+        Route::post('/banners/{banner}/toggle-status', [BannerController::class, 'toggleStatus'])->name('admin.banners.toggle-status');
+
+        // Quản lý mã khuyến mãi
+        Route::resource('promotions', PromotionController::class);
+        Route::post('/promotions/{promotion}/toggle-status', [PromotionController::class, 'toggleStatus'])->name('admin.promotions.toggle-status');
+
+        // Quản lý định dạng sách
+        Route::resource('formats', FormatController::class);
+        Route::post('/formats/{format}/toggle-status', [FormatController::class, 'toggleStatus'])->name('admin.formats.toggle-status');
+
+        // Quản lý ngôn ngữ
+        Route::resource('languages', LanguageController::class);
+        Route::post('/languages/{language}/toggle-status', [LanguageController::class, 'toggleStatus'])->name('admin.languages.toggle-status');
+
+        // Quản lý sản phẩm
+        Route::resource('products', ProductController::class);
+        Route::post('/products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('admin.products.toggle-status');
+
+        // Quản lý biến thể sản phẩm
+        Route::resource('product-variants', ProductVariantController::class);
+        Route::post('/product-variants/{productVariant}/toggle-status', [ProductVariantController::class, 'toggleStatus'])->name('admin.product-variants.toggle-status');
+    
+        // Quản lý bình luận
+        Route::resource('comments', CommentController::class);
+        Route::post('/comments/{comment}/approve', [CommentController::class, 'approve'])->name('admin.comments.approve');
+        Route::post('/comments/{comment}/reject', [CommentController::class, 'reject'])->name('admin.comments.reject');
+
+        // Quản lý đánh giá
+        Route::resource('ratings', RatingController::class);
+        Route::post('/ratings/{rating}/approve', [RatingController::class, 'approve'])->name('admin.ratings.approve');
+        Route::post('/ratings/{rating}/reject', [RatingController::class, 'reject'])->name('admin.ratings.reject');
+        Route::post('/admin/ratings/{rating}/reply', [RatingController::class, 'reply'])->name('admin.ratings.reply');
+        
+    });
 
 // Các route cho user thường
-Route::prefix('user')->middleware(['auth', CheckRole::class.':user'])->group(function () {
-    Route::get('/', function () {
-        return 'Đây là user dashboard';
-    })->name('user.dashboard');
-});
+Route::middleware(['auth', CheckRole::class . ':user'])
+    ->prefix('user')
+    ->name('user.')
+    ->group(function () {
+        Route::get('/', function () {
+            return 'Đây là user dashboard';
+        })->name('dashboard');
+    });

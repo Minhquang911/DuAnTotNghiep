@@ -24,6 +24,10 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin@gmail.com'),
             'role_id' => $adminRoleId,
+            'gender' => 'male',
+            'birthday' => '1990-01-01',
+            'phone' => '0909090909',
+            'avatar' => 'https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg',
         ]);
         
         // Tạo tài khoản user
@@ -32,6 +36,10 @@ class UserSeeder extends Seeder
             'email' => 'user@gmail.com',
             'password' => Hash::make('user@gmail.com'),
             'role_id' => $userRoleId,
+            'gender' => 'male',
+            'birthday' => '1990-01-01',
+            'phone' => '0909090908',
+            'avatar' => 'https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg',
         ]);
     }
 } 

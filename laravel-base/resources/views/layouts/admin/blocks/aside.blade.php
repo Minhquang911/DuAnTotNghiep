@@ -11,7 +11,7 @@
       />
       <!--end::Brand Image-->
       <!--begin::Brand Text-->
-      <span class="brand-text fw-light">SHOP-ONLINE</span>
+      <span class="brand-text fw-light">Book360</span>
       <!--end::Brand Text-->
     </a>
     <!--end::Brand Link-->
@@ -33,28 +33,86 @@
             <p>Trang chủ</p>
           </a>
         </li>
-
+        
         <li class="nav-item">
-          <a href="" class="nav-link">
-            <i class="nav-icon bi bi-palette"></i>
-            <p>Danh mục</p>
+          <a href="{{ route('admin.users.index') }}" class="nav-link {{ Route::is('admin.users.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-people"></i>
+            <p>Quản lý người dùng</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="{{ route('admin.categories.index') }}" class="nav-link {{ Route::is('admin.categories.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-tags"></i>
+            <p>Quản lý danh mục</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('admin.publishers.index') }}" class="nav-link {{ Route::is('admin.publishers.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-building"></i>
+            <p>Quản lý nhà xuất bản</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('admin.banners.index') }}" class="nav-link {{ Route::is('admin.banners.*') ? 'active' : '' }}">
             <i class="nav-icon bi bi-images"></i>
-            <p>Banner</p>
+            <p>Quản lý banner</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="" class="nav-link">
-            <i class="nav-icon bi bi-palette"></i>
-            <p>Sản phẩm</p>
+          <a href="{{ route('admin.promotions.index') }}" class="nav-link {{ Route::is('admin.promotions.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-gift"></i>
+            <p>Quản lý mã khuyến mãi</p>
           </a>
         </li>
 
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon bi bi-book"></i>
+            <p>
+              Quản lý sách
+              <i class="right bi bi-chevron-down"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('admin.formats.index') }}" class="nav-link">
+                <i class="nav-icon bi bi-book"></i>
+                <p>Định dạng sách</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('admin.languages.index') }}" class="nav-link">
+                <i class="nav-icon bi bi-translate"></i>
+                <p>Ngôn ngữ</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('admin.products.index') }}" class="nav-link">
+                <i class="nav-icon bi bi-box"></i>
+                <p>Danh sách sách</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('admin.comments.index') }}" class="nav-link {{ Route::is('admin.comments.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-chat"></i>
+            <p>Quản lý bình luận</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('admin.ratings.index') }}" class="nav-link {{ Route::is('admin.ratings.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-star"></i>
+            <p>Quản lý đánh giá</p>
+          </a>
+        </li>
+        
         {{-- <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="nav-icon bi bi-speedometer"></i>
