@@ -71,7 +71,7 @@
                                     <div class="form-group mb-3">
                                         <label for="name">Tên danh mục <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                            id="name" name="name" value="{{ old('name', $category->name) }}">
+                                            id="name" name="name" value="{{ old('name', $category->name) }}" placeholder="Nhập tên danh mục">
                                         @error('name')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
@@ -79,10 +79,11 @@
                                     <div class="form-group mb-3">
                                         <label for="slug">Slug</label>
                                         <input type="text" class="form-control @error('slug') is-invalid @enderror"
-                                            id="slug" name="slug" value="{{ old('slug', $category->slug) }}">
+                                            id="slug" name="slug" value="{{ old('slug', $category->slug) }}" placeholder="Nhập slug" readonly>
                                         @error('slug')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
+                                        <small class="text-muted">Slug được sử dụng trong URL, tự động tạo từ tên danh mục</small>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="parent_id">Danh mục cha</label>
@@ -106,7 +107,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="description">Mô tả</label>
-                                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $category->description) }}</textarea>
+                                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" placeholder="Nhập mô tả danh mục">{{ old('description', $category->description) }}</textarea>
                                         @error('description')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
