@@ -79,6 +79,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             
             $table->timestamps();
+            $table->softDeletes();
         
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('format_id')->references('id')->on('formats');
