@@ -14,7 +14,7 @@ git init
 git add .
 
 # Commit các thay đổi
-git commit -m ""
+git commit -m "Initial commit"
 
 # Push code lên GitHub
 git push origin main

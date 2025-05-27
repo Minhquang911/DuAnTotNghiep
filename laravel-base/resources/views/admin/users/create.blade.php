@@ -70,7 +70,7 @@
                                     <div class="form-group mb-3">
                                         <label for="name">Họ và tên <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                            id="name" name="name" value="{{ old('name') }}">
+                                            id="name" name="name" value="{{ old('name') }}" placeholder="Nhập họ và tên">
                                         @error('name')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}
@@ -81,7 +81,7 @@
                                     <div class="form-group mb-3">
                                         <label for="email">Email <span class="text-danger">*</span></label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                            id="email" name="email" value="{{ old('email') }}">
+                                            id="email" name="email" value="{{ old('email') }}" placeholder="Nhập email">
                                         @error('email')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}
@@ -92,7 +92,7 @@
                                     <div class="form-group mb-3">
                                         <label for="password">Mật khẩu <span class="text-danger">*</span></label>
                                         <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                            id="password" name="password">
+                                            id="password" name="password" placeholder="Nhập mật khẩu">
                                         @error('password')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}
@@ -105,7 +105,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="password"
                                             class="form-control @error('password_confirmation') is-invalid @enderror"
-                                            id="password_confirmation" name="password_confirmation">
+                                            id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu">
                                         @error('password_confirmation')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}
@@ -118,7 +118,7 @@
                                     <div class="form-group mb-3">
                                         <label for="phone">Số điện thoại</label>
                                         <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                            id="phone" name="phone" value="{{ old('phone') }}">
+                                            id="phone" name="phone" value="{{ old('phone') }}" placeholder="Nhập số điện thoại">
                                         @error('phone')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}
@@ -146,7 +146,7 @@
                                     <div class="form-group mb-3">
                                         <label for="birthday">Ngày sinh</label>
                                         <input type="date" class="form-control @error('birthday') is-invalid @enderror"
-                                            id="birthday" name="birthday" value="{{ old('birthday') }}">
+                                            id="birthday" name="birthday" value="{{ old('birthday') }}" placeholder="Nhập ngày sinh">
                                         @error('birthday')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}
@@ -157,7 +157,7 @@
                                     <div class="form-group mb-3">
                                         <label for="avatar">Ảnh đại diện</label>
                                         <input type="file" class="form-control @error('avatar') is-invalid @enderror"
-                                            id="avatar" name="avatar" accept="image/*">
+                                            id="avatar" name="avatar" accept="image/*" placeholder="Chọn ảnh đại diện">
                                         @error('avatar')
                                             <div class="invalid-feedback d-block">
                                                 {{ $message }}
