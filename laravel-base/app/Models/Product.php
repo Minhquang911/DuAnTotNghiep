@@ -81,6 +81,22 @@ class Product extends Model
     }
 
     /**
+     * Đánh giá
+     */
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    /**
+     * Ảnh sách
+     */
+    public function albums()
+    {
+        return $this->hasMany(Album::class);
+    }
+
+    /**
      * Các biến thể sản phẩm (format, ngôn ngữ, ...)
      */
     public function variants()
