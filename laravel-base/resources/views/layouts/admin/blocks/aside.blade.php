@@ -30,7 +30,7 @@
         <li class="nav-item">
           <a href="{{ route('admin.dashboard') }}" class="nav-link">
             <i class="nav-icon bi bi-palette"></i>
-            <p>Trang chủ</p>
+            <p>Dashboard</p>
           </a>
         </li>
         
@@ -52,20 +52,6 @@
           <a href="{{ route('admin.publishers.index') }}" class="nav-link {{ Route::is('admin.publishers.*') ? 'active' : '' }}">
             <i class="nav-icon bi bi-building"></i>
             <p>Quản lý nhà xuất bản</p>
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a href="{{ route('admin.banners.index') }}" class="nav-link {{ Route::is('admin.banners.*') ? 'active' : '' }}">
-            <i class="nav-icon bi bi-images"></i>
-            <p>Quản lý banner</p>
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a href="{{ route('admin.promotions.index') }}" class="nav-link {{ Route::is('admin.promotions.*') ? 'active' : '' }}">
-            <i class="nav-icon bi bi-gift"></i>
-            <p>Quản lý mã khuyến mãi</p>
           </a>
         </li>
 
@@ -100,6 +86,27 @@
         </li>
 
         <li class="nav-item">
+          <a href="" class="nav-link">
+            <i class="nav-icon bi bi-cart"></i>
+            <p>Quản lý đơn hàng</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('admin.banners.index') }}" class="nav-link {{ Route::is('admin.banners.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-images"></i>
+            <p>Quản lý banner</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('admin.promotions.index') }}" class="nav-link {{ Route::is('admin.promotions.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-gift"></i>
+            <p>Quản lý mã khuyến mãi</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
           <a href="{{ route('admin.comments.index') }}" class="nav-link {{ Route::is('admin.comments.*') ? 'active' : '' }}">
             <i class="nav-icon bi bi-chat"></i>
             <p>Quản lý bình luận</p>
@@ -110,6 +117,20 @@
           <a href="{{ route('admin.ratings.index') }}" class="nav-link {{ Route::is('admin.ratings.*') ? 'active' : '' }}">
             <i class="nav-icon bi bi-star"></i>
             <p>Quản lý đánh giá</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('admin.contacts.index') }}" class="nav-link {{ Route::is('admin.contacts.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-envelope"></i>
+            <p>Quản lý liên hệ</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('admin.posts.index') }}" class="nav-link {{ Route::is('admin.posts.*') ? 'active' : '' }}">
+            <i class="nav-icon bi bi-file-earmark-text"></i>
+            <p>Quản lý bài viết</p>
           </a>
         </li>
         

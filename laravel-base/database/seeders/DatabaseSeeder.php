@@ -25,6 +25,9 @@ class DatabaseSeeder extends Seeder
             ProductVariantSeeder::class,
             CommentSeeder::class,
             RatingSeeder::class,
+            ContactSeeder::class,
+            PostSeeder::class,
+            AlbumSeeder::class,
         ]);
     }
 }
