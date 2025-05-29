@@ -5,12 +5,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\FormatController;
 use App\Http\Controllers\Admin\RatingController;
 use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\LanguageController;
@@ -67,7 +69,7 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
         // Quản lý biến thể sản phẩm
         Route::resource('product-variants', ProductVariantController::class);
         Route::post('/product-variants/{productVariant}/toggle-status', [ProductVariantController::class, 'toggleStatus'])->name('admin.product-variants.toggle-status');
-    
+
         // Quản lý bình luận
         Route::resource('comments', CommentController::class);
         Route::post('/comments/{comment}/approve', [CommentController::class, 'approve'])->name('admin.comments.approve');
@@ -77,8 +79,16 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
         Route::resource('ratings', RatingController::class);
         Route::post('/ratings/{rating}/approve', [RatingController::class, 'approve'])->name('admin.ratings.approve');
         Route::post('/ratings/{rating}/reject', [RatingController::class, 'reject'])->name('admin.ratings.reject');
-        Route::post('/admin/ratings/{rating}/reply', [RatingController::class, 'reply'])->name('admin.ratings.reply');
-        
+        Route::post('/ratings/{rating}/reply', [RatingController::class, 'reply'])->name('admin.ratings.reply');
+
+        // Quản lý liên hệ
+        Route::resource('contacts', ContactController::class);
+        Route::post('/contacts/{contact}/approve', [ContactController::class, 'approve'])->name('admin.contacts.approve');
+        Route::post('/contacts/{contact}/reject', [ContactController::class, 'reject'])->name('admin.contacts.reject');
+
+        // Quản lý bài viết
+        Route::resource('posts', PostController::class);
+        Route::post('/posts/{post}/toggle-status', [PostController::class, 'toggleStatus'])->name('admin.posts.toggle-status');
     });
 
 // Các route cho user thường
