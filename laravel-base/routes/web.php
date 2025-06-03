@@ -69,14 +69,15 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
         // Quản lý biến thể sản phẩm
         Route::resource('product-variants', ProductVariantController::class);
         Route::post('/product-variants/{productVariant}/toggle-status', [ProductVariantController::class, 'toggleStatus'])->name('admin.product-variants.toggle-status');
-    
+
         // Quản lý bình luận
         Route::resource('comments', CommentController::class)->except(['show']);
         Route::prefix('comments')->name('comments.')->group(function () {
             Route::post('{comment}/approve', [CommentController::class, 'approve'])->name('approve');
             Route::post('{comment}/reject', [CommentController::class, 'reject'])->name('reject');
-            
+
             Route::get('trashed', [CommentController::class, 'trashed'])->name('trashed');
+            Route::post('{id}/restore', [CommentController::class, 'restore'])->name('restore');
         });
 
         // Quản lý đánh giá

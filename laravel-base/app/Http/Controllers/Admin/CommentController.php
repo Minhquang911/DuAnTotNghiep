@@ -234,4 +234,28 @@ class CommentController extends Controller
 
         return view('admin.comments.trashed', compact('trashedComments', 'products', 'users'));
     }
+
+    public function restore($id)
+    {
+        try {
+            DB::beginTransaction();
+            $comment = Comment::onlyTrashed()->findOrFail($id);
+            // Nếu muốn, khôi phục luôn các replies bị xóa
+            $comment->replies()->onlyTrashed()->restore();
+            $comment->restore();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Khôi phục bình luận thành công.'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi khôi phục bình luận.'
+            ], 500);
+        }
+    }
 }

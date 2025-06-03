@@ -41,7 +41,7 @@
                                             <i class="fas fa-search text-muted"></i>
                                         </span>
                                         <input type="text" name="content" class="form-control"
-                                            placeholder="Tìm kiếm nội dung..." value="{{ request('content') }}">
+                                               placeholder="Tìm kiếm nội dung..." value="{{ request('content') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -89,88 +89,88 @@
                         <div class="table-responsive">
                             <table class="table table-hover table-striped align-middle">
                                 <thead class="table-light">
-                                    <tr>
-                                        <th class="text-center" style="width: 60px">STT</th>
-                                        <th>Nội dung</th>
-                                        <th>Sản phẩm</th>
-                                        <th>Người dùng</th>
-                                        <th class="text-center" style="width: 100px">Trạng thái</th>
-                                        <th class="text-center" style="width: 150px">Thời gian xóa</th>
-                                        <th class="text-center" style="width: 150px">Thao tác</th>
-                                    </tr>
+                                <tr>
+                                    <th class="text-center" style="width: 60px">STT</th>
+                                    <th>Nội dung</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Người dùng</th>
+                                    <th class="text-center" style="width: 100px">Trạng thái</th>
+                                    <th class="text-center" style="width: 150px">Thời gian xóa</th>
+                                    <th class="text-center" style="width: 150px">Thao tác</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($trashedComments as $comment)
-                                        <tr>
-                                            <td class="text-center">{{ $loop->iteration }}</td>
-                                            <td>
-                                                <div class="fw-bold">{{ Str::limit($comment->content, 100) }}</div>
-                                                <small class="text-muted">
-                                                    <i class="far fa-clock me-1"></i>
-                                                    {{ $comment->created_at->format('d/m/Y H:i') }}
-                                                </small>
-                                                @if ($comment->replies_count > 0)
-                                                    <div class="mt-1 text-info">
-                                                        <i class="fas fa-reply-all me-1"></i>
-                                                        <small>{{ $comment->replies_count }} phản hồi</small>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('admin.products.show', $comment->product_id) }}"
-                                                    class="text-decoration-none">
-                                                    {{ $comment->product->title }}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ $comment->user->avatar ?? asset('images/default-avatar.png') }}"
-                                                        class="rounded-circle me-2" width="32" height="32"
-                                                        alt="{{ $comment->user->name }}">
-                                                    <div>
-                                                        <div class="fw-bold">{{ $comment->user->name }}</div>
-                                                        <small class="text-muted">{{ $comment->user->email }}</small>
-                                                    </div>
+                                @forelse($trashedComments as $comment)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="fw-bold">{{ Str::limit($comment->content, 100) }}</div>
+                                            <small class="text-muted">
+                                                <i class="far fa-clock me-1"></i>
+                                                {{ $comment->created_at->format('d/m/Y H:i') }}
+                                            </small>
+                                            @if ($comment->replies_count > 0)
+                                                <div class="mt-1 text-info">
+                                                    <i class="fas fa-reply-all me-1"></i>
+                                                    <small>{{ $comment->replies_count }} phản hồi</small>
                                                 </div>
-                                            </td>
-                                            <td class="text-center">
-                                                @if ($comment->is_approved)
-                                                    <span class="badge bg-success">Đã duyệt</span>
-                                                @else
-                                                    <span class="badge bg-warning">Chờ duyệt</span>
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                <small class="text-muted">
-                                                    <i class="far fa-clock me-1"></i>
-                                                    {{ $comment->deleted_at->format('d/m/Y H:i') }}
-                                                </small>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm btn-outline-success restore-btn"
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.products.show', $comment->product_id) }}"
+                                               class="text-decoration-none">
+                                                {{ $comment->product->title }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ $comment->user->avatar ?? asset('images/default-avatar.png') }}"
+                                                     class="rounded-circle me-2" width="32" height="32"
+                                                     alt="{{ $comment->user->name }}">
+                                                <div>
+                                                    <div class="fw-bold">{{ $comment->user->name }}</div>
+                                                    <small class="text-muted">{{ $comment->user->email }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($comment->is_approved)
+                                                <span class="badge bg-success">Đã duyệt</span>
+                                            @else
+                                                <span class="badge bg-warning">Chờ duyệt</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <small class="text-muted">
+                                                <i class="far fa-clock me-1"></i>
+                                                {{ $comment->deleted_at->format('d/m/Y H:i') }}
+                                            </small>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-outline-success restore-btn"
                                                         data-comment-id="{{ $comment->id }}" data-bs-toggle="tooltip"
                                                         title="Khôi phục">
-                                                        <i class="fas fa-undo"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger force-delete-btn"
+                                                    <i class="fas fa-undo"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-danger force-delete-btn"
                                                         data-comment-id="{{ $comment->id }}" data-bs-toggle="tooltip"
                                                         title="Xóa vĩnh viễn">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="7" class="text-center py-4">
-                                                <div class="text-muted">
-                                                    <i class="fas fa-trash-alt fa-2x mb-3"></i>
-                                                    <p class="mb-0">Không có bình luận nào đã xóa.</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="fas fa-trash-alt fa-2x mb-3"></i>
+                                                <p class="mb-0">Không có bình luận nào đã xóa.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -232,4 +232,49 @@
             font-size: 1.5em;
         }
     </style>
+@endpush
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Xử lý khôi phục bình luận
+            $('.restore-btn').click(function() {
+                const commentId = $(this).data('comment-id');
+                const $btn = $(this);
+
+                if (confirm('Bạn có chắc chắn muốn khôi phục bình luận này?')) {
+                    $btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: `/admin/comments/${commentId}/restore`,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(() => window.location.reload(), 1000);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function() {
+                            toastr.error('Có lỗi xảy ra khi khôi phục bình luận');
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 @endpush
