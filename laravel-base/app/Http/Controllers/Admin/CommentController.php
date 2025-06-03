@@ -258,4 +258,30 @@ class CommentController extends Controller
             ], 500);
         }
     }
+
+    public function forceDelete($id)
+    {
+        try {
+            DB::beginTransaction();
+            $comment = Comment::onlyTrashed()->findOrFail($id);
+
+            // Xóa vĩnh viễn replies trước
+            $comment->replies()->onlyTrashed()->forceDelete();
+            // Sau đó xóa bình luận cha
+            $comment->forceDelete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã xóa vĩnh viễn bình luận.'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi xóa vĩnh viễn bình luận.'
+            ], 500);
+        }
+    }
 }
