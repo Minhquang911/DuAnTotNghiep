@@ -164,4 +164,74 @@ class CommentController extends Controller
             ], 500);
         }
     }
+
+    public function trashed(Request $request)
+    {
+        $query = Comment::onlyTrashed()->with('user', 'replies');
+
+        // Tìm kiếm theo nội dung
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where('content', 'like', "%{$search}%");
+        }
+
+        // Lọc theo sản phẩm
+        if ($request->filled('product_id')) {
+            $query->where('product_id', $request->get('product_id'));
+        }
+
+        // Lọc theo người dùng
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->get('user_id'));
+        }
+
+        // Lọc theo trạng thái duyệt
+        if ($request->has('is_approved')) {
+            $isApproved = $request->get('is_approved');
+            if ($isApproved === '1') {
+                $query->where('is_approved', true);
+            } elseif ($isApproved === '0') {
+                $query->where('is_approved', false);
+            }
+        }
+
+        // Lọc theo loại bình luận (cha/con)
+        if ($request->filled('type')) {
+            switch ($request->get('type')) {
+                case 'parent':
+                    $query->whereNull('parent_id');
+                    break;
+                case 'reply':
+                    $query->whereNotNull('parent_id');
+                    break;
+            }
+        }
+
+        // Sắp xếp
+        $sort = $request->get('sort', 'latest');
+        switch ($sort) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'product':
+                $query->orderBy('product_id');
+                break;
+            case 'user':
+                $query->orderBy('user_id');
+                break;
+            case 'approved':
+                $query->orderBy('is_approved', 'desc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        $trashedComments = $query->paginate(10)->withQueryString();
+
+        // Lấy danh sách sản phẩm và người dùng cho bộ lọc
+        $products = Product::select('id', 'title')->get();
+        $users = User::select('id', 'name')->get();
+
+        return view('admin.comments.trashed', compact('trashedComments', 'products', 'users'));
+    }
 }

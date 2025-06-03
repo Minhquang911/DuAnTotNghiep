@@ -82,6 +82,10 @@
                             <h3 class="card-title text-white fw-bold">
                                 <i class="fas fa-comments me-2"></i>Quản lý bình luận
                             </h3>
+
+                            <a href="{{ route('admin.comments.trashed') }}" class="btn btn-light btn-sm">
+                                <i class="fas fa-trash-alt me-1"></i> Danh sách đã xóa
+                            </a>
                         </div>
                     </div>
                     <div class="card-body">
