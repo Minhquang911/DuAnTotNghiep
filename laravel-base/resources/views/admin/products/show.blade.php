@@ -156,6 +156,65 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Phần albums hình ảnh -->
+                <div class="mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-images me-2"></i>Albums hình ảnh
+                        </h5>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#uploadImageModal">
+                            <i class="fas fa-upload me-1"></i> Thêm ảnh
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            @if ($product->albums->count() > 0)
+                                <div class="row g-3">
+                                    @foreach ($product->albums as $image)
+                                        <div class="col-md-3 col-sm-4 col-6">
+                                            <div class="card h-100">
+                                                <img src="{{ asset('storage/' . $image->image) }}" class="card-img-top"
+                                                    alt="Hình ảnh sản phẩm" style="height: 200px; object-fit: cover;">
+                                                <div class="card-body p-2">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <small class="text-muted">
+                                                            <i class="far fa-clock me-1"></i>
+                                                            {{ $image->created_at->format('d/m/Y') }}
+                                                        </small>
+                                                        <div class="btn-group">
+                                                            <button type="button"
+                                                                class="btn btn-sm btn-outline-danger delete-image-btn"
+                                                                data-image-id="{{ $image->id }}"
+                                                                data-bs-toggle="tooltip" title="Xóa ảnh">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    @if ($image->is_cover)
+                                                        <div class="mt-1">
+                                                            <span class="badge bg-success">Ảnh bìa</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-center py-4">
+                                    <div class="text-muted">
+                                        <i class="fas fa-images fa-2x mb-3"></i>
+                                        <p class="mb-0">Chưa có hình ảnh nào.</p>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
                 <h5 class="mt-4 mb-3"><i class="fas fa-layer-group me-1"></i>Biến thể sách</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle table-variants">
@@ -766,6 +825,43 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal upload ảnh -->
+    <div class="modal fade" id="uploadImageModal" tabindex="-1" aria-labelledby="uploadImageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadImageModalLabel">Thêm hình ảnh</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadImageForm" enctype="multipart/form-data">
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Chọn hình ảnh</label>
+                            <input type="file" class="form-control" id="images" name="images[]" multiple
+                                accept="image/*" required>
+                            <div class="form-text">Có thể chọn nhiều ảnh cùng lúc. Hỗ trợ định dạng: JPG, PNG, GIF</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="setAsCover" name="set_as_cover">
+                                <label class="form-check-label" for="setAsCover">
+                                    Đặt ảnh đầu tiên làm ảnh bìa
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="uploadPreview" class="row g-2 mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="submitUploadBtn">Tải lên</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('styles')
@@ -1076,7 +1172,9 @@
 
         // Xử lý toggle replies
         $('.toggle-replies').click(function() {
-        $(this).toggleClass('collapsed');
+            $(this).toggleClass('collapsed');
         });
+
+        
     </script>
 @endpush
