@@ -165,4 +165,70 @@ class RatingController extends Controller
             'message' => 'Đã trả lời đánh giá thành công!',
         ]);
     }
+
+    // Hiển thị danh sách đánh giá đã xóa (thùng rác)
+    public function trashed(Request $request)
+    {
+        $query = Rating::onlyTrashed()->with(['user', 'productVariant', 'product']);
+
+        // Tìm kiếm theo tên user
+        if ($request->filled('user')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->user . '%');
+            });
+        }
+
+        // Tìm kiếm theo tên sản phẩm
+        if ($request->filled('product')) {
+            $query->whereHas('product', function ($q) use ($request) {
+                $q->where('id', $request->product);
+            });
+        }
+
+        // Tìm kiếm theo nội dung đánh giá
+        if ($request->filled('comment')) {
+            $query->where('comment', 'like', '%' . $request->comment . '%');
+        }
+
+        // Bộ lọc trạng thái duyệt
+        if ($request->has('is_approved')) {
+            $isApproved = $request->get('is_approved');
+            if ($isApproved === '1') {
+                $query->where('is_approved', true);
+            } elseif ($isApproved === '0') {
+                $query->where('is_approved', false);
+            }
+        }
+
+        // Bộ lọc số sao
+        if ($request->filled('rating')) {
+            $query->where('rating', $request->rating);
+        }
+
+        // Sắp xếp
+        $sort = $request->get('sort', 'latest');
+        switch ($sort) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'product':
+                $query->orderBy('product_variant_id');
+                break;
+            case 'user':
+                $query->orderBy('user_id');
+                break;
+            case 'approved':
+                $query->orderBy('is_approved', 'desc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        // Phân trang + giữ tham số truy vấn
+        $trashedRatings = $query->paginate(10)->withQueryString();
+
+        $products = Product::all();
+        return view('admin.ratings.trashed', compact('trashedRatings', 'products'));
+    }
+
 }

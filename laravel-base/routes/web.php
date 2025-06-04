@@ -82,10 +82,14 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
         });
 
         // Quản lý đánh giá
-        Route::resource('ratings', RatingController::class);
-        Route::post('/ratings/{rating}/approve', [RatingController::class, 'approve'])->name('admin.ratings.approve');
-        Route::post('/ratings/{rating}/reject', [RatingController::class, 'reject'])->name('admin.ratings.reject');
-        Route::post('/ratings/{rating}/reply', [RatingController::class, 'reply'])->name('admin.ratings.reply');
+        Route::resource('ratings', RatingController::class)->except(['show']);
+        Route::prefix('ratings')->name('ratings.')->group(function () {
+            Route::post('{rating}/approve', [RatingController::class, 'approve'])->name('approve');
+            Route::post('{rating}/reject', [RatingController::class, 'reject'])->name('reject');
+            Route::post('{rating}/reply', [RatingController::class, 'reply'])->name('reply');
+
+            Route::get('trashed', [RatingController::class, 'trashed'])->name('trashed');
+        });
 
         // Quản lý liên hệ
         Route::resource('contacts', ContactController::class);
