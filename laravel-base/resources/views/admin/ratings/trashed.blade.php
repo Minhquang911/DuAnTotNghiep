@@ -240,3 +240,48 @@
         }
     </style>
 @endpush
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Xử lý khôi phục đánh giá
+            $('.restore-btn').click(function() {
+                const ratingId = $(this).data('rating-id');
+                const $btn = $(this);
+
+                if (confirm('Bạn có chắc chắn muốn khôi phục đánh giá này?')) {
+                    $btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: `/admin/ratings/${ratingId}/restore`,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(() => window.location.reload(), 1000);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function() {
+                            toastr.error('Có lỗi xảy ra khi khôi phục đánh giá');
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+@endpush

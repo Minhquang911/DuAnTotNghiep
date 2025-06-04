@@ -231,4 +231,24 @@ class RatingController extends Controller
         return view('admin.ratings.trashed', compact('trashedRatings', 'products'));
     }
 
+    // Khôi phục đánh giá
+    public function restore($id)
+    {
+        try {
+            DB::beginTransaction();
+            $rating = Rating::onlyTrashed()->findOrFail($id);
+            $rating->restore();
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Khôi phục đánh giá thành công.'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy hoặc lỗi khi khôi phục đánh giá.'
+            ], 500);
+        }
+    }
 }

@@ -89,6 +89,7 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
             Route::post('{rating}/reply', [RatingController::class, 'reply'])->name('reply');
 
             Route::get('trashed', [RatingController::class, 'trashed'])->name('trashed');
+            Route::post('{id}/restore', [RatingController::class, 'restore'])->name('restore');
         });
 
         // Quản lý liên hệ
