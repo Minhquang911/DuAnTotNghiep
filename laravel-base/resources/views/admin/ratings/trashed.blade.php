@@ -282,6 +282,38 @@
                     });
                 }
             });
+
+            // Xử lý xóa vĩnh viễn đánh giá
+            $('.force-delete-btn').click(function() {
+                const ratingId = $(this).data('rating-id');
+                const $btn = $(this);
+
+                if (confirm('Bạn có chắc chắn muốn xóa vĩnh viễn đánh giá này? Hành động này không thể hoàn tác!')) {
+                    $btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: `/admin/ratings/${ratingId}/force-delete`,
+                        method: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(() => window.location.reload(), 1000);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function() {
+                            toastr.error('Có lỗi xảy ra khi xóa vĩnh viễn đánh giá');
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endpush

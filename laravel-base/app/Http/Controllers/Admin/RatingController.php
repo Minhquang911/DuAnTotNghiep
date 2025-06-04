@@ -76,7 +76,7 @@ class RatingController extends Controller
         $productVariants = ProductVariant::with('product')->get();
         $users = User::select('id', 'name')->get();
         $products = Product::all();
-        
+
         // Thống kê
         $stats = [
             'total' => Rating::count(),
@@ -126,6 +126,7 @@ class RatingController extends Controller
         }
     }
 
+    // Xóa mềm
     public function destroy(Rating $rating)
     {
         try {
@@ -143,27 +144,6 @@ class RatingController extends Controller
                 'message' => 'Có lỗi xảy ra khi xóa đánh giá.'
             ], 500);
         }
-    }
-
-    public function reply(Request $request, Rating $rating)
-    {
-        $request->validate([
-            'reply' => 'required|string|max:1000',
-        ]);
-        if ($rating->reply) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Đánh giá này đã được trả lời!',
-            ], 400);
-        }
-        $rating->reply = $request->reply;
-        $rating->reply_at = now();
-        $rating->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Đã trả lời đánh giá thành công!',
-        ]);
     }
 
     // Hiển thị danh sách đánh giá đã xóa (thùng rác)
@@ -231,6 +211,7 @@ class RatingController extends Controller
         return view('admin.ratings.trashed', compact('trashedRatings', 'products'));
     }
 
+
     // Khôi phục đánh giá
     public function restore($id)
     {
@@ -250,5 +231,47 @@ class RatingController extends Controller
                 'message' => 'Không tìm thấy hoặc lỗi khi khôi phục đánh giá.'
             ], 500);
         }
+    }
+
+    // Xóa vĩnh viễn đánh giá khỏi database
+    public function forceDelete($id)
+    {
+        try {
+            DB::beginTransaction();
+            $rating = Rating::onlyTrashed()->findOrFail($id);
+            $rating->forceDelete();
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã xóa vĩnh viễn đánh giá.'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy hoặc lỗi khi xóa vĩnh viễn đánh giá.'
+            ], 500);
+        }
+    }
+
+    public function reply(Request $request, Rating $rating)
+    {
+        $request->validate([
+            'reply' => 'required|string|max:1000',
+        ]);
+        if ($rating->reply) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Đánh giá này đã được trả lời!',
+            ], 400);
+        }
+        $rating->reply = $request->reply;
+        $rating->reply_at = now();
+        $rating->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã trả lời đánh giá thành công!',
+        ]);
     }
 }
