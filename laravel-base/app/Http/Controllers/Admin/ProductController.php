@@ -379,12 +379,12 @@ class ProductController extends Controller
                     function ($attribute, $value, $fail) use ($request) {
                         $index = explode('.', $attribute)[1];
                         $variantId = $request->variants[$index]['id'] ?? null;
-                        
+
                         $exists = DB::table('product_variants')
                             ->where('sku', $value)
                             ->where('id', '!=', $variantId)
                             ->exists();
-                            
+
                         if ($exists) {
                             $fail('Mã SKU đã tồn tại.');
                         }
@@ -480,12 +480,30 @@ class ProductController extends Controller
             }
 
             // Delete variants that were not updated
-            $variantsToDelete = array_diff($existingVariantIds, $updatedVariantIds);
             if (!empty($variantsToDelete)) {
                 $product->variants()->whereIn('id', $variantsToDelete)->delete();
             }
 
+            // Xử lý lưu album ảnh mới
+            if ($request->hasFile('album_images')) {
+                foreach ($request->file('album_images') as $file) {
+                    if ($file->isValid()) {
+                        $path = $file->store('products/albums', 'public');
+                        $product->albums()->create([
+                            'image' => $path,
+                        ]);
+                    }
+                }
+            }
+
             DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sản phẩm đã được cập nhật thành công.'
+                ]);
+            }
 
             return redirect()
                 ->route('admin.products.index')
