@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->text('content');
             $table->boolean('is_approved')->default(false); // Trạng thái duyệt bởi admin
-            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade'); // Bình luận cha/con
             $table->timestamps();
             $table->softDeletes(); // Xóa mềm
 

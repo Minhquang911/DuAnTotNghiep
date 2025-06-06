@@ -39,31 +39,18 @@ class CommentSeeder extends Seeder
             'Chất lượng sách tốt, giá cả phải chăng. Sẽ ủng hộ shop dài dài.',
         ];
 
-        // Tạo bình luận cha
+        // Tạo bình luận
         foreach ($products as $product) {
-            // Mỗi sản phẩm tạo 3-5 bình luận cha
+            // Mỗi sản phẩm tạo 3-5 bình luận
             $numberOfComments = rand(3, 5);
             
             for ($i = 0; $i < $numberOfComments; $i++) {
-                $parentComment = Comment::create([
+                Comment::create([
                     'user_id' => $users->random()->id,
                     'product_id' => $product->id,
                     'content' => $comments[array_rand($comments)],
                     'is_approved' => rand(0, 1), // 50% bình luận được duyệt
-                    'parent_id' => null,
                 ]);
-
-                // Tạo 0-2 bình luận con cho mỗi bình luận cha
-                $numberOfReplies = rand(0, 2);
-                for ($j = 0; $j < $numberOfReplies; $j++) {
-                    Comment::create([
-                        'user_id' => $users->random()->id,
-                        'product_id' => $product->id,
-                        'content' => $comments[array_rand($comments)],
-                        'is_approved' => rand(0, 1),
-                        'parent_id' => $parentComment->id,
-                    ]);
-                }
             }
         }
 

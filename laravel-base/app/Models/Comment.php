@@ -14,8 +14,7 @@ class Comment extends Model
         'user_id',
         'product_id',
         'content',
-        'is_approved',
-        'parent_id',
+        'is_approved'
     ];
 
     protected $casts = [
@@ -34,18 +33,6 @@ class Comment extends Model
         return $this->belongsTo(Product::class);
     }
 
-    // Quan hệ với Comment cha
-    public function parent()
-    {
-        return $this->belongsTo(Comment::class, 'parent_id');
-    }
-
-    // Quan hệ với các Comment con
-    public function replies()
-    {
-        return $this->hasMany(Comment::class, 'parent_id');
-    }
-
     // Scope để lấy các bình luận đã được duyệt
     public function scopeApproved($query)
     {
@@ -56,11 +43,5 @@ class Comment extends Model
     public function scopePending($query)
     {
         return $query->where('is_approved', false);
-    }
-
-    // Scope để lấy các bình luận cha (không phải reply)
-    public function scopeParents($query)
-    {
-        return $query->whereNull('parent_id');
     }
 }
