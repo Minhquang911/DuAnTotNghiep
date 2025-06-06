@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PublisherController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\AlbumController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -62,9 +63,13 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
         Route::resource('languages', LanguageController::class);
         Route::post('/languages/{language}/toggle-status', [LanguageController::class, 'toggleStatus'])->name('admin.languages.toggle-status');
 
-        // Quản lý sản phẩm
+        // Nhóm các route phụ trợ của sản phẩm
+        Route::prefix('products')->name('products.')->group(function () {
+            // Đổi trạng thái hoạt động
+            Route::post('{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('toggle-status');
+        });
+        // Quản lý sản phẩm (CRUD chính)
         Route::resource('products', ProductController::class);
-        Route::post('/products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('admin.products.toggle-status');
 
         // Quản lý biến thể sản phẩm
         Route::resource('product-variants', ProductVariantController::class);
@@ -75,7 +80,7 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
         Route::prefix('comments')->name('comments.')->group(function () {
             Route::post('{comment}/approve', [CommentController::class, 'approve'])->name('approve');
             Route::post('{comment}/reject', [CommentController::class, 'reject'])->name('reject');
-            
+
             Route::get('trashed', [CommentController::class, 'trashed'])->name('trashed');
             Route::post('{id}/restore', [CommentController::class, 'restore'])->name('restore');
             Route::delete('{id}/force-delete', [CommentController::class, 'forceDelete'])->name('forceDelete');
