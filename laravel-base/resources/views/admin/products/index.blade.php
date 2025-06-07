@@ -26,9 +26,14 @@
                             <h3 class="card-title text-white fw-bold">
                                 <i class="fas fa-book me-2"></i>Quản lý sản phẩm sách
                             </h3>
-                            <a href="{{ route('admin.products.create') }}" class="btn btn-light btn-sm">
-                                <i class="fas fa-plus me-1"></i> Thêm sách mới
-                            </a>
+                            <div>
+                                <a href="{{ route('admin.products.trashed') }}" class="btn btn-light btn-sm me-2">
+                                    <i class="fas fa-trash me-1"></i> Thùng rác
+                                </a>
+                                <a href="{{ route('admin.products.create') }}" class="btn btn-light btn-sm">
+                                    <i class="fas fa-plus me-1"></i> Thêm sách mới
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -199,17 +204,28 @@
                                             <td>
                                                 @php
                                                     $specs = [];
-                                                    if($product->length_cm && $product->width_cm) {
-                                                        $specs[] = rtrim(rtrim(number_format($product->length_cm,2), '0'), '.') . ' x ' . rtrim(rtrim(number_format($product->width_cm,2), '0'), '.') . ' cm';
+                                                    if ($product->length_cm && $product->width_cm) {
+                                                        $specs[] =
+                                                            rtrim(
+                                                                rtrim(number_format($product->length_cm, 2), '0'),
+                                                                '.',
+                                                            ) .
+                                                            ' x ' .
+                                                            rtrim(
+                                                                rtrim(number_format($product->width_cm, 2), '0'),
+                                                                '.',
+                                                            ) .
+                                                            ' cm';
                                                     }
-                                                    if($product->weight_g) {
-                                                        $specs[] = 'Trọng lượng: ' . number_format($product->weight_g) . 'g';
+                                                    if ($product->weight_g) {
+                                                        $specs[] =
+                                                            'Trọng lượng: ' . number_format($product->weight_g) . 'g';
                                                     }
-                                                    if($product->page_count) {
+                                                    if ($product->page_count) {
                                                         $specs[] = number_format($product->page_count) . ' trang';
                                                     }
                                                 @endphp
-                                                @if(count($specs))
+                                                @if (count($specs))
                                                     {{ implode(' | ', $specs) }}
                                                 @else
                                                     <span class="text-muted">-</span>
@@ -237,11 +253,10 @@
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     <form action="{{ route('admin.products.destroy', $product->id) }}"
-                                                        method="POST" class="d-inline">
+                                                        method="POST" class="d-inline delete-form">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                            onclick="return confirm('Bạn có chắc chắn muốn xóa sách này?')"
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-btn"
                                                             data-bs-toggle="tooltip" title="Xóa">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
@@ -368,6 +383,42 @@
                         $toggle.prop('disabled', false);
                     }
                 });
+            });
+
+            // Xử lý xóa sản phẩm
+            $('.delete-form').on('submit', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                
+                if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+                    $.ajax({
+                        url: form.attr('action'),
+                        method: 'POST',
+                        data: form.serialize(),
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 419) {
+                                toastr.error('Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.');
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                toastr.error(xhr.responseJSON.message);
+                            } else {
+                                toastr.error('Có lỗi xảy ra khi xóa sản phẩm');
+                            }
+                        }
+                    });
+                }
             });
         });
     </script>

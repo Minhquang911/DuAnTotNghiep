@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Http\Controllers\Admin;
@@ -536,19 +537,40 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Delete cover image
-            if ($product->cover_image) {
-                Storage::disk('public')->delete($product->cover_image);
+            // Kiểm tra xem sản phẩm có được sử dụng trong đơn hàng nào không
+            $orderItems = OrderItem::where('product_id', $product->id)->exists();
+            if ($orderItems) {
+                if (request()->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Không thể xóa sản phẩm này vì đã được sử dụng trong đơn hàng.'
+                    ], 422);
+                }
+                return redirect()
+                    ->route('admin.products.index')
+                    ->with('error', 'Không thể xóa sản phẩm này vì đã được sử dụng trong đơn hàng.');
             }
 
             $product->delete();
 
             DB::commit();
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sản phẩm đã được xóa thành công.'
+                ]);
+            }
             return redirect()
                 ->route('admin.products.index')
                 ->with('success', 'Sản phẩm đã được xóa thành công.');
         } catch (\Exception $e) {
             DB::rollBack();
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại sau.'
+                ], 500);
+            }
             return redirect()
                 ->route('admin.products.index')
                 ->with('error', 'Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại sau.');
