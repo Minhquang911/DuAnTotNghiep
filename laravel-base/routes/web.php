@@ -67,6 +67,10 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
         Route::prefix('products')->name('products.')->group(function () {
             // Đổi trạng thái hoạt động
             Route::post('{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('toggle-status');
+
+            // Quản lý album ảnh sản phẩm
+            Route::post('{product}/upload-images', [AlbumController::class, 'upload'])->name('upload-images');
+            Route::delete('images/{album}', [AlbumController::class, 'destroy'])->name('albums.destroy');
         });
         // Quản lý sản phẩm (CRUD chính)
         Route::resource('products', ProductController::class);

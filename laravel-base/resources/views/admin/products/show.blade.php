@@ -176,28 +176,23 @@
                                     @foreach ($product->albums as $image)
                                         <div class="col-md-3 col-sm-4 col-6">
                                             <div class="card h-100">
-                                                <img src="{{ asset('storage/' . $image->image) }}" class="card-img-top"
-                                                    alt="Hình ảnh sản phẩm" style="height: 200px; object-fit: cover;">
+                                                <img src="{{ asset('storage/' . $image->image) }}" 
+                                                    class="card-img-top" alt="Album image"
+                                                    style="height: 200px; object-fit: cover;">
                                                 <div class="card-body p-2">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <small class="text-muted">
                                                             <i class="far fa-clock me-1"></i>
-                                                            {{ $image->created_at->format('d/m/Y') }}
+                                                            {{ $image->created_at ? $image->created_at->format('d/m/Y') : '' }}
                                                         </small>
-                                                        <div class="btn-group">
-                                                            <button type="button"
-                                                                class="btn btn-sm btn-outline-danger delete-image-btn"
-                                                                data-image-id="{{ $image->id }}"
-                                                                data-bs-toggle="tooltip" title="Xóa ảnh">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </div>
+                                                        <button type="button" 
+                                                            class="btn btn-sm btn-outline-danger delete-image-btn"
+                                                            data-image-id="{{ $image->id }}"
+                                                            data-bs-toggle="tooltip" 
+                                                            title="Xóa ảnh">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
                                                     </div>
-                                                    @if ($image->is_cover)
-                                                        <div class="mt-1">
-                                                            <span class="badge bg-success">Ảnh bìa</span>
-                                                        </div>
-                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -281,9 +276,8 @@
                             $approvedComments = $product->comments()->where('is_approved', true)->count();
                             $pendingComments = $product->comments()->where('is_approved', false)->count();
                             $totalComments = $product->comments()->count();
-                            $parentComments = $product->comments()->whereNull('parent_id')->count();
                         @endphp
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="card bg-primary text-white">
                                 <div class="card-body py-3">
                                     <div class="d-flex justify-content-between align-items-center">
@@ -296,7 +290,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="card bg-success text-white">
                                 <div class="card-body py-3">
                                     <div class="d-flex justify-content-between align-items-center">
@@ -309,7 +303,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="card bg-warning text-white">
                                 <div class="card-body py-3">
                                     <div class="d-flex justify-content-between align-items-center">
@@ -318,19 +312,6 @@
                                             <h2 class="mt-2 mb-0">{{ $pendingComments }}</h2>
                                         </div>
                                         <i class="fas fa-clock fa-2x opacity-50"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card bg-info text-white">
-                                <div class="card-body py-3">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="card-title mb-0">Bình luận cha</h6>
-                                            <h2 class="mt-2 mb-0">{{ $parentComments }}</h2>
-                                        </div>
-                                        <i class="fas fa-reply fa-2x opacity-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -361,9 +342,6 @@
                                             {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Mới nhất</option>
                                         <option value="oldest"
                                             {{ request('sort', 'latest') == 'oldest' ? 'selected' : '' }}>Cũ nhất</option>
-                                        <option value="most_replies"
-                                            {{ request('sort', 'latest') == 'most_replies' ? 'selected' : '' }}>Nhiều trả
-                                            lời nhất</option>
                                     </select>
                                 </div>
                             </div>
@@ -373,161 +351,71 @@
                                 $perPage = request('per_page', 5);
                                 $sort = request('sort', 'latest');
 
-                                $query = $product
-                                    ->comments()
-                                    ->with(['user', 'replies.user'])
-                                    ->whereNull('parent_id');
+                                $query = $product->comments()->with('user');
 
                                 switch ($sort) {
                                     case 'oldest':
                                         $query->orderBy('created_at', 'asc');
-                                        break;
-                                    case 'most_replies':
-                                        $query
-                                            ->withCount('replies')
-                                            ->orderBy('replies_count', 'desc')
-                                            ->orderBy('created_at', 'desc');
                                         break;
                                     default:
                                         // latest
                                         $query->orderBy('created_at', 'desc');
                                 }
 
-                                $parentComments = $query->paginate($perPage);
+                                $comments = $query->paginate($perPage);
                             @endphp
 
-                            @forelse($parentComments as $parentComment)
+                            @forelse($comments as $comment)
                                 <div class="comment-item mb-4 {{ !$loop->last ? 'border-bottom pb-4' : '' }}">
-                                    <!-- Bình luận cha -->
                                     <div class="d-flex">
                                         <div class="flex-shrink-0">
-                                            <img src="{{ $parentComment->user->avatar ?? asset('images/default-avatar.png') }}"
+                                            <img src="{{ $comment->user->avatar ?? asset('images/default-avatar.png') }}"
                                                 class="rounded-circle" width="48" height="48"
-                                                alt="{{ $parentComment->user->name }}">
+                                                alt="{{ $comment->user->name }}">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <h6 class="mb-1">
-                                                        {{ $parentComment->user->name }}
-                                                        @if ($parentComment->is_approved)
+                                                        {{ $comment->user->name }}
+                                                        @if ($comment->is_approved)
                                                             <span class="badge bg-success ms-2">Hiển thị</span>
                                                         @else
                                                             <span class="badge bg-warning ms-2">Ẩn</span>
                                                         @endif
-                                                        @if ($parentComment->replies_count > 0)
-                                                            <span class="badge bg-info ms-2">
-                                                                <i
-                                                                    class="fas fa-reply me-1"></i>{{ $parentComment->replies_count }}
-                                                            </span>
-                                                        @endif
                                                     </h6>
                                                     <small class="text-muted">
                                                         <i class="far fa-clock me-1"></i>
-                                                        {{ $parentComment->created_at->format('d/m/Y H:i') }}
+                                                        {{ $comment->created_at->format('d/m/Y H:i') }}
                                                     </small>
                                                 </div>
                                                 <div class="btn-group">
-                                                    @if (!$parentComment->is_approved)
+                                                    @if (!$comment->is_approved)
                                                         <button type="button"
                                                             class="btn btn-sm btn-outline-success approve-btn"
-                                                            data-comment-id="{{ $parentComment->id }}"
+                                                            data-comment-id="{{ $comment->id }}"
                                                             data-bs-toggle="tooltip" title="Hiển thị">
                                                             <i class="fas fa-check"></i>
                                                         </button>
                                                     @else
                                                         <button type="button"
                                                             class="btn btn-sm btn-outline-warning reject-btn"
-                                                            data-comment-id="{{ $parentComment->id }}"
+                                                            data-comment-id="{{ $comment->id }}"
                                                             data-bs-toggle="tooltip" title="Ẩn">
                                                             <i class="fas fa-times"></i>
                                                         </button>
                                                     @endif
                                                     <button type="button"
                                                         class="btn btn-sm btn-outline-danger delete-btn"
-                                                        data-comment-id="{{ $parentComment->id }}"
-                                                        data-bs-toggle="tooltip" title="Xóa">
+                                                        data-comment-id="{{ $comment->id }}" data-bs-toggle="tooltip"
+                                                        title="Xóa">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
                                             </div>
-                                            <p class="mt-2 mb-2">{{ $parentComment->content }}</p>
-
-                                            <!-- Nút hiển thị/ẩn trả lời -->
-                                            @if ($parentComment->replies->count() > 0)
-                                                <button
-                                                    class="btn btn-link btn-sm p-0 text-decoration-none toggle-replies collapsed"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#replies-{{ $parentComment->id }}">
-                                                    <i class="fas fa-chevron-down me-1"></i>
-                                                    <span class="show-text">Hiển thị
-                                                        {{ $parentComment->replies->count() }} trả lời</span>
-                                                    <span class="hide-text d-none">Ẩn trả lời</span>
-                                                </button>
-                                            @endif
+                                            <p class="mt-2 mb-0">{{ $comment->content }}</p>
                                         </div>
                                     </div>
-
-                                    <!-- Các bình luận con -->
-                                    @if ($parentComment->replies->count() > 0)
-                                        <div class="replies ms-5 mt-3 collapse" id="replies-{{ $parentComment->id }}">
-                                            @foreach ($parentComment->replies as $reply)
-                                                <div
-                                                    class="reply-item mb-3 {{ !$loop->last ? 'border-bottom pb-3' : '' }}">
-                                                    <div class="d-flex">
-                                                        <div class="flex-shrink-0">
-                                                            <img src="{{ $reply->user->avatar ?? asset('images/default-avatar.png') }}"
-                                                                class="rounded-circle" width="40" height="40"
-                                                                alt="{{ $reply->user->name }}">
-                                                        </div>
-                                                        <div class="flex-grow-1 ms-3">
-                                                            <div class="d-flex justify-content-between align-items-start">
-                                                                <div>
-                                                                    <h6 class="mb-1">
-                                                                        {{ $reply->user->name }}
-                                                                        @if ($reply->is_approved)
-                                                                            <span class="badge bg-success ms-2">Hiển
-                                                                                thị</span>
-                                                                        @else
-                                                                            <span class="badge bg-warning ms-2">Ẩn</span>
-                                                                        @endif
-                                                                    </h6>
-                                                                    <small class="text-muted">
-                                                                        <i class="far fa-clock me-1"></i>
-                                                                        {{ $reply->created_at->format('d/m/Y H:i') }}
-                                                                    </small>
-                                                                </div>
-                                                                <div class="btn-group">
-                                                                    @if (!$reply->is_approved)
-                                                                        <button type="button"
-                                                                            class="btn btn-sm btn-outline-success approve-btn"
-                                                                            data-comment-id="{{ $reply->id }}"
-                                                                            data-bs-toggle="tooltip" title="Hiển thị">
-                                                                            <i class="fas fa-check"></i>
-                                                                        </button>
-                                                                    @else
-                                                                        <button type="button"
-                                                                            class="btn btn-sm btn-outline-warning reject-btn"
-                                                                            data-comment-id="{{ $reply->id }}"
-                                                                            data-bs-toggle="tooltip" title="Ẩn">
-                                                                            <i class="fas fa-times"></i>
-                                                                        </button>
-                                                                    @endif
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-outline-danger delete-btn"
-                                                                        data-comment-id="{{ $reply->id }}"
-                                                                        data-bs-toggle="tooltip" title="Xóa">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mt-2 mb-0">{{ $reply->content }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
                                 </div>
                             @empty
                                 <div class="text-center py-4">
@@ -539,18 +427,18 @@
                             @endforelse
 
                             <!-- Phân trang -->
-                            @if ($parentComments->hasPages())
+                            @if ($comments->hasPages())
                                 <div
                                     class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 gap-3">
                                     <div class="text-muted small">
                                         <i class="fas fa-info-circle me-1"></i>
-                                        Hiển thị {{ $parentComments->firstItem() ?? 0 }} -
-                                        {{ $parentComments->lastItem() ?? 0 }}
-                                        của {{ $parentComments->total() }} bình luận
-                                        ({{ ceil($parentComments->total() / $perPage) }} trang)
+                                        Hiển thị {{ $comments->firstItem() ?? 0 }} -
+                                        {{ $comments->lastItem() ?? 0 }}
+                                        của {{ $comments->total() }} bình luận
+                                        ({{ ceil($comments->total() / $perPage) }} trang)
                                     </div>
                                     <nav aria-label="Phân trang bình luận">
-                                        {{ $parentComments->appends(request()->query())->links('pagination::bootstrap-5') }}
+                                        {{ $comments->appends(request()->query())->links('pagination::bootstrap-5') }}
                                     </nav>
                                 </div>
                             @endif
@@ -844,14 +732,7 @@
                                 accept="image/*" required>
                             <div class="form-text">Có thể chọn nhiều ảnh cùng lúc. Hỗ trợ định dạng: JPG, PNG, GIF</div>
                         </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="setAsCover" name="set_as_cover">
-                                <label class="form-check-label" for="setAsCover">
-                                    Đặt ảnh đầu tiên làm ảnh bìa
-                                </label>
-                            </div>
-                        </div>
+
                     </form>
                     <div id="uploadPreview" class="row g-2 mt-3"></div>
                 </div>
@@ -862,6 +743,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('styles')
@@ -1175,6 +1057,112 @@
             $(this).toggleClass('collapsed');
         });
 
-        
+        // Xử lý upload ảnh
+        $(document).ready(function() {
+            // Preview ảnh trước khi upload
+            $('#images').change(function() {
+                const files = this.files;
+                const preview = $('#uploadPreview');
+                preview.empty();
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.append(`
+                                <div class="col-4">
+                                    <div class="card">
+                                        <img src="${e.target.result}" class="card-img-top" alt="Preview"
+                                            style="height: 100px; object-fit: cover;">
+                                    </div>
+                                </div>
+                            `);
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+
+            // Xử lý upload ảnh
+            $('#submitUploadBtn').click(function() {
+                const formData = new FormData($('#uploadImageForm')[0]);
+                const $btn = $(this);
+
+                $btn.prop('disabled', true);
+
+                $.ajax({
+                    url: '{{ route('admin.products.upload-images', $product->id) }}',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 419) {
+                            toastr.error('Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.');
+                        } else {
+                            toastr.error('Có lỗi xảy ra khi tải lên hình ảnh');
+                        }
+                    },
+                    complete: function() {
+                        $btn.prop('disabled', false);
+                    }
+                });
+            });
+
+            // Xử lý xóa ảnh
+            $('.delete-image-btn').click(function() {
+                const imageId = $(this).data('image-id');
+                const $btn = $(this);
+
+                if (confirm('Bạn có chắc chắn muốn xóa ảnh này?')) {
+                    $btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: `/admin/products/images/${imageId}`,
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                $btn.closest('.col-md-3').fadeOut(400, function() {
+                                    $(this).remove();
+                                    if ($('.delete-image-btn').length === 0) {
+                                        $('#album-preview').closest('.card-body').prepend(
+                                            '<div class="text-center py-4 text-muted">Chưa có hình ảnh nào.</div>'
+                                        );
+                                    }
+                                });
+                            } else {
+                                toastr.error(response.message || 'Có lỗi xảy ra khi xóa ảnh');
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 419) {
+                                toastr.error('Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.');
+                            } else {
+                                toastr.error('Có lỗi xảy ra khi xóa ảnh');
+                            }
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endpush
