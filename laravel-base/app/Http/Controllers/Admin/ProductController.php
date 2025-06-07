@@ -664,4 +664,180 @@ class ProductController extends Controller
 
         return view('admin.products.trashed', compact('products', 'categories', 'publishers'));
     }
+
+    public function restore($id)
+    {
+        try {
+            $product = Product::withTrashed()->find($id);
+            $product->restore();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sản phẩm đã được khôi phục thành công.'
+                ]);
+            }
+
+            return redirect()
+                ->route('admin.products.trashed')
+                ->with('success', 'Sản phẩm đã được khôi phục thành công.');
+        } catch (\Exception $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Có lỗi xảy ra khi khôi phục sản phẩm.'
+                ], 500);
+            }
+
+            return redirect()
+                ->route('admin.products.tratrashedsh')
+                ->with('error', 'Có lỗi xảy ra khi khôi phục sản phẩm.');
+        }
+    }
+
+    public function restoreAll()
+    {
+        try {
+            Product::onlyTrashed()->restore();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Đã khôi phục tất cả sản phẩm.'
+                ]);
+            }
+
+            return redirect()
+                ->route('admin.products.trashed')
+                ->with('success', 'Đã khôi phục tất cả sản phẩm.');
+        } catch (\Exception $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Có lỗi xảy ra khi khôi phục tất cả sản phẩm.'
+                ], 500);
+            }
+
+            return redirect()
+                ->route('admin.products.trashed')
+                ->with('error', 'Có lỗi xảy ra khi khôi phục tất cả sản phẩm.');
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $product = Product::withTrashed()->find($id);
+
+            // Kiểm tra xem sản phẩm có được sử dụng trong đơn hàng nào không
+            $orderItems = OrderItem::where('product_id', $product->id)->exists();
+            if ($orderItems) {
+                if (request()->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Không thể xóa vĩnh viễn sản phẩm này vì đã được sử dụng trong đơn hàng.'
+                    ], 422);
+                }
+                return redirect()
+                    ->route('admin.products.trash')
+                    ->with('error', 'Không thể xóa vĩnh viễn sản phẩm này vì đã được sử dụng trong đơn hàng.');
+            }
+
+            // Xóa ảnh bìa
+            if ($product->cover_image) {
+                Storage::disk('public')->delete($product->cover_image);
+            }
+
+            // Xóa ảnh album
+            foreach ($product->albums as $album) {
+                Storage::disk('public')->delete($album->image);
+            }
+
+            // Xóa vĩnh viễn sản phẩm
+            $product->forceDelete();
+
+            DB::commit();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Sản phẩm đã được xóa vĩnh viễn.'
+                ]);
+            }
+
+            return redirect()
+                ->route('admin.products.trash')
+                ->with('success', 'Sản phẩm đã được xóa vĩnh viễn.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Có lỗi xảy ra khi xóa vĩnh viễn sản phẩm.'
+                ], 500);
+            }
+
+            return redirect()
+                ->route('admin.products.trash')
+                ->with('error', 'Có lỗi xảy ra khi xóa vĩnh viễn sản phẩm.');
+        }
+    }
+
+    public function forceDeleteAll()
+    {
+        DB::beginTransaction();
+        try {
+            $products = Product::onlyTrashed()->get();
+
+            foreach ($products as $product) {
+                // Kiểm tra xem sản phẩm có được sử dụng trong đơn hàng nào không
+                $orderItems = OrderItem::where('product_id', $product->id)->exists();
+                if ($orderItems) {
+                    continue; // Bỏ qua sản phẩm đã được sử dụng trong đơn hàng
+                }
+
+                // Xóa ảnh bìa
+                if ($product->cover_image) {
+                    Storage::disk('public')->delete($product->cover_image);
+                }
+
+                // Xóa ảnh album
+                foreach ($product->albums as $album) {
+                    Storage::disk('public')->delete($album->image);
+                }
+
+                // Xóa vĩnh viễn sản phẩm
+                $product->forceDelete();
+            }
+
+            DB::commit();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Đã xóa vĩnh viễn tất cả sản phẩm có thể xóa.'
+                ]);
+            }
+
+            return redirect()
+                ->route('admin.products.trash')
+                ->with('success', 'Đã xóa vĩnh viễn tất cả sản phẩm có thể xóa.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Có lỗi xảy ra khi xóa vĩnh viễn tất cả sản phẩm.'
+                ], 500);
+            }
+
+            return redirect()
+                ->route('admin.products.trash')
+                ->with('error', 'Có lỗi xảy ra khi xóa vĩnh viễn tất cả sản phẩm.');
+        }
+    }
 }

@@ -205,3 +205,174 @@
         }
     </style>
 @endpush
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Xử lý khôi phục sản phẩm
+            $('.restore-btn').click(function() {
+                const productId = $(this).data('product-id');
+                const $btn = $(this);
+
+                if (confirm('Bạn có chắc chắn muốn khôi phục sản phẩm này?')) {
+                    $btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: `/admin/products/${productId}/restore`,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 419) {
+                                toastr.error('Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.');
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                toastr.error(xhr.responseJSON.message);
+                            } else {
+                                toastr.error('Có lỗi xảy ra khi khôi phục sản phẩm');
+                            }
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    });
+                }
+            });
+
+            // Xử lý xóa vĩnh viễn sản phẩm
+            $('.force-delete-btn').click(function() {
+                const productId = $(this).data('product-id');
+                const $btn = $(this);
+
+                if (confirm('Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm này? Hành động này không thể hoàn tác!')) {
+                    $btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: `/admin/products/${productId}/force-delete`,
+                        method: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 419) {
+                                toastr.error('Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.');
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                toastr.error(xhr.responseJSON.message);
+                            } else {
+                                toastr.error('Có lỗi xảy ra khi xóa vĩnh viễn sản phẩm');
+                            }
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    });
+                }
+            });
+
+            // Xử lý khôi phục tất cả
+            $('#restoreAllBtn').click(function() {
+                const $btn = $(this);
+
+                if (confirm('Bạn có chắc chắn muốn khôi phục tất cả sản phẩm?')) {
+                    $btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: '{{ route("admin.products.restore-all") }}',
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(() => {
+                                    window.location.href = '{{ route("admin.products.index") }}';
+                                }, 1000);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 419) {
+                                toastr.error('Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.');
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                toastr.error(xhr.responseJSON.message);
+                            } else {
+                                toastr.error('Có lỗi xảy ra khi khôi phục tất cả sản phẩm');
+                            }
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    });
+                }
+            });
+
+            // Xử lý xóa vĩnh viễn tất cả
+            $('#forceDeleteAllBtn').click(function() {
+                const $btn = $(this);
+
+                if (confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả sản phẩm? Hành động này không thể hoàn tác!')) {
+                    $btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: '{{ route("admin.products.force-delete-all") }}',
+                        method: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 419) {
+                                toastr.error('Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.');
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                toastr.error(xhr.responseJSON.message);
+                            } else {
+                                toastr.error('Có lỗi xảy ra khi xóa vĩnh viễn tất cả sản phẩm');
+                            }
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+@endpush 

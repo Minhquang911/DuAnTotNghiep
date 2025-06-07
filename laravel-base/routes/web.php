@@ -75,6 +75,10 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
 
             // Thùng rác sản phẩm
             Route::get('trashed', [ProductController::class, 'trashed'])->name('trashed');
+            Route::post('{id}/restore', [ProductController::class, 'restore'])->name('restore');
+            Route::delete('{id}/force-delete', [ProductController::class, 'forceDelete'])->name('force-delete');
+            Route::post('restore-all', [ProductController::class, 'restoreAll'])->name('restore-all');
+            Route::delete('force-delete-all', [ProductController::class, 'forceDeleteAll'])->name('force-delete-all');
         });
 
         // Quản lý sản phẩm (CRUD chính)
