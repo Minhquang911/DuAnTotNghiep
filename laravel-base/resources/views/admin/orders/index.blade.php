@@ -466,3 +466,105 @@
         }
     </style>
 @endpush
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        // Cấu hình toastr
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000"
+        };
+
+        function confirmOrder(orderId) {
+            if (confirm('Bạn có chắc chắn muốn xác nhận đơn hàng này?')) {
+                fetch(`/admin/orders/${orderId}/confirm`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            toastr.success(data.message);
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        toastr.error('Có lỗi xảy ra khi xác nhận đơn hàng');
+                    });
+            }
+        }
+
+        function cancelOrder(orderId) {
+            if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
+                fetch(`/admin/orders/${orderId}/cancel`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            toastr.success(data.message);
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        toastr.error('Có lỗi xảy ra khi hủy đơn hàng');
+                    });
+            }
+        }
+
+        function updateStatus(orderId, status) {
+            if (confirm('Bạn có chắc chắn muốn cập nhật trạng thái đơn hàng?')) {
+                fetch(`/admin/orders/${orderId}/update-status`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            status: status
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            toastr.success(data.message);
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        toastr.error('Có lỗi xảy ra khi cập nhật trạng thái');
+                    });
+            }
+        }
+
+        // Khởi tạo tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+@endpush

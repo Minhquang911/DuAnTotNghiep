@@ -60,4 +60,124 @@ class OrderController extends Controller
 
         return view('admin.orders.index', compact('orders', 'orderStats'));
     }
+
+    public function confirm(Order $order)
+    {
+        try {
+            DB::beginTransaction();
+            
+            // Kiểm tra trạng thái hiện tại
+            if ($order->status !== 'pending') {
+                throw new \Exception('Chỉ có thể xác nhận đơn hàng đang ở trạng thái chờ xác nhận');
+            }
+
+            // Cập nhật trạng thái đơn hàng
+            $order->update([
+                'status' => 'processing',
+                // 'processed_at' => now() // Sử dụng để truy vết
+            ]);
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Xác nhận đơn hàng thành công'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function cancel(Order $order)
+    {
+        try {
+            DB::beginTransaction();
+            
+            // Kiểm tra trạng thái hiện tại
+            if (!in_array($order->status, ['pending', 'processing'])) {
+                throw new \Exception('Không thể hủy đơn hàng ở trạng thái này');
+            }
+
+            // Cập nhật trạng thái đơn hàng
+            $order->update([
+                'status' => 'cancelled',
+                // 'cancelled_at' => now() // Sử dụng để truy vết
+            ]);
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Hủy đơn hàng thành công'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Cập nhật trạng thái đơn hàng
+            if ($request->has('status')) {
+                $validStatuses = ['processing', 'delivering', 'completed', 'failed', 'finished'];
+                if (!in_array($request->status, $validStatuses)) {
+                    throw new \Exception('Trạng thái không hợp lệ');
+                }
+
+                // Kiểm tra luồng trạng thái
+                $statusFlow = [
+                    'pending' => ['processing'],
+                    'processing' => ['delivering'],
+                    'delivering' => ['completed', 'failed'],
+                    'completed' => ['finished'],
+                    'failed' => ['delivering'] // Thêm khả năng chuyển từ failed về delivering
+                ];
+
+                if (!isset($statusFlow[$order->status]) || !in_array($request->status, $statusFlow[$order->status])) {
+                    throw new \Exception('Không thể chuyển sang trạng thái này');
+                }
+
+                $order->status = $request->status;
+
+                // Tự động cập nhật thanh toán cho đơn COD khi hoàn thành
+                if ($request->status === 'completed' && $order->payment_method === 'cod') {
+                    $order->payment_status = 'paid';
+                    $order->paid_at = now();
+                }
+            }
+
+            // Cập nhật trạng thái thanh toán
+            if ($request->has('payment_status')) {
+                if ($request->payment_status === 'paid' && $order->payment_status === 'unpaid') {
+                    $order->payment_status = 'paid';
+                    $order->paid_at = $request->paid_at ? Carbon::parse($request->paid_at) : now();
+                } else {
+                    throw new \Exception('Không thể cập nhật trạng thái thanh toán');
+                }
+            }
+
+            $order->save();
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật trạng thái thành công'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
 } 

@@ -119,6 +119,15 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
         // Quản lý bài viết
         Route::resource('posts', PostController::class);
         Route::post('/posts/{post}/toggle-status', [PostController::class, 'toggleStatus'])->name('admin.posts.toggle-status');
+
+        // Quản lý đơn hàng
+        Route::prefix('orders')->name('orders.')->group(function () {
+            Route::get('/', [OrderController::class, 'index'])->name('index');
+            Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+            Route::post('/{order}/confirm', [OrderController::class, 'confirm'])->name('confirm');
+            Route::post('/{order}/cancel', [OrderController::class, 'cancel'])->name('cancel');
+            Route::post('/{order}/update-status', [OrderController::class, 'updateStatus'])->name('update-status');
+        });
     });
 
 // Các route cho user thường
