@@ -1,20 +1,20 @@
-
 <?php
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Format;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Publisher;
-use App\Models\Format;
 use App\Models\Language;
-use Illuminate\Http\Request;
+use App\Models\OrderItem;
+use App\Models\Publisher;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
@@ -468,6 +468,15 @@ class ProductController extends Controller
             $existingVariantIds = $product->variants->pluck('id')->toArray();
             $updatedVariantIds = [];
 
+            // Kiểm tra các biến thể cần xóa có được sử dụng trong đơn hàng không
+            $variantsToDelete = array_diff($existingVariantIds, collect($request->variants)->pluck('id')->filter()->toArray());
+            if (!empty($variantsToDelete)) {
+                $usedVariants = OrderItem::whereIn('product_variant_id', $variantsToDelete)->exists();
+                if ($usedVariants) {
+                    throw new \Exception('Không thể xóa một số biến thể vì chúng đã được sử dụng trong đơn hàng.');
+                }
+            }
+
             foreach ($request->variants as $variant) {
                 if (isset($variant['id'])) {
                     // Update existing variant
@@ -599,5 +608,60 @@ class ProductController extends Controller
                 'message' => 'Có lỗi xảy ra khi cập nhật trạng thái. Vui lòng thử lại sau.'
             ], 500);
         }
+    }
+
+    public function trashed(Request $request)
+    {
+        $query = Product::onlyTrashed()->with(['category', 'publisher']);
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('author', 'like', "%{$search}%")
+                    ->orWhere('isbn', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->get('category_id'));
+        }
+
+        // Filter by publisher
+        if ($request->filled('publisher_id')) {
+            $query->where('publisher_id', $request->get('publisher_id'));
+        }
+
+        // Sort
+        $sort = $request->get('sort', 'deleted_at_desc');
+        switch ($sort) {
+            case 'title_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'title_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            case 'author_asc':
+                $query->orderBy('author', 'asc');
+                break;
+            case 'author_desc':
+                $query->orderBy('author', 'desc');
+                break;
+            case 'deleted_at_asc':
+                $query->orderBy('deleted_at', 'asc');
+                break;
+            default:
+                $query->orderBy('deleted_at', 'desc');
+        }
+
+        $products = $query->paginate(10)->withQueryString();
+
+        // Get filter options
+        $categories = Category::active()->get();
+        $publishers = Publisher::active()->get();
+
+        return view('admin.products.trashed', compact('products', 'categories', 'publishers'));
     }
 }

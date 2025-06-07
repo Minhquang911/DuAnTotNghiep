@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PublisherController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\AlbumController;
+use App\Http\Controllers\Admin\OrderController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,7 +72,11 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
             // Quản lý album ảnh sản phẩm
             Route::post('{product}/upload-images', [AlbumController::class, 'upload'])->name('upload-images');
             Route::delete('images/{album}', [AlbumController::class, 'destroy'])->name('albums.destroy');
+
+            // Thùng rác sản phẩm
+            Route::get('trashed', [ProductController::class, 'trashed'])->name('trashed');
         });
+
         // Quản lý sản phẩm (CRUD chính)
         Route::resource('products', ProductController::class);
 
