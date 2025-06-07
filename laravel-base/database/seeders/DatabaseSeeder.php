@@ -24,10 +24,11 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             ProductVariantSeeder::class,
             CommentSeeder::class,
-            RatingSeeder::class,
             ContactSeeder::class,
             PostSeeder::class,
             AlbumSeeder::class,
+            OrderSeeder::class,
+            RatingSeeder::class,
         ]);
     }
 }
