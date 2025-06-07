@@ -18,7 +18,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 1, // Cần đảm bảo category này tồn tại
                 'publisher_id' => 1, // Cần đảm bảo publisher này tồn tại
                 'description' => 'Đắc nhân tâm của Dale Carnegie là quyển sách nổi tiếng nhất, bán chạy nhất và có tầm ảnh hưởng nhất của mọi thời đại.',
-                'cover_image' => 'products/dac-nhan-tam.jpg',
+                'cover_image' => null,
                 'published_at' => '2019-01-01',
                 'isbn' => '9786048862545',
                 'is_active' => true,
@@ -36,7 +36,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 1,
                 'publisher_id' => 1,
                 'description' => 'Nhà giả kim của Paulo Coelho như một câu chuyện cổ tích giản dị, nhân ái, giàu chất thơ, thấm đẫm những minh triết huyền bí của phương Đông.',
-                'cover_image' => 'products/nha-gia-kim.jpg',
+                'cover_image' => null,
                 'published_at' => '2018-01-01',
                 'isbn' => '9786048862546',
                 'is_active' => true,
@@ -54,7 +54,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 2,
                 'publisher_id' => 2,
                 'description' => 'Tôi thấy hoa vàng trên cỏ xanh là một tác phẩm đặc sắc của nhà văn Nguyễn Nhật Ánh.',
-                'cover_image' => 'products/toi-thay-hoa-vang-tren-co-xanh.jpg',
+                'cover_image' => null,
                 'published_at' => '2020-01-01',
                 'isbn' => '9786048862547',
                 'is_active' => true,
@@ -94,5 +94,34 @@ class ProductSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        for ($i = 1; $i <= 10; $i++) {
+            DB::table('products')->insert([
+                'title' => 'Sản phẩm số ' . $i,
+                'slug' => 'san-pham-so-' . $i,
+                'author' => fake()->name(),
+                'category_id' => 1,
+                'publisher_id' => 1,
+                'description' => fake()->paragraph(),
+                'cover_image' => null,
+                'published_at' => now()->subYears(rand(1, 5)),
+                'isbn' => '97860488625' . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'view_count' => rand(100, 1000),
+                'order_count' => rand(10, 100),
+                'is_active' => true,
+                'is_hot' => false,
+                'is_new' => false,
+                'is_best_seller' => false,
+                'is_recommended' => false,
+                'is_featured' => false,
+                'is_promotion' => false,
+                'length_cm' => rand(15, 22),
+                'width_cm' => rand(11, 16),
+                'weight_g' => rand(300, 400),
+                'page_count' => rand(200, 400),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
-} 
+}

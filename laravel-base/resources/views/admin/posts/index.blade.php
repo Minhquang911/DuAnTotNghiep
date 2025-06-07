@@ -142,9 +142,9 @@
                                                 <div class="fw-bold">{{ Str::limit($post->title, 100) }}</div>
                                                 <small class="text-muted">
                                                     <i class="far fa-clock me-1"></i>
-                                                    {{ $post->created_at->format('d/m/Y') }}
+                                                    {{ $post->created_at ? $post->created_at->format('d/m/Y') : '' }}
                                                     @if ($post->updated_at && $post->updated_at->ne($post->created_at))
-                                                        <span class="ms-2"><i class="fas fa-edit me-1"></i> Sửa: {{ $post->updated_at->format('d/m/Y') }}</span>
+                                                        <span class="ms-2"><i class="fas fa-edit me-1"></i> Sửa: {{ $post->updated_at ? $post->updated_at->format('d/m/Y') : '' }}</span>
                                                     @endif
                                                 </small>
                                             </td>

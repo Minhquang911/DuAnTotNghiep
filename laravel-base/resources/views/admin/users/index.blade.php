@@ -88,15 +88,16 @@
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td>
-                                                <div class="avatar-wrapper">
-                                                    @if ($user->avatar)
+                                                @if ($user->avatar)
+                                                    <div class="avatar-wrapper">
                                                         <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar"
                                                             class="img-thumbnail avatar-image">
-                                                    @else
-                                                        <img src="https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg"
-                                                            alt="Default Avatar" class="img-thumbnail avatar-image">
-                                                    @endif
-                                                </div>
+                                                    </div>
+                                                @else
+                                                    <div class="avatar-circle bg-primary text-white me-2">
+                                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                                    </div>
+                                                @endif
                                             </td>
                                             <td>
                                                 <div class="fw-bold">{{ $user->name }}</div>
@@ -288,6 +289,16 @@
         .badge {
             font-size: 0.875rem;
             padding: 0.5em 0.75em;
+        }
+
+        .avatar-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
     </style>
 @endpush

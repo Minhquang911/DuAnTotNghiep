@@ -150,7 +150,7 @@
                                             <td class="text-center">
                                                 <small class="text-muted">
                                                     <i class="far fa-clock me-1"></i>
-                                                    {{ $rating->deleted_at->format('d/m/Y') }}
+                                                    {{ $rating->deleted_at ? $rating->deleted_at->format('d/m/Y') : '' }}
                                                 </small>
                                             </td>
                                             <td class="text-center">

@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
             'gender' => 'male',
             'birthday' => '1990-01-01',
             'phone' => '0909090909',
-            'avatar' => 'https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg',
+            'avatar' => null,
         ]);
         
         // Tạo tài khoản user
@@ -39,7 +39,26 @@ class UserSeeder extends Seeder
             'gender' => 'male',
             'birthday' => '1990-01-01',
             'phone' => '0909090908',
-            'avatar' => 'https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpg',
+            'avatar' => null,
         ]);
+
+        // Tạo thêm nhiều user random
+        for ($i = 1; $i <= 8; $i++) {
+            $gender = rand(0, 1) ? 'male' : 'female';
+            $name = fake()->name($gender);
+            $email = "user{$i}@gmail.com";
+            $phone = '09' . rand(10000000, 99999999);
+
+            User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make('12345678'),
+                'role_id' => $userRoleId,
+                'gender' => $gender,
+                'birthday' => fake()->date('Y-m-d', '2005-12-31'),
+                'phone' => $phone,
+                'avatar' => null,
+            ]);
+        }
     }
 } 

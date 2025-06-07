@@ -53,7 +53,5 @@ class CommentSeeder extends Seeder
                 ]);
             }
         }
-
-        $this->command->info('Đã tạo dữ liệu mẫu cho bảng comments thành công!');
     }
 }

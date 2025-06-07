@@ -48,7 +48,7 @@
                     <div class="col-md-3 text-center">
                         @if ($post->image)
                             <img src="{{ asset('storage/' . $post->image) }}" class="product-cover mb-2" width="200"
-                                 alt="Ảnh bìa">
+                                alt="Ảnh bìa">
                         @else
                             <div class="text-muted border rounded p-4 bg-light">Không có ảnh bài viết</div>
                         @endif
@@ -74,16 +74,16 @@
                         <div class="row mb-2 align-items-center">
                             <div class="col-6 d-flex">
                                 <span class="product-attr-label me-2">Ngày tạo:</span>
-                                <span>{{ $post->created_at->format('d/m/Y') }}</span>
+                                <span>{{ $post->created_at ? $post->created_at->format('d/m/Y') : '' }}</span>
                             </div>
                             <div class="col-6 d-flex">
                                 @if ($post->updated_at && $post->updated_at->ne($post->created_at))
                                     <span class="product-attr-label me-2">Ngày sửa:</span>
-                                    <span>{{ $post->updated_at->format('d/m/Y') }}</span>
+                                    <span>{{ $post->updated_at ? $post->updated_at->format('d/m/Y') : '' }}</span>
                                 @endif
                             </div>
                         </div>
-
+                        
                         <div class="row mb-2">
                             <div class="col-sm-2 product-attr-label">Nội dung:</div>
                             <div class="col-sm-10">{!! $post->content !!}</div>
