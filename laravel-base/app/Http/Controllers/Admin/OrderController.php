@@ -61,6 +61,12 @@ class OrderController extends Controller
         return view('admin.orders.index', compact('orders', 'orderStats'));
     }
 
+    public function show(Order $order)
+    {
+        $order->load(['user', 'orderItems.product', 'orderItems.productVariant']);
+        return view('admin.orders.show', compact('order'));
+    }
+
     public function confirm(Order $order)
     {
         try {
@@ -171,6 +177,42 @@ class OrderController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Cập nhật trạng thái thành công'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    // Thêm command để tự động hủy đơn hàng chưa thanh toán sau 24h
+    public function cancelUnpaidOrders()
+    {
+        try {
+            DB::beginTransaction();
+
+            // Tìm các đơn hàng online (bank_transfer) chưa thanh toán và đã quá 24h
+            $unpaidOrders = Order::where('payment_method', 'bank_transfer')
+                ->where('payment_status', 'unpaid')
+                ->where('status', 'pending')
+                ->where('created_at', '<=', Carbon::now()->subHours(24))
+                ->get();
+
+            $count = 0;
+            foreach ($unpaidOrders as $order) {
+                $order->update([
+                    'status' => 'cancelled',
+                    'cancelled_at' => now()
+                ]);
+                $count++;
+            }
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => "Đã hủy {$count} đơn hàng chưa thanh toán sau 24h"
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
