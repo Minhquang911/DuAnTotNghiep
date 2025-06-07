@@ -109,12 +109,6 @@
                                                     <i class="far fa-clock me-1"></i>
                                                     {{ $comment->created_at->format('d/m/Y H:i') }}
                                                 </small>
-                                                @if ($comment->replies_count > 0)
-                                                    <div class="mt-1 text-info">
-                                                        <i class="fas fa-reply-all me-1"></i>
-                                                        <small>{{ $comment->replies_count }} phản hồi</small>
-                                                    </div>
-                                                @endif
                                             </td>
                                             <td>
                                                 <a href="{{ route('admin.products.show', $comment->product_id) }}"

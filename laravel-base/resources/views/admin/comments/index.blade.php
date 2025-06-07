@@ -22,7 +22,7 @@
 
                 <!-- Thống kê -->
                 <div class="row mb-4">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="card bg-primary text-white">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="card bg-success text-white">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="card bg-warning text-white">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -57,19 +57,6 @@
                                         <h2 class="mt-2 mb-0">{{ $stats['pending'] }}</h2>
                                     </div>
                                     <i class="fas fa-clock fa-2x opacity-50"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card bg-info text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="card-title mb-0">Bình luận cha</h6>
-                                        <h2 class="mt-2 mb-0">{{ $stats['parents'] }}</h2>
-                                    </div>
-                                    <i class="fas fa-reply fa-2x opacity-50"></i>
                                 </div>
                             </div>
                         </div>
@@ -119,13 +106,6 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <select name="type" class="form-select">
-                                        <option value="">-- Loại --</option>
-                                        <option value="parent" {{ request('type') === 'parent' ? 'selected' : '' }}>Bình luận cha</option>
-                                        <option value="reply" {{ request('type') === 'reply' ? 'selected' : '' }}>Bình luận con</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
                                     <select name="sort" class="form-select">
                                         <option value="latest" {{ request('sort') === 'latest' ? 'selected' : '' }}>Mới nhất</option>
                                         <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Cũ nhất</option>
@@ -150,7 +130,6 @@
                                         <th>Nội dung</th>
                                         <th>Sản phẩm</th>
                                         <th>Người dùng</th>
-                                        <th class="text-center" style="width: 100px">Loại</th>
                                         <th class="text-center" style="width: 100px">Trạng thái</th>
                                         <th class="text-center" style="width: 150px">Thao tác</th>
                                     </tr>
@@ -184,13 +163,6 @@
                                                         <small class="text-muted">{{ $comment->user->email }}</small>
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td class="text-center">
-                                                @if($comment->parent_id)
-                                                    <span class="badge bg-info">Bình luận con</span>
-                                                @else
-                                                    <span class="badge bg-primary">Bình luận cha</span>
-                                                @endif
                                             </td>
                                             <td class="text-center">
                                                 @if($comment->is_approved)

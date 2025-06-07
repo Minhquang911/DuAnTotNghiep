@@ -13,7 +13,7 @@ class CommentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Comment::with(['user', 'product', 'parent']);
+        $query = Comment::with(['user', 'product']);
 
         // Tìm kiếm theo nội dung
         if ($request->filled('search')) {
@@ -38,18 +38,6 @@ class CommentController extends Controller
                 $query->where('is_approved', true);
             } elseif ($isApproved === '0') {
                 $query->where('is_approved', false);
-            }
-        }
-
-        // Lọc theo loại bình luận (cha/con)
-        if ($request->filled('type')) {
-            switch ($request->get('type')) {
-                case 'parent':
-                    $query->whereNull('parent_id');
-                    break;
-                case 'reply':
-                    $query->whereNotNull('parent_id');
-                    break;
             }
         }
 
@@ -84,8 +72,6 @@ class CommentController extends Controller
             'total' => Comment::count(),
             'approved' => Comment::where('is_approved', true)->count(),
             'pending' => Comment::where('is_approved', false)->count(),
-            'parents' => Comment::whereNull('parent_id')->count(),
-            'replies' => Comment::whereNotNull('parent_id')->count(),
         ];
 
         return view('admin.comments.index', compact(
@@ -145,9 +131,7 @@ class CommentController extends Controller
         try {
             DB::beginTransaction();
 
-            // Xóa các bình luận con trước
-            $comment->replies()->delete();
-            // Sau đó xóa bình luận cha
+            // Xóa bình luận
             $comment->delete();
 
             DB::commit();
@@ -167,7 +151,7 @@ class CommentController extends Controller
 
     public function trashed(Request $request)
     {
-        $query = Comment::onlyTrashed()->with('user', 'replies');
+        $query = Comment::onlyTrashed()->with('user');
 
         // Tìm kiếm theo nội dung
         if ($request->filled('search')) {
@@ -192,18 +176,6 @@ class CommentController extends Controller
                 $query->where('is_approved', true);
             } elseif ($isApproved === '0') {
                 $query->where('is_approved', false);
-            }
-        }
-
-        // Lọc theo loại bình luận (cha/con)
-        if ($request->filled('type')) {
-            switch ($request->get('type')) {
-                case 'parent':
-                    $query->whereNull('parent_id');
-                    break;
-                case 'reply':
-                    $query->whereNotNull('parent_id');
-                    break;
             }
         }
 
@@ -240,8 +212,6 @@ class CommentController extends Controller
         try {
             DB::beginTransaction();
             $comment = Comment::onlyTrashed()->findOrFail($id);
-            // Nếu muốn, khôi phục luôn các replies bị xóa
-            $comment->replies()->onlyTrashed()->restore();
             $comment->restore();
 
             DB::commit();
@@ -264,10 +234,6 @@ class CommentController extends Controller
         try {
             DB::beginTransaction();
             $comment = Comment::onlyTrashed()->findOrFail($id);
-
-            // Xóa vĩnh viễn replies trước
-            $comment->replies()->onlyTrashed()->forceDelete();
-            // Sau đó xóa bình luận cha
             $comment->forceDelete();
 
             DB::commit();
