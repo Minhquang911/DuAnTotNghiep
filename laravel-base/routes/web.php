@@ -22,12 +22,12 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\AlbumController;
 use App\Http\Controllers\Admin\OrderController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Các route cho admin
 Route::middleware(['auth', CheckRole::class . ':admin'])

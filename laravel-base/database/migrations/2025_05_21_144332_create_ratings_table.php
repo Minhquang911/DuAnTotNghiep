@@ -19,13 +19,13 @@ return new class extends Migration
             $table->integer('rating')->comment('Điểm đánh giá từ 1 đến 5');
             $table->text('comment')->nullable();
             $table->boolean('is_approved')->default(false);
-            $table->text('reply')->nullable()->comment('Cửa hàng trả lời'); 
+            $table->text('reply')->nullable()->comment('Cửa hàng trả lời');
             $table->timestamp('reply_at')->nullable()->comment('Thời gian trả lời');
             $table->timestamps();
             $table->softDeletes();
 
-            // Ensure a user can only rate a product variant once
-            $table->unique(['user_id', 'product_variant_id']);
+            // Mỗi user chỉ được đánh giá 1 lần cho 1 biến thể trong 1 đơn hàng
+            $table->unique(['user_id', 'product_id', 'product_variant_id'], 'unique_rating_per_order');
         });
     }
 
