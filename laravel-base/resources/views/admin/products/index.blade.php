@@ -179,7 +179,9 @@
                                                         class="img-thumbnail"
                                                         style="width: 50px; height: 70px; object-fit: cover;">
                                                 @else
-                                                    <span class="text-muted">Không có</span>
+                                                    <img src="{{ asset('auth/img/book_defaut.png') }}"
+                                                        class="img-thumbnail me-2"
+                                                        style="width: 40px; height: 60px; object-fit: cover;">
                                                 @endif
                                             </td>
                                             <td>
@@ -256,7 +258,8 @@
                                                         method="POST" class="d-inline delete-form">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-btn"
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger delete-btn"
                                                             data-bs-toggle="tooltip" title="Xóa">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
@@ -389,7 +392,7 @@
             $('.delete-form').on('submit', function(e) {
                 e.preventDefault();
                 const form = $(this);
-                
+
                 if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
                     $.ajax({
                         url: form.attr('action'),
@@ -410,7 +413,9 @@
                         },
                         error: function(xhr) {
                             if (xhr.status === 419) {
-                                toastr.error('Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.');
+                                toastr.error(
+                                    'Phiên làm việc đã hết hạn. Vui lòng tải lại trang và thử lại.'
+                                    );
                             } else if (xhr.responseJSON && xhr.responseJSON.message) {
                                 toastr.error(xhr.responseJSON.message);
                             } else {

@@ -268,6 +268,10 @@
                                                                         alt="{{ $product->title }}"
                                                                         class="img-thumbnail me-2"
                                                                         style="width: 40px; height: 60px; object-fit: cover;">
+                                                                @else
+                                                                    <img src="{{ asset('auth/img/book_defaut.png') }}"
+                                                                        class="img-thumbnail me-2"
+                                                                        style="width: 40px; height: 60px; object-fit: cover;">
                                                                 @endif
                                                                 <div>
                                                                     <div class="fw-bold">{{ $product->title }}</div>
@@ -378,6 +382,10 @@
                                                                         alt="{{ $book->title }}"
                                                                         class="img-thumbnail me-2"
                                                                         style="width: 40px; height: 60px; object-fit: cover;">
+                                                                @else
+                                                                    <img src="{{ asset('auth/img/book_defaut.png') }}"
+                                                                        class="img-thumbnail me-2"
+                                                                        style="width: 40px; height: 60px; object-fit: cover;">
                                                                 @endif
                                                                 <div>
                                                                     <div class="fw-bold">{{ $book->title }}</div>
@@ -447,6 +455,10 @@
                                                                 @if ($product->cover_image_url)
                                                                     <img src="{{ $product->cover_image_url }}"
                                                                         alt="{{ $product->title }}"
+                                                                        class="img-thumbnail me-2"
+                                                                        style="width: 40px; height: 60px; object-fit: cover;">
+                                                                @else
+                                                                    <img src="{{ asset('auth/img/book_defaut.png') }}"
                                                                         class="img-thumbnail me-2"
                                                                         style="width: 40px; height: 60px; object-fit: cover;">
                                                                 @endif
