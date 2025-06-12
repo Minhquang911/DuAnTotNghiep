@@ -27,15 +27,12 @@
                             <h3 class="card-title text-white fw-bold">
                                 <i class="fas fa-users me-2"></i>Quản lý Người dùng
                             </h3>
-                            <a href="{{ route('admin.users.create') }}" class="btn btn-light btn-sm">
-                                <i class="fas fa-plus me-1"></i> Thêm người dùng mới
-                            </a>
                         </div>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('admin.users.index') }}" method="GET" class="mb-4">
                             <div class="row g-3 align-items-center">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="input-group">
                                         <span class="input-group-text bg-light">
                                             <i class="fas fa-search text-muted"></i>
@@ -44,7 +41,7 @@
                                             placeholder="Tìm kiếm theo tên, email..." value="{{ request('search') }}">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="input-group">
                                         <span class="input-group-text bg-light">
                                             <i class="fas fa-venus-mars text-muted"></i>
@@ -58,7 +55,21 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="fas fa-user text-muted"></i>
+                                        </span>
+                                        <select name="status" class="form-control">
+                                            <option value="">Tất cả trạng thái</option>
+                                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Đang hoạt động
+                                            </option>
+                                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Đang khóa
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-search me-1"></i> Tìm kiếm
                                     </button>
@@ -143,10 +154,10 @@
                                             </td>
                                             <td class="text-center">
                                                 <div class="btn-group">
-                                                    <a href="{{ route('admin.users.edit', $user->id) }}"
+                                                    <a href="{{ route('admin.users.show', $user->id) }}"
                                                         class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip"
-                                                        title="Chỉnh sửa">
-                                                        <i class="fas fa-edit"></i>
+                                                        title="Chi tiết">
+                                                        <i class="fas fa-eye"></i>
                                                     </a>
 
                                                 </div>
