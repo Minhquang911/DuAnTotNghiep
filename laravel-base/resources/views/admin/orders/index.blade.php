@@ -324,7 +324,7 @@
                                             @if ($order->payment_status === 'paid')
                                                 <small class="text-muted">
                                                     <i class="fas fa-clock me-1"></i>
-                                                    {{ $order->paid_at ? $order->paid_at->format('d/m/Y') : '' }}
+                                                    {{ $order->paid_at ? $order->paid_at->format('d/m/Y H:i') : '' }}
                                                 </small>
                                             @endif
                                         </div>
@@ -408,6 +408,35 @@
                 <!-- Phân trang -->
                 <div class="d-flex justify-content-end mt-4">
                     {{ $orders->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Hủy đơn hàng -->
+    <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelOrderModalLabel">Hủy đơn hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Bạn có chắc chắn muốn hủy đơn hàng này? Hành động này không thể hoàn tác.
+                    </div>
+                    <div class="mb-3">
+                        <label for="cancel_reason" class="form-label">Lý do hủy đơn hàng <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="cancel_reason" rows="3" required 
+                                  placeholder="Vui lòng nhập lý do hủy đơn hàng"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmCancelOrder()">
+                        <i class="fas fa-times"></i> Xác nhận hủy
+                    </button>
                 </div>
             </div>
         </div>
@@ -504,30 +533,49 @@
             }
         }
 
+        let currentOrderId = null;
+
         function cancelOrder(orderId) {
-            if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-                fetch(`/admin/orders/${orderId}/cancel`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            toastr.success(data.message);
-                            setTimeout(() => window.location.reload(), 1000);
-                        } else {
-                            toastr.error(data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        toastr.error('Có lỗi xảy ra khi hủy đơn hàng');
-                    });
+            currentOrderId = orderId;
+            const modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+            modal.show();
+        }
+
+        function confirmCancelOrder() {
+            const cancelReason = document.getElementById('cancel_reason').value.trim();
+            if (!cancelReason) {
+                toastr.error('Vui lòng nhập lý do hủy đơn hàng');
+                return;
             }
+
+            fetch(`/admin/orders/${currentOrderId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cancel_reason: cancelReason })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    toastr.success(data.message);
+                    // Đóng modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('cancelOrderModal'));
+                    modal.hide();
+                    // Reset form
+                    document.getElementById('cancel_reason').value = '';
+                    // Reload trang
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                toastr.error('Có lỗi xảy ra khi hủy đơn hàng');
+            });
         }
 
         function updateStatus(orderId, status) {

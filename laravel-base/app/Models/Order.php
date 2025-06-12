@@ -28,9 +28,11 @@ class Order extends Model
         'payment_status',
         'paid_at',
         'status',
+        'cancel_reason',
+        'cancelled_at',
         'coupon_code',
         'note',
-        'ordered_at',
+        'ordered_at'
     ];
 
     // Kiểu dữ liệu đặc biệt
@@ -41,6 +43,7 @@ class Order extends Model
         'shipping_fee'    => 'decimal:2',
         'discount_amount' => 'decimal:2',
         'amount_due'      => 'decimal:2',
+        'cancelled_at' => 'datetime'
     ];
 
     // Các trạng thái đơn hàng

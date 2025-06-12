@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Jobs\SendOrderStatusEmail;
 
 class OrderController extends Controller
 {
@@ -77,11 +78,15 @@ class OrderController extends Controller
                 throw new \Exception('Chỉ có thể xác nhận đơn hàng đang ở trạng thái chờ xác nhận');
             }
 
+            $oldStatus = $order->status;
+            
             // Cập nhật trạng thái đơn hàng
             $order->update([
                 'status' => 'processing',
-                // 'processed_at' => now() // Sử dụng để truy vết
             ]);
+
+            // Gửi email thông báo
+            SendOrderStatusEmail::dispatch($order, $oldStatus, 'processing');
 
             DB::commit();
             return response()->json([
@@ -107,11 +112,23 @@ class OrderController extends Controller
                 throw new \Exception('Không thể hủy đơn hàng ở trạng thái này');
             }
 
+            // Validate lý do hủy
+            $cancelReason = request('cancel_reason');
+            if (empty($cancelReason)) {
+                throw new \Exception('Vui lòng nhập lý do hủy đơn hàng');
+            }
+
+            $oldStatus = $order->status;
+            
             // Cập nhật trạng thái đơn hàng
             $order->update([
                 'status' => 'cancelled',
-                // 'cancelled_at' => now() // Sử dụng để truy vết
+                'cancel_reason' => $cancelReason,
+                'cancelled_at' => now()
             ]);
+
+            // Gửi email thông báo
+            SendOrderStatusEmail::dispatch($order, $oldStatus, 'cancelled');
 
             DB::commit();
             return response()->json([
@@ -132,6 +149,8 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
+            $oldStatus = $order->status;
+
             // Cập nhật trạng thái đơn hàng
             if ($request->has('status')) {
                 $validStatuses = ['processing', 'delivering', 'completed', 'failed', 'finished'];
@@ -145,7 +164,7 @@ class OrderController extends Controller
                     'processing' => ['delivering'],
                     'delivering' => ['completed', 'failed'],
                     'completed' => ['finished'],
-                    'failed' => ['delivering'] // Thêm khả năng chuyển từ failed về delivering
+                    'failed' => ['delivering']
                 ];
 
                 if (!isset($statusFlow[$order->status]) || !in_array($request->status, $statusFlow[$order->status])) {
@@ -159,6 +178,9 @@ class OrderController extends Controller
                     $order->payment_status = 'paid';
                     $order->paid_at = now();
                 }
+
+                // Gửi email thông báo khi thay đổi trạng thái
+                SendOrderStatusEmail::dispatch($order, $oldStatus, $request->status);
             }
 
             // Cập nhật trạng thái thanh toán

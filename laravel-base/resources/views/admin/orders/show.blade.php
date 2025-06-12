@@ -188,8 +188,13 @@
 
             <!-- Cập nhật trạng thái -->
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Cập nhật trạng thái</h6>
+                    @if($order->status !== 'finished' && $order->status !== 'cancelled' && in_array($order->status, ['pending', 'processing']))
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
+                            <i class="fas fa-times"></i> Hủy đơn hàng
+                        </button>
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
@@ -200,6 +205,13 @@
                                 <span class="badge bg-success">Đã thanh toán</span>
                             @endif
                         </div>
+                        @if($order->status === 'cancelled')
+                            <div class="mt-2">
+                                <small class="text-muted d-block">Lý do hủy:</small>
+                                <p class="mb-0 text-danger">{{ $order->cancel_reason }}</p>
+                                <small class="text-muted">Thời gian hủy: {{ $order->cancelled_at ? $order->cancelled_at->format('d/m/Y H:i') : '' }}</small>
+                            </div>
+                        @endif
                     </div>
 
                     @if($order->status !== 'finished' && $order->status !== 'cancelled')
@@ -250,6 +262,35 @@
                         </button>
                     @endif
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Hủy đơn hàng -->
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelOrderModalLabel">Hủy đơn hàng #{{ $order->order_code }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Bạn có chắc chắn muốn hủy đơn hàng này? Hành động này không thể hoàn tác.
+                </div>
+                <div class="mb-3">
+                    <label for="cancel_reason" class="form-label">Lý do hủy đơn hàng <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="cancel_reason" rows="3" required 
+                              placeholder="Vui lòng nhập lý do hủy đơn hàng"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-danger" onclick="cancelOrder()">
+                    <i class="fas fa-times"></i> Xác nhận hủy
+                </button>
             </div>
         </div>
     </div>
@@ -352,6 +393,38 @@
                     toastr.error('Có lỗi xảy ra khi cập nhật trạng thái thanh toán');
                 });
             }
+        }
+
+        // Hàm hủy đơn hàng
+        function cancelOrder() {
+            const cancelReason = document.getElementById('cancel_reason').value.trim();
+            if (!cancelReason) {
+                toastr.error('Vui lòng nhập lý do hủy đơn hàng');
+                return;
+            }
+
+            fetch(`{{ route('admin.orders.cancel', $order) }}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cancel_reason: cancelReason })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    toastr.success(data.message);
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                toastr.error('Có lỗi xảy ra khi hủy đơn hàng');
+            });
         }
 
         // Khởi tạo tooltips
