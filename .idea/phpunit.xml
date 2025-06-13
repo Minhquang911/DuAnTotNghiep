@@ -5,8 +5,6 @@
       <list>
         <option value="$PROJECT_DIR$/websiteBanSach/tests/Unit" />
         <option value="$PROJECT_DIR$/websiteBanSach/tests/Feature" />
-        <option value="$PROJECT_DIR$/laravel-base/tests/Unit" />
-        <option value="$PROJECT_DIR$/laravel-base/tests/Feature" />
       </list>
     </option>
   </component>
