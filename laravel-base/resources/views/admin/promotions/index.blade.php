@@ -127,9 +127,9 @@
                                             <td>
                                                 <div class="d-flex flex-column gap-1">
                                                     <span class="text-muted" style="font-size:12px">Từ: <span
-                                                            class="fw-medium text-dark">{{ $promotion->start_date ? \Carbon\Carbon::parse($promotion->start_date)->format('d/m/Y') : 'N/A' }}</span></span>
+                                                            class="fw-medium text-dark">{{ $promotion->start_date ? \Carbon\Carbon::parse($promotion->start_date)->format('d/m/Y H:i') : 'N/A' }}</span></span>
                                                     <span class="text-muted" style="font-size:12px">Đến: <span
-                                                            class="fw-medium text-dark">{{ $promotion->end_date ? \Carbon\Carbon::parse($promotion->end_date)->format('d/m/Y') : 'N/A' }}</span></span>
+                                                            class="fw-medium text-dark">{{ $promotion->end_date ? \Carbon\Carbon::parse($promotion->end_date)->format('d/m/Y H:i') : 'N/A' }}</span></span>
                                                 </div>
                                             </td>
                                             <td class="text-center">

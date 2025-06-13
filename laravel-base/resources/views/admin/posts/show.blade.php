@@ -74,12 +74,12 @@
                         <div class="row mb-2 align-items-center">
                             <div class="col-6 d-flex">
                                 <span class="product-attr-label me-2">Ngày tạo:</span>
-                                <span>{{ $post->created_at ? $post->created_at->format('d/m/Y') : '' }}</span>
+                                <span>{{ $post->created_at ? $post->created_at->format('d/m/Y H:i') : '' }}</span>
                             </div>
                             <div class="col-6 d-flex">
                                 @if ($post->updated_at && $post->updated_at->ne($post->created_at))
                                     <span class="product-attr-label me-2">Ngày sửa:</span>
-                                    <span>{{ $post->updated_at ? $post->updated_at->format('d/m/Y') : '' }}</span>
+                                    <span>{{ $post->updated_at ? $post->updated_at->format('d/m/Y H:i') : '' }}</span>
                                 @endif
                             </div>
                         </div>

@@ -57,7 +57,7 @@
                                 </tr>
                                 <tr>
                                     <th>Ngày sinh</th>
-                                    <td>{{ $user->birthday ? $user->birthday->format('d/m/Y') : 'Chưa cập nhật' }}</td>
+                                    <td>{{ $user->birthday ? $user->birthday->format('d/m/Y H:i') : 'Chưa cập nhật' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Trạng thái</th>
@@ -108,7 +108,7 @@
                                     @foreach($user->orders as $order)
                                         <tr>
                                             <td>#{{ $order->order_code }}</td>
-                                            <td>{{ $order->ordered_at ? $order->ordered_at->format('d/m/Y') : $order->created_at->format('d/m/Y H:i:s') }}</td>
+                                            <td>{{ $order->ordered_at ? $order->ordered_at->format('d/m/Y H:i') : $order->created_at->format('d/m/Y H:i:s') }}</td>
                                             <td>
                                                 <strong>{{ $order->customer_name }}</strong><br>
                                                 {{ $order->customer_phone }}<br>
@@ -126,7 +126,7 @@
                                                 @if($order->payment_status == 'paid')
                                                     <span class="badge bg-success">Đã thanh toán</span>
                                                     @if($order->paid_at)
-                                                        <br><small>{{ $order->paid_at->format('d/m/Y') }}</small>
+                                                        <br><small>{{ $order->paid_at->format('d/m/Y H:i') }}</small>
                                                     @endif
                                                 @else
                                                     <span class="badge bg-warning">Chưa thanh toán</span>

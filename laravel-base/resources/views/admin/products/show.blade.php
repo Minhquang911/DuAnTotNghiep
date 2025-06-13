@@ -82,7 +82,7 @@
                         <div class="row mb-2">
                             <div class="col-sm-4 product-attr-label">Ngày xuất bản:</div>
                             <div class="col-sm-8">
-                                {{ $product->published_at ? $product->published_at->format('d/m/Y') : '-' }}</div>
+                                {{ $product->published_at ? $product->published_at->format('d/m/Y H:i') : '-' }}</div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-sm-4 product-attr-label">Lượt xem:</div>
@@ -183,7 +183,7 @@
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <small class="text-muted">
                                                             <i class="far fa-clock me-1"></i>
-                                                            {{ $image->created_at ? $image->created_at->format('d/m/Y') : '' }}
+                                                            {{ $image->created_at ? $image->created_at->format('d/m/Y H:i') : '' }}
                                                         </small>
                                                         <button type="button" 
                                                             class="btn btn-sm btn-outline-danger delete-image-btn"

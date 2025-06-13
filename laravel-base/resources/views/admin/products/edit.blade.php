@@ -122,7 +122,7 @@
                         @endif
 
                         <form action="{{ route('admin.products.update', $product->id) }}" method="POST"
-                              enctype="multipart/form-data">
+                            enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="row mb-4">
@@ -133,25 +133,25 @@
                                     <div class="form-group mb-3">
                                         <label for="title">Tên sách <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                               id="title" name="title" value="{{ old('title', $product->title) }}"
-                                               placeholder="Nhập tên sách">
+                                            id="title" name="title" value="{{ old('title', $product->title) }}"
+                                            placeholder="Nhập tên sách">
                                         @error('title')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="author">Tác giả <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('author') is-invalid @enderror"
-                                               id="author" name="author" value="{{ old('author', $product->author) }}"
-                                               placeholder="Nhập tên tác giả">
+                                            id="author" name="author" value="{{ old('author', $product->author) }}"
+                                            placeholder="Nhập tên tác giả">
                                         @error('author')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="category_id">Danh mục <span class="text-danger">*</span></label>
                                         <select class="form-select @error('category_id') is-invalid @enderror"
-                                                id="category_id" name="category_id">
+                                            id="category_id" name="category_id">
                                             <option value="">Chọn danh mục</option>
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->id }}"
@@ -160,13 +160,13 @@
                                             @endforeach
                                         </select>
                                         @error('category_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="publisher_id">Nhà xuất bản <span class="text-danger">*</span></label>
                                         <select class="form-select @error('publisher_id') is-invalid @enderror"
-                                                id="publisher_id" name="publisher_id">
+                                            id="publisher_id" name="publisher_id">
                                             <option value="">Chọn nhà xuất bản</option>
                                             @foreach ($publishers as $publisher)
                                                 <option value="{{ $publisher->id }}"
@@ -175,7 +175,7 @@
                                             @endforeach
                                         </select>
                                         @error('publisher_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
@@ -183,20 +183,20 @@
                                     <div class="form-group mb-3">
                                         <label for="isbn">ISBN <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('isbn') is-invalid @enderror"
-                                               id="isbn" name="isbn" value="{{ old('isbn', $product->isbn) }}"
-                                               placeholder="Nhập mã ISBN">
+                                            id="isbn" name="isbn" value="{{ old('isbn', $product->isbn) }}"
+                                            placeholder="Nhập mã ISBN">
                                         @error('isbn')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="published_at">Ngày xuất bản <span class="text-danger">*</span></label>
                                         <input type="date"
-                                               class="form-control @error('published_at') is-invalid @enderror"
-                                               id="published_at" name="published_at"
-                                               value="{{ old('published_at', $product->published_at ? $product->published_at->format('Y-m-d') : '') }}">
+                                            class="form-control @error('published_at') is-invalid @enderror"
+                                            id="published_at" name="published_at"
+                                            value="{{ old('published_at', $product->published_at ? $product->published_at->format('Y-m-d') : '') }}">
                                         @error('published_at')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="row">
@@ -204,12 +204,12 @@
                                             <div class="form-group mb-3">
                                                 <label for="length_cm">Chiều dài (cm)</label>
                                                 <input type="number" step="0.01" min="0"
-                                                       class="form-control @error('length_cm') is-invalid @enderror"
-                                                       id="length_cm" name="length_cm"
-                                                       value="{{ old('length_cm', $product->length_cm) }}"
-                                                       placeholder="VD: 20.5">
+                                                    class="form-control @error('length_cm') is-invalid @enderror"
+                                                    id="length_cm" name="length_cm"
+                                                    value="{{ old('length_cm', $product->length_cm) }}"
+                                                    placeholder="VD: 20.5">
                                                 @error('length_cm')
-                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -217,12 +217,12 @@
                                             <div class="form-group mb-3">
                                                 <label for="width_cm">Chiều rộng (cm)</label>
                                                 <input type="number" step="0.01" min="0"
-                                                       class="form-control @error('width_cm') is-invalid @enderror"
-                                                       id="width_cm" name="width_cm"
-                                                       value="{{ old('width_cm', $product->width_cm) }}"
-                                                       placeholder="VD: 14.5">
+                                                    class="form-control @error('width_cm') is-invalid @enderror"
+                                                    id="width_cm" name="width_cm"
+                                                    value="{{ old('width_cm', $product->width_cm) }}"
+                                                    placeholder="VD: 14.5">
                                                 @error('width_cm')
-                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -232,12 +232,12 @@
                                             <div class="form-group mb-3">
                                                 <label for="weight_g">Trọng lượng (g)</label>
                                                 <input type="number" min="0"
-                                                       class="form-control @error('weight_g') is-invalid @enderror"
-                                                       id="weight_g" name="weight_g"
-                                                       value="{{ old('weight_g', $product->weight_g) }}"
-                                                       placeholder="VD: 350">
+                                                    class="form-control @error('weight_g') is-invalid @enderror"
+                                                    id="weight_g" name="weight_g"
+                                                    value="{{ old('weight_g', $product->weight_g) }}"
+                                                    placeholder="VD: 350">
                                                 @error('weight_g')
-                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -245,12 +245,12 @@
                                             <div class="form-group mb-3">
                                                 <label for="page_count">Số trang</label>
                                                 <input type="number" min="1"
-                                                       class="form-control @error('page_count') is-invalid @enderror"
-                                                       id="page_count" name="page_count"
-                                                       value="{{ old('page_count', $product->page_count) }}"
-                                                       placeholder="VD: 320">
+                                                    class="form-control @error('page_count') is-invalid @enderror"
+                                                    id="page_count" name="page_count"
+                                                    value="{{ old('page_count', $product->page_count) }}"
+                                                    placeholder="VD: 320">
                                                 @error('page_count')
-                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -258,18 +258,18 @@
                                     <div class="form-group mb-3">
                                         <label for="cover_image">Ảnh bìa</label>
                                         <input type="file"
-                                               class="form-control @error('cover_image') is-invalid @enderror"
-                                               id="cover_image" name="cover_image" accept="image/*">
+                                            class="form-control @error('cover_image') is-invalid @enderror"
+                                            id="cover_image" name="cover_image" accept="image/*">
                                         @error('cover_image')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                         <div class="mt-2">
                                             @if ($product->cover_image_url)
                                                 <img id="preview" src="{{ $product->cover_image_url }}" alt="Preview"
-                                                     class="preview-image">
+                                                    class="preview-image">
                                             @else
                                                 <img id="preview" src="#" alt="Preview"
-                                                     class="preview-image d-none">
+                                                    class="preview-image d-none">
                                             @endif
                                         </div>
                                     </div>
@@ -278,9 +278,9 @@
                                     <div class="form-group mb-3">
                                         <label for="description">Mô tả <span class="text-danger">*</span></label>
                                         <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
-                                                  rows="4" placeholder="Nhập mô tả sách">{{ old('description', $product->description) }}</textarea>
+                                            rows="4" placeholder="Nhập mô tả sách">{{ old('description', $product->description) }}</textarea>
                                         @error('description')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
@@ -306,19 +306,19 @@
                                                         <div class="col-md-3 col-sm-4 col-6">
                                                             <div class="card h-100">
                                                                 <img src="{{ asset('storage/' . $image->image) }}"
-                                                                     class="card-img-top" alt="Album image"
-                                                                     style="height: 200px; object-fit: cover;">
+                                                                    class="card-img-top" alt="Album image"
+                                                                    style="height: 200px; object-fit: cover;">
                                                                 <div class="card-body p-2">
                                                                     <div
                                                                         class="d-flex justify-content-between align-items-center">
                                                                         <small class="text-muted">
                                                                             <i class="far fa-clock me-1"></i>
-                                                                            {{ $image->created_at ? $image->created_at->format('d/m/Y') : '' }}
+                                                                            {{ $image->created_at ? $image->created_at->format('d/m/Y H:i') : '' }}
                                                                         </small>
                                                                         <button type="button"
-                                                                                class="btn btn-sm btn-outline-danger delete-image-btn"
-                                                                                data-image-id="{{ $image->id }}"
-                                                                                data-bs-toggle="tooltip" title="Xóa ảnh">
+                                                                            class="btn btn-sm btn-outline-danger delete-image-btn"
+                                                                            data-image-id="{{ $image->id }}"
+                                                                            data-bs-toggle="tooltip" title="Xóa ảnh">
                                                                             <i class="fas fa-trash"></i>
                                                                         </button>
                                                                     </div>
@@ -349,7 +349,7 @@
                                     <div class="form-check form-switch mb-3">
                                         <input type="hidden" name="is_active" value="0">
                                         <input class="form-check-input" type="checkbox" id="is_active" name="is_active"
-                                               value="1" {{ old('is_active', $product->is_active) ? 'checked' : '' }}>
+                                            value="1" {{ old('is_active', $product->is_active) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_active">Đang hoạt động</label>
                                     </div>
                                 </div>
@@ -357,7 +357,7 @@
                                     <div class="form-check form-switch mb-3">
                                         <input type="hidden" name="is_hot" value="0">
                                         <input class="form-check-input" type="checkbox" id="is_hot" name="is_hot"
-                                               value="1" {{ old('is_hot', $product->is_hot) ? 'checked' : '' }}>
+                                            value="1" {{ old('is_hot', $product->is_hot) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_hot">Sản phẩm hot</label>
                                     </div>
                                 </div>
@@ -365,7 +365,7 @@
                                     <div class="form-check form-switch mb-3">
                                         <input type="hidden" name="is_new" value="0">
                                         <input class="form-check-input" type="checkbox" id="is_new" name="is_new"
-                                               value="1" {{ old('is_new', $product->is_new) ? 'checked' : '' }}>
+                                            value="1" {{ old('is_new', $product->is_new) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_new">Sản phẩm mới</label>
                                     </div>
                                 </div>
@@ -373,7 +373,7 @@
                                     <div class="form-check form-switch mb-3">
                                         <input type="hidden" name="is_best_seller" value="0">
                                         <input class="form-check-input" type="checkbox" id="is_best_seller"
-                                               name="is_best_seller" value="1"
+                                            name="is_best_seller" value="1"
                                             {{ old('is_best_seller', $product->is_best_seller) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_best_seller">Bán chạy nhất</label>
                                     </div>
@@ -382,7 +382,7 @@
                                     <div class="form-check form-switch mb-3">
                                         <input type="hidden" name="is_recommended" value="0">
                                         <input class="form-check-input" type="checkbox" id="is_recommended"
-                                               name="is_recommended" value="1"
+                                            name="is_recommended" value="1"
                                             {{ old('is_recommended', $product->is_recommended) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_recommended">Đề xuất</label>
                                     </div>
@@ -391,7 +391,7 @@
                                     <div class="form-check form-switch mb-3">
                                         <input type="hidden" name="is_featured" value="0">
                                         <input class="form-check-input" type="checkbox" id="is_featured"
-                                               name="is_featured" value="1"
+                                            name="is_featured" value="1"
                                             {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_featured">Nổi bật</label>
                                     </div>
@@ -400,7 +400,7 @@
                                     <div class="form-check form-switch mb-3">
                                         <input type="hidden" name="is_promotion" value="0">
                                         <input class="form-check-input" type="checkbox" id="is_promotion"
-                                               name="is_promotion" value="1"
+                                            name="is_promotion" value="1"
                                             {{ old('is_promotion', $product->is_promotion) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_promotion">Khuyến mãi</label>
                                     </div>
@@ -421,18 +421,18 @@
                                                 <div class="variant-header">
                                                     <h5 class="mb-0">Biến thể #{{ $i + 1 }}</h5>
                                                     <button type="button" class="btn btn-danger btn-sm remove-variant"
-                                                            data-variant="{{ $i }}">
+                                                        data-variant="{{ $i }}">
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </div>
                                                 <div class="row">
                                                     <input type="hidden" name="variants[{{ $i }}][id]"
-                                                           value="{{ $variant->id }}">
+                                                        value="{{ $variant->id }}">
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-3">
                                                             <label>Định dạng <span class="text-danger">*</span></label>
                                                             <select class="form-select"
-                                                                    name="variants[{{ $i }}][format_id]" required>
+                                                                name="variants[{{ $i }}][format_id]" required>
                                                                 <option value="">Chọn định dạng</option>
                                                                 @foreach ($formats as $format)
                                                                     <option value="{{ $format->id }}"
@@ -446,8 +446,8 @@
                                                         <div class="form-group mb-3">
                                                             <label>Ngôn ngữ <span class="text-danger">*</span></label>
                                                             <select class="form-select"
-                                                                    name="variants[{{ $i }}][language_id]"
-                                                                    required>
+                                                                name="variants[{{ $i }}][language_id]"
+                                                                required>
                                                                 <option value="">Chọn ngôn ngữ</option>
                                                                 @foreach ($languages as $language)
                                                                     <option value="{{ $language->id }}"
@@ -461,34 +461,34 @@
                                                         <div class="form-group mb-3">
                                                             <label>Mã SKU <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control"
-                                                                   name="variants[{{ $i }}][sku]"
-                                                                   value="{{ $variant->sku }}" required>
+                                                                name="variants[{{ $i }}][sku]"
+                                                                value="{{ $variant->sku }}" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-3">
                                                             <label>Giá <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control"
-                                                                   name="variants[{{ $i }}][price]"
-                                                                   value="{{ $variant->price }}" min="0"
-                                                                   step="1000" required>
+                                                                name="variants[{{ $i }}][price]"
+                                                                value="{{ $variant->price }}" min="0"
+                                                                step="1000" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-3">
                                                             <label>Giá khuyến mãi</label>
                                                             <input type="number" class="form-control"
-                                                                   name="variants[{{ $i }}][promotion_price]"
-                                                                   value="{{ $variant->promotion_price }}" min="0"
-                                                                   step="1000">
+                                                                name="variants[{{ $i }}][promotion_price]"
+                                                                value="{{ $variant->promotion_price }}" min="0"
+                                                                step="1000">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-3">
                                                             <label>Số lượng <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control"
-                                                                   name="variants[{{ $i }}][stock]"
-                                                                   value="{{ $variant->stock }}" min="0" required>
+                                                                name="variants[{{ $i }}][stock]"
+                                                                value="{{ $variant->stock }}" min="0" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
@@ -497,7 +497,7 @@
                                                             <div class="form-check form-switch">
                                                                 <input type="hidden" name="variants[{{ $i }}][is_active]" value="0">
                                                                 <input class="form-check-input" type="checkbox" id="variant_is_active_{{ $i }}"
-                                                                       name="variants[{{ $i }}][is_active]" value="1"
+                                                                    name="variants[{{ $i }}][is_active]" value="1"
                                                                     {{ $variant->is_active ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="variant_is_active_{{ $i }}">Đang bán</label>
                                                             </div>

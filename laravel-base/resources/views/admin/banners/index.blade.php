@@ -99,7 +99,7 @@
                                                         <div>
                                                             <small class="text-muted d-block">Từ ngày:</small>
                                                             <span
-                                                                class="fw-medium">{{ $banner->start_date ? $banner->start_date->format('d/m/Y') : 'N/A' }}</span>
+                                                                class="fw-medium">{{ $banner->start_date ? $banner->start_date->format('d/m/Y H:i') : 'N/A' }}</span>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex align-items-center">
@@ -107,7 +107,7 @@
                                                         <div>
                                                             <small class="text-muted d-block">Đến ngày:</small>
                                                             <span
-                                                                class="fw-medium">{{ $banner->end_date ? $banner->end_date->format('d/m/Y') : 'N/A' }}</span>
+                                                                class="fw-medium">{{ $banner->end_date ? $banner->end_date->format('d/m/Y H:i') : 'N/A' }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
