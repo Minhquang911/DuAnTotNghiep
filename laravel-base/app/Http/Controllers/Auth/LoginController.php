@@ -38,7 +38,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
-    
+
     /**
      * Xử lý điều hướng sau khi người dùng đăng nhập thành công.
      *
@@ -52,9 +52,9 @@ class LoginController extends Controller
         if ($user->role->name === 'admin') {
             return redirect()->route('admin.dashboard');
         } elseif ($user->role->name === 'user') {
-            return redirect()->route('user.dashboard');
+            return redirect()->back() ?: redirect()->route('home');
         }
-        
+
         // Mặc định sẽ điều hướng về trang home
         return redirect('/home');
     }

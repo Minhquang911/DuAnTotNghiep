@@ -1809,6 +1809,7 @@ span {
   border-radius: 50%;
   border: 1px solid rgba(79, 83, 107, 0.3);
 }
+
 .header-2-wrapper .header-2-right .menu-cart .cart-icon::before {
   position: absolute;
   top: -7px;
@@ -2897,6 +2898,17 @@ span {
   color: var(--header);
 }
 .header-2 .header-right .menu-cart .sidebar__toggle .bar-icon-2 {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 45px;
+  background-color: transparent;
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid rgba(79, 83, 107, 0.3);
+}
+
+.menu-cart .user-icon {
   width: 50px;
   height: 50px;
   text-align: center;

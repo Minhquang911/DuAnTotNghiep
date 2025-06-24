@@ -83,29 +83,70 @@
                     <div class="col-6 col-xl-3">
                         <div class="header-right">
                             <div class="category-oneadjust gap-6 d-flex align-items-center">
-                                <div class="icon">
-                                    <i class="fa-sharp fa-solid fa-grid-2"></i>
+                                <div class="bd-header__category-nav p-relative">
+                                    <div class="bd-category__click style-2">
+                                        <span><i class="icon-icon-15"></i> Danh mục </span>
+                                    </div>
+                                    <div class="category__items-2" style="display: none;">
+                                        <div class="category-item">
+                                            <nav>
+                                                <ul>
+                                                    <li>
+                                                        <a href="shop-details.html">
+                                                            <span>Novel Books</span>
+                                                            <span>(8)</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="shop-details.html">
+                                                            <span>Poetry Books</span>
+                                                            <span>(5)</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="shop-details.html">
+                                                            <span>History Books</span>
+                                                            <span>(7)</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="shop-details.html">
+                                                            <span>Movement Books</span>
+                                                            <span>(3)</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="shop-details.html">
+                                                            <span>Independence Books </span>
+                                                            <span>(4)</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="shop-details.html">
+                                                            <span>Technology Books</span>
+                                                            <span>(2)</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="shop-details.html">
+                                                            <span>Political Books</span>
+                                                            <span>(1)</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="shop-details.html">
+                                                            <span>Romantic Books</span>
+                                                            <span>(7)</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
                                 </div>
-                                <select name="cate" class="category">
-                                    <option value="1">
-                                        Category
-                                    </option>
-                                    <option value="1">
-                                        Web Design
-                                    </option>
-                                    <option value="1">
-                                        Web Development
-                                    </option>
-                                    <option value="1">
-                                        Graphic Design
-                                    </option>
-                                    <option value="1">
-                                        Softwer Eng
-                                    </option>
-                                </select>
                                 <form action="#" class="search-toggle-box d-md-block">
                                     <div class="input-area">
-                                        <input type="text" placeholder="Author">
+                                        <input type="text" placeholder="Tìm kiếm sách theo từ khóa">
                                         <button class="cmn-btn">
                                             <i class="far fa-search"></i>
                                         </button>
@@ -113,9 +154,6 @@
                                 </form>
                             </div>
                             <div class="menu-cart">
-                                <a href="wishlist.html" class="cart-icon">
-                                    <i class="fa-regular fa-heart"></i>
-                                </a>
                                 <a href="shop-cart.html" class="cart-icon">
                                     <i class="fa-regular fa-cart-shopping"></i>
                                 </a>
@@ -126,6 +164,26 @@
                                         </div>
                                     </a>
                                 </div>
+                                @if (auth()->check())
+                                    <a href="{{ auth()->check() ? route('user.dashboard') : route('login') }}"
+                                        class="user-icon" title="Tài khoản">
+                                        <i class="fa-regular fa-user"></i>
+                                    </a>
+                                    <a href="{{ route('logout') }}" class="user-icon" title="Đăng xuất"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}">
+                                        <button type="button" class="theme-btn rounded-1">
+                                            Đăng nhập
+                                        </button>
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -140,18 +198,17 @@
 <!-- Main Header Section start  -->
 <div class="header-2-section">
     <div class="container">
-        <div class="header-2-wrapper">
+        <div class="header-2-wrapper" style="justify-content: space-between">
             <div class="header-top-logo">
                 <a href="index.html">
                     <img src="{{ asset('client/img/logo/black-logo.svg') }}" alt="img">
                 </a>
             </div>
             <div class="header-2-right">
-
                 <div class="category-oneadjust gap-6 d-flex align-items-center">
                     <div class="bd-header__category-nav p-relative">
                         <div class="bd-category__click style-2">
-                            <span><i class="icon-icon-15"></i> Categories </span>
+                            <span><i class="icon-icon-15"></i> Danh mục </span>
                         </div>
                         <div class="category__items-2" style="display: none;">
                             <div class="category-item">
@@ -212,7 +269,7 @@
                     </div>
                     <form action="#" class="search-toggle-box d-md-block">
                         <div class="input-area">
-                            <input type="text" placeholder="Search For books for keyword">
+                            <input type="text" placeholder="Tìm kiếm sách theo từ khóa">
                             <button class="cmn-btn">
                                 <i class="far fa-search"></i>
                             </button>
@@ -224,16 +281,13 @@
                         <img src="{{ asset('client/img/icon/icon-23.svg') }}" alt="icon">
                     </div>
                     <div class="content">
-                        <span>Call Us Now</span>
+                        <span>Gọi cho chúng tôi</span>
                         <h5>
-                            <a href="tel:+2085550112">+208-555-0112</a>
+                            <a href="tel:0123456789">0123456789</a>
                         </h5>
                     </div>
                 </div>
-                <div class="menu-cart">
-                    <a href="wishlist.html" class="cart-icon">
-                        <i class="fa-regular fa-heart"></i>
-                    </a>
+                <div class="menu-cart text-end">
                     <a href="shop-cart.html" class="cart-icon">
                         <i class="fa-regular fa-cart-shopping"></i>
                     </a>
@@ -244,8 +298,26 @@
                             </div>
                         </a>
                     </div>
-                    <button type="button" class="theme-btn rounded-1" data-bs-toggle="modal"
-                        data-bs-target="#registrationModal">Sign Up</button>
+                    @if (auth()->check())
+                        <a href="{{ auth()->check() ? route('user.dashboard') : route('login') }}" class="user-icon"
+                            title="Tài khoản">
+                            <i class="fa-regular fa-user"></i>
+                        </a>
+                        <a href="{{ route('logout') }}" class="user-icon" title="Đăng xuất"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            style="display: none;">
+                            @csrf
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}">
+                            <button type="button" class="theme-btn rounded-1">
+                                Đăng nhập
+                            </button>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>

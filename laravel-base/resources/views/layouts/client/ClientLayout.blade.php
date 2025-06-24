@@ -44,8 +44,6 @@
 
     @include('layouts.client.partials.header')
 
-    @include('layouts.client.partials.authen')
-
     @yield('banner')
 
     @yield('content')
