@@ -8,6 +8,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AlbumController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\FormatController;
 use App\Http\Controllers\Admin\RatingController;
@@ -18,15 +20,18 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PublisherController;
+use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Admin\AlbumController;
-use App\Http\Controllers\Admin\OrderController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 
 Auth::routes();
+// Đăng nhập bằng google
+Route::get('/login/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('/login/google/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Các route cho admin
