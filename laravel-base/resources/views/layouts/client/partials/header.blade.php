@@ -165,16 +165,16 @@
                                     </a>
                                 </div>
                                 @if (auth()->check())
-                                    <a href="{{ auth()->check() ? route('user.dashboard') : route('login') }}"
-                                        class="user-icon" title="Tài khoản">
+                                    <a href="{{ auth()->check() ? route('user.profile') : route('login') }}"
+                                       class="user-icon" title="Tài khoản">
                                         <i class="fa-regular fa-user"></i>
                                     </a>
                                     <a href="{{ route('logout') }}" class="user-icon" title="Đăng xuất"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        style="display: none;">
+                                          style="display: none;">
                                         @csrf
                                     </form>
                                 @else
@@ -299,16 +299,16 @@
                         </a>
                     </div>
                     @if (auth()->check())
-                        <a href="{{ auth()->check() ? route('user.dashboard') : route('login') }}" class="user-icon"
-                            title="Tài khoản">
+                        <a href="{{ auth()->check() ? route('user.profile') : route('login') }}" class="user-icon"
+                           title="Tài khoản">
                             <i class="fa-regular fa-user"></i>
                         </a>
                         <a href="{{ route('logout') }}" class="user-icon" title="Đăng xuất"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fa-solid fa-arrow-right-from-bracket"></i>
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            style="display: none;">
+                              style="display: none;">
                             @csrf
                         </form>
                     @else

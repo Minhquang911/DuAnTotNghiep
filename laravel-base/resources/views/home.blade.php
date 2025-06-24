@@ -1,7 +1,7 @@
 @extends('layouts.client.ClientLayout')
 
 @section('title')
-    {{ $title . ' - Book360 Store WooCommerce' ?? 'Book360 Store WooCommerce' }}
+    {{ isset($title) ? $title . ' - Book360 Store WooCommerce' : 'Book360 Store WooCommerce' }}
 @endsection
 
 @section('banner')
@@ -45,7 +45,7 @@
             <div class="row g-4">
                 <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
                     <div class="banner-book-card-items bg-cover"
-                        style="background-image: url('{{ asset('client/img/banner/book-banner-1.jpg') }}');">
+                         style="background-image: url('{{ asset('client/img/banner/book-banner-1.jpg') }}');">
                         <div class="book-shape">
                             <img src="{{ asset('client/img/banner/book-1.png') }}" alt="img">
                         </div>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
                     <div class="banner-book-card-items bg-cover"
-                        style="background-image: url('{{ asset('client/img/banner/book-banner-2.jpg') }}');">
+                         style="background-image: url('{{ asset('client/img/banner/book-banner-2.jpg') }}');">
                         <div class="book-shape">
                             <img src="{{ asset('client/img/banner/book-2.png') }}" alt="img">
                         </div>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".7s">
                     <div class="banner-book-card-items bg-cover"
-                        style="background-image: url('{{ asset('client/img/banner/book-banner-3.jpg') }}');">
+                         style="background-image: url('{{ asset('client/img/banner/book-banner-3.jpg') }}');">
                         <div class="book-shape">
                             <img src="{{ asset('client/img/banner/book-3.png') }}" alt="img">
                         </div>
@@ -110,7 +110,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/01.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="post-box">
                                     <li>
                                         Hot
@@ -126,7 +126,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -166,7 +166,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/02.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="shop-icon d-grid justify-content-center align-items-center">
                                     <li>
                                         <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -174,7 +174,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -211,7 +211,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/03.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="shop-icon d-grid justify-content-center align-items-center">
                                     <li>
                                         <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -219,7 +219,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -258,7 +258,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/04.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="post-box">
                                     <li>
                                         -12%
@@ -271,7 +271,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -308,7 +308,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/05.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="shop-icon d-grid justify-content-center align-items-center">
                                     <li>
                                         <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -316,7 +316,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -369,7 +369,7 @@
                         <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/07.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                             </div>
                             <div class="shop-content">
                                 <ul class="book-category">
@@ -420,7 +420,7 @@
                         <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/11.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                             </div>
                             <div class="shop-content">
                                 <ul class="book-category">
@@ -471,7 +471,7 @@
                         <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/10.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                             </div>
                             <div class="shop-content">
                                 <ul class="book-category">
@@ -522,7 +522,7 @@
                         <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/07.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                             </div>
                             <div class="shop-content">
                                 <ul class="book-category">
@@ -573,7 +573,7 @@
                         <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/11.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                             </div>
                             <div class="shop-content">
                                 <ul class="book-category">
@@ -642,7 +642,7 @@
                 <div class="shop-box-items style-3 wow fadeInUp" data-wow-delay=".2s">
                     <div class="book-thumb center">
                         <a href="shop-details-2.html"><img src="{{ asset('client/img/book/07.png') }}"
-                                alt="img"></a>
+                                                           alt="img"></a>
                     </div>
                     <div class="shop-content">
                         <ul class="book-category">
@@ -673,7 +673,7 @@
                 <div class="shop-box-items style-3 wow fadeInUp" data-wow-delay=".4s">
                     <div class="book-thumb center">
                         <a href="shop-details-2.html"><img src="{{ asset('client/img/book/08.png') }}"
-                                alt="img"></a>
+                                                           alt="img"></a>
                     </div>
                     <div class="shop-content">
                         <ul class="book-category">
@@ -704,7 +704,7 @@
                 <div class="shop-box-items style-3 wow fadeInUp" data-wow-delay=".6s">
                     <div class="book-thumb center">
                         <a href="shop-details-2.html"><img src="{{ asset('client/img/book/09.png') }}"
-                                alt="img"></a>
+                                                           alt="img"></a>
                     </div>
                     <div class="shop-content">
                         <ul class="book-category">
@@ -794,7 +794,7 @@
                 <div class="shop-box-items style-2 wow fadeInUp" data-wow-delay=".2s">
                     <div class="book-thumb center">
                         <a href="shop-details-2.html"><img src="{{ asset('client/img/book/03.png') }}"
-                                alt="img"></a>
+                                                           alt="img"></a>
                         <ul class="shop-icon d-grid justify-content-center align-items-center">
                             <li>
                                 <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -839,7 +839,7 @@
                 <div class="shop-box-items style-2 wow fadeInUp" data-wow-delay=".3s">
                     <div class="book-thumb center">
                         <a href="shop-details-2.html"><img src="{{ asset('client/img/book/02.png') }}"
-                                alt="img"></a>
+                                                           alt="img"></a>
                         <ul class="shop-icon d-grid justify-content-center align-items-center">
                             <li>
                                 <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -884,7 +884,7 @@
                 <div class="shop-box-items style-2 wow fadeInUp" data-wow-delay=".4s">
                     <div class="book-thumb center">
                         <a href="shop-details-2.html"><img src="{{ asset('client/img/book/04.png') }}"
-                                alt="img"></a>
+                                                           alt="img"></a>
                         <ul class="shop-icon d-grid justify-content-center align-items-center">
                             <li>
                                 <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -929,7 +929,7 @@
                 <div class="shop-box-items style-2 wow fadeInUp" data-wow-delay=".5s">
                     <div class="book-thumb center">
                         <a href="shop-details-2.html"><img src="{{ asset('client/img/book/05.png') }}"
-                                alt="img"></a>
+                                                           alt="img"></a>
                         <ul class="post-box">
                             <li>
                                 -30%
@@ -989,7 +989,7 @@
     <section class="cta-banner-section fix section-padding pt-0">
         <div class="container">
             <div class="cta-banner-wrapper style-2 section-padding bg-cover"
-                style="background-image: url('{{ asset('client/img/cta-banner2.jpg') }}');">
+                 style="background-image: url('{{ asset('client/img/cta-banner2.jpg') }}');">
                 <div class="overlay"></div>
                 <div class="cta-content text-left">
                     <h2 class="text-white mb-40 wow fadeInUp" data-wow-delay=".3s">Get 25% discount in all <br> kind of
@@ -1017,7 +1017,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/01.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="post-box">
                                     <li>
                                         Hot
@@ -1033,7 +1033,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -1073,7 +1073,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/02.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="shop-icon d-grid justify-content-center align-items-center">
                                     <li>
                                         <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -1081,7 +1081,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -1118,7 +1118,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/03.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="shop-icon d-grid justify-content-center align-items-center">
                                     <li>
                                         <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -1126,7 +1126,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -1165,7 +1165,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/04.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="post-box">
                                     <li>
                                         -12%
@@ -1178,7 +1178,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>
@@ -1215,7 +1215,7 @@
                         <div class="shop-box-items style-2">
                             <div class="book-thumb center">
                                 <a href="shop-details-2.html"><img src="{{ asset('client/img/book/05.png') }}"
-                                        alt="img"></a>
+                                                                   alt="img"></a>
                                 <ul class="shop-icon d-grid justify-content-center align-items-center">
                                     <li>
                                         <a href="shop-cart.html"><i class="far fa-heart"></i></a>
@@ -1223,7 +1223,7 @@
                                     <li>
                                         <a href="shop-cart.html">
                                             <img class="icon" src="{{ asset('client/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
+                                                 alt="svg-icon">
                                         </a>
                                     </li>
                                     <li>

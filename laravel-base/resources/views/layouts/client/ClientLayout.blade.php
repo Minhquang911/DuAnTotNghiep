@@ -12,7 +12,7 @@
     <meta name="author" content="gramentheme">
     <meta name="description" content="Book360 Store WooCommerce ">
     <!-- ======== Page title ============ -->
-    <title>@yield('title')</title>
+    <title>@yield('title', 'Book360 Store WooCommerce')</title>
     <!--<< Favcion >>-->
     <link rel="shortcut icon" href="{{ asset('client/img/favicon.png') }}">
     <!--<< Bootstrap min.css >>-->
@@ -36,45 +36,47 @@
 </head>
 
 <body>
-    <!-- Preloader Start -->
-    @include('layouts.client.partials.preloader')
+<!-- Preloader Start -->
+@include('layouts.client.partials.preloader')
 
-    <!-- Offcanvas Area Start -->
-    @include('layouts.client.partials.offcanvas')
+<!-- Offcanvas Area Start -->
+@include('layouts.client.partials.offcanvas')
 
-    @include('layouts.client.partials.header')
+@include('layouts.client.partials.header')
 
-    @yield('banner')
+@yield('banner')
 
-    @yield('content')
+@yield('content')
 
-    <!-- Footer Section Start -->
-    @include('layouts.client.partials.footer')
+<!-- Footer Section Start -->
+@include('layouts.client.partials.footer')
 
-    <!--<< All JS Plugins >>-->
-    <script src="{{ asset('client/js/jquery-3.7.1.min.js') }}"></script>
-    <!--<< Viewport Js >>-->
-    <script src="{{ asset('client/js/viewport.jquery.js') }}"></script>
-    <!--<< Bootstrap Js >>-->
-    <script src="{{ asset('client/js/bootstrap.bundle.min.js') }}"></script>
-    <!--<< Nice Select Js >>-->
-    <script src="{{ asset('client/js/jquery.nice-select.min.js') }}"></script>
-    <!--<< Waypoints Js >>-->
-    <script src="{{ asset('client/js/jquery.waypoints.js') }}"></script>
-    <!--<< Counterup Js >>-->
-    <script src="{{ asset('client/js/jquery.counterup.min.js') }}"></script>
-    <!--<< Swiper Slider Js >>-->
-    <script src="{{ asset('client/js/swiper-bundle.min.js') }}"></script>
-    <!--<< MeanMenu Js >>-->
-    <script src="{{ asset('client/js/jquery.meanmenu.min.js') }}"></script>
-    <!--<< Magnific Popup Js >>-->
-    <script src="{{ asset('client/js/jquery.magnific-popup.min.js') }}"></script>
-    <!--<< Wow Animation Js >>-->
-    <script src="{{ asset('client/js/wow.min.js') }}"></script>
-    <!-- Gsap -->
-    <script src="{{ asset('client/js/gsap.min.js') }}"></script>
-    <!--<< Main.js >>-->
-    <script src="{{ asset('client/js/main.js') }}"></script>
+<!--<< All JS Plugins >>-->
+<script src="{{ asset('client/js/jquery-3.7.1.min.js') }}"></script>
+<!--<< Viewport Js >>-->
+<script src="{{ asset('client/js/viewport.jquery.js') }}"></script>
+<!--<< Bootstrap Js >>-->
+<script src="{{ asset('client/js/bootstrap.bundle.min.js') }}"></script>
+<!--<< Nice Select Js >>-->
+<script src="{{ asset('client/js/jquery.nice-select.min.js') }}"></script>
+<!--<< Waypoints Js >>-->
+<script src="{{ asset('client/js/jquery.waypoints.js') }}"></script>
+<!--<< Counterup Js >>-->
+<script src="{{ asset('client/js/jquery.counterup.min.js') }}"></script>
+<!--<< Swiper Slider Js >>-->
+<script src="{{ asset('client/js/swiper-bundle.min.js') }}"></script>
+<!--<< MeanMenu Js >>-->
+<script src="{{ asset('client/js/jquery.meanmenu.min.js') }}"></script>
+<!--<< Magnific Popup Js >>-->
+<script src="{{ asset('client/js/jquery.magnific-popup.min.js') }}"></script>
+<!--<< Wow Animation Js >>-->
+<script src="{{ asset('client/js/wow.min.js') }}"></script>
+<!-- Gsap -->
+<script src="{{ asset('client/js/gsap.min.js') }}"></script>
+<!--<< Main.js >>-->
+<script src="{{ asset('client/js/main.js') }}"></script>
+
+@stack('scripts')
 </body>
 
 

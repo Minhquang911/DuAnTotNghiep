@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PublisherController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Client\UserProfileController;
 use App\Http\Controllers\Admin\ProductVariantController;
 
 // Route::get('/', function () {
@@ -32,6 +33,7 @@ Auth::routes();
 Route::get('/login/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('/login/google/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
 
+// Các route cho khách hàng chưa đăng nhập
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Các route cho admin
@@ -137,10 +139,9 @@ Route::middleware(['auth', CheckRole::class . ':admin'])
 
 // Các route cho user thường
 Route::middleware(['auth', CheckRole::class . ':user'])
-    ->prefix('user')
     ->name('user.')
     ->group(function () {
-        Route::get('/', function () {
-            return 'Đây là user dashboard';
-        })->name('dashboard');
+        // Quản lý tài khoản cá nhân
+        Route::get('/profile', [UserProfileController::class, 'profile'])->name('profile');
+        Route::put('/profile', [UserProfileController::class, 'updateProfile'])->name('profile.update');
     });
