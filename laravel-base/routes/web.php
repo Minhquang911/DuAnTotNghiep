@@ -143,5 +143,7 @@ Route::middleware(['auth', CheckRole::class . ':user'])
     ->group(function () {
         // Quản lý tài khoản cá nhân
         Route::get('/profile', [UserProfileController::class, 'profile'])->name('profile');
+        Route::get('/profile/password', [UserProfileController::class, 'password'])->name('profile.password');
         Route::put('/profile', [UserProfileController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/profile/password', [UserProfileController::class, 'updatePassword'])->name('profile.password');
     });

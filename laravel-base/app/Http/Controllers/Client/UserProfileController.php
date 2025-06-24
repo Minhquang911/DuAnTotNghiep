@@ -19,6 +19,11 @@ class UserProfileController extends Controller
         return view('client.profiles.profile', compact('user'));
     }
 
+    public function password()
+    {
+        return view('client.profiles.password');
+    }
+
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -72,4 +77,42 @@ class UserProfileController extends Controller
         }
     }
 
+    public function updatePassword(Request $request)
+    {
+
+        $messages = [
+            'current_password.required' => 'Vui lòng nhập mật khẩu hiện tại.',
+            'current_password.current_password' => 'Mật khẩu hiện tại không chính xác.',
+            'password.required' => 'Vui lòng nhập mật khẩu mới.',
+            'password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu mới không khớp.',
+            'password.regex' => 'Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.',
+        ];
+
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+            ],
+        ], $messages);
+
+        try {
+            $user = Auth::user();
+            $user = User::find($user->id);
+            if ($user) {
+                $user->fill([
+                    'password' => Hash::make($validated['password'])
+                ]);
+                $user->save();
+            }
+
+            return redirect()->route('user.profile.password')->with('success', 'Mật khẩu đã được thay đổi thành công!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi thay đổi mật khẩu: ' . $e->getMessage());
+        }
+    }
 }
