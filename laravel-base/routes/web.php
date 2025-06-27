@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\PublisherController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Client\UserProfileController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Client\ProductController as ClientProductController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -35,6 +36,7 @@ Route::get('/login/google/callback', [GoogleLoginController::class, 'handleGoogl
 
 // Các route cho khách hàng chưa đăng nhập
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
 
 // Các route cho admin
 Route::middleware(['auth', CheckRole::class . ':admin'])
