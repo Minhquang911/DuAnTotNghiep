@@ -6,9 +6,9 @@
                     <i class="icon-icon-5"></i>
                 </div>
                 <div class="content">
-                    <p>Call Us 7/24</p>
+                    <p>Hỗ trợ 7/24</p>
                     <h3>
-                        <a href="tel:+2085550112">+208-555-0112</a>
+                        <a href="tel:0987654321">0987654321</a>
                     </h3>
                 </div>
             </div>
@@ -17,9 +17,9 @@
                     <i class="icon-icon-6"></i>
                 </div>
                 <div class="content">
-                    <p>Make a Quote</p>
+                    <p>Liên hệ</p>
                     <h3>
-                        <a href="mailto:example@gmail.com">example@gmail.com</a>
+                        <a href="mailto:book306store@gmail.com">book306store@gmail.com</a>
                     </h3>
                 </div>
             </div>
@@ -28,9 +28,9 @@
                     <i class="icon-icon-7"></i>
                 </div>
                 <div class="content">
-                    <p>Opening Hour</p>
+                    <p>Giờ hoạt động</p>
                     <h3>
-                        Sunday - Fri: 9 aM - 6 pM
+                        T2-T6, 09am -05pm
                     </h3>
                 </div>
             </div>
@@ -39,9 +39,9 @@
                     <i class="icon-icon-8"></i>
                 </div>
                 <div class="content">
-                    <p>Location</p>
+                    <p>Địa chỉ</p>
                     <h3>
-                        4517 Washington ave.
+                        13 Trịnh Văn Bô, TP Hà Nội
                     </h3>
                 </div>
             </div>
@@ -57,13 +57,13 @@
                     <div class="single-footer-widget">
                         <div class="widget-head">
                             <a href="index.html">
-                                <img src="{{ asset('client/img/logo/white-logo.svg') }}" alt="logo-img">
+                                <img src="{{ asset('client/img/logo/black-logo.png') }}" alt="logo-img"
+                                    style="max-width: 200px;">
                             </a>
                         </div>
                         <div class="footer-content">
                             <p>
-                                Phasellus ultricies aliquam volutpat ullamcorper laoreet neque, a lacinia curabitur
-                                lacinia mollis
+                                Book360 - Thiên đường sách trực tuyến của bạn.
                             </p>
                             <div class="social-icon d-flex align-items-center">
                                 <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
@@ -77,78 +77,49 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 ps-lg-5 wow fadeInUp" data-wow-delay=".4s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
-                            <h3>Costumers Support</h3>
+                            <h3>Nhà xuất bản</h3>
                         </div>
                         <ul class="list-area">
-                            <li>
-                                <a href="shop.html">
-                                    <i class="fa-solid fa-chevrons-right"></i>
-                                    Store List
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    <i class="fa-solid fa-chevrons-right"></i>
-                                    Opening Hours
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    <i class="fa-solid fa-chevrons-right"></i>
-                                    Contact Us
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    <i class="fa-solid fa-chevrons-right"></i>
-                                    Return Policy
-                                </a>
-                            </li>
+                            @foreach ($publishersFootrer as $publisher)
+                                <li>
+                                    <a href="">
+                                        <i class="fa-solid fa-chevrons-right"></i>
+                                        <span>{{ $publisher->name }}</span>
+                                        <span>({{ $publisher->products_count }})</span>
+                                    </a>
+                                </li>
+                            @endforeach
+
                         </ul>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-4 col-md-6 ps-lg-5 wow fadeInUp" data-wow-delay=".6s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
-                            <h3>Categories</h3>
+                            <h3>Danh mục</h3>
                         </div>
                         <ul class="list-area">
-                            <li>
-                                <a href="shop.html">
-                                    <i class="fa-solid fa-chevrons-right"></i>
-                                    Novel Books
-                                </a>
-                            </li>
-                            <li>
-                                <a href="shop.html">
-                                    <i class="fa-solid fa-chevrons-right"></i>
-                                    Poetry Books
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    <i class="fa-solid fa-chevrons-right"></i>
-                                    Political Books
-                                </a>
-                            </li>
-                            <li>
-                                <a href="contact.html">
-                                    <i class="fa-solid fa-chevrons-right"></i>
-                                    History Books
-                                </a>
-                            </li>
+                            @foreach ($categoriesFootrer as $category)
+                                <li>
+                                    <a href="">
+                                        <i class="fa-solid fa-chevrons-right"></i>
+                                        <span>{{ $category->name }}</span>
+                                        <span>({{ $category->products_count }})</span>
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
-                            <h3>Newsletter</h3>
+                            <h3>Tin tức</h3>
                         </div>
                         <div class="footer-content">
-                            <p>Sign up to searing weekly newsletter to get the latest updates.</p>
+                            <p>Đăng ký nhận bản tin hàng tuần của searing để nhận thông tin cập nhật mới nhất.</p>
                             <div class="footer-input">
-                                <input type="email" id="email2" placeholder="Enter Email Address">
+                                <input type="email" id="email2" placeholder="Nhập địa chỉ email">
                                 <button class="newsletter-btn" type="submit">
                                     <i class="fa-regular fa-paper-plane"></i>
                                 </button>
