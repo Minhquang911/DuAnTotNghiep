@@ -160,6 +160,23 @@ class Product extends Model
     }
 
     /**
+     * Điểm đánh giá trung bình
+     */
+    public function getAverageRatingAttribute()
+    {
+        $rating = $this->ratings()->avg('rating');
+        return $rating ? round($rating, 1) : null;
+    }
+
+    /**
+     * Số lượng đánh giá
+     */
+    public function getRatingCountAttribute()
+    {
+        return $this->ratings()->count();
+    }
+
+    /**
      * Giá thấp nhất của các biến thể
      */
     public function getMinPriceAttribute()
