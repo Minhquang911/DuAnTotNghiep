@@ -74,22 +74,6 @@ class HomeController extends Controller
             ->take(10)
             ->get();
 
-        $categories = Category::withCount('products')->where('is_active', 1)->get();
-
-        $categoriesFootrer = Category::withCount('products')
-            ->where('is_active', 1)
-            ->orderByDesc('products_count')
-            ->take(5)
-            ->get();
-
-        $publishers = Publisher::withCount('products')->where('is_active', 1)->get();
-
-        $publishersFootrer = Publisher::withCount('products')
-            ->where('is_active', 1)
-            ->orderByDesc('products_count')
-            ->take(5)
-            ->get();
-
         $banners = Banner::where('is_active', 1)->get();
 
         $promotions = Promotion::where('is_active', 1)
@@ -104,10 +88,6 @@ class HomeController extends Controller
 
         return view('home', compact(
             'title',
-            'categories',
-            'publishers',
-            'categoriesFootrer',
-            'publishersFootrer',
             'banners',
             'promotions',
             'posts',

@@ -28,9 +28,9 @@
                                     sách phong phú với hàng ngàn đầu sách từ văn học, kinh tế, kỹ năng sống đến sách thiếu
                                     nhi.</p>
                                 <div class="form-clt wow fadeInUp mt-5" data-wow-delay=".9s">
-                                    <button type="submit" class="theme-btn">
+                                    <a href="{{ route('client.products.index') }}" class="theme-btn">
                                         Cửa hàng <i class="fa-solid fa-arrow-right-long"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                                                 <p class="text-capitalize">{{ $banner->description }}</p>
                                                 <div class="form-clt wow fadeInUp mt-5" data-wow-delay=".9s">
                                                     <a href="{{ $banner->link }}" class="theme-btn">
-                                                        Cửa hàng <i class="fa-solid fa-arrow-right-long"></i>
+                                                        Mua ngay <i class="fa-solid fa-arrow-right-long"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -191,7 +191,7 @@
                 <div class="section-title">
                     <h2 class="wow fadeInUp" data-wow-delay=".3s">Sách hot</h2>
                 </div>
-                <a href="" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Xem thêm <i
+                <a href="{{ route('client.products.index') }}" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Xem thêm <i
                         class="fa-solid fa-arrow-right-long"></i></a>
             </div>
             <div class="swiper book-slider">
@@ -343,7 +343,7 @@
                 <div class="section-title wow fadeInUp" data-wow-delay=".3s">
                     <h2>Sách bán chạy</h2>
                 </div>
-                <a href="" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Xem thêm <i
+                <a href="{{ route('client.products.index') }}" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Xem thêm <i
                         class="fa-solid fa-arrow-right-long"></i></a>
             </div>
             <div class="book-shop-wrapper style-2">
@@ -448,7 +448,7 @@
                 <div class="section-title wow fadeInUp" data-wow-delay=".3s">
                     <h2>Sách mới</h2>
                 </div>
-                <a href="" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Xem thêm <i
+                <a href="{{ route('client.products.index') }}" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Xem thêm <i
                         class="fa-solid fa-arrow-right-long"></i></a>
             </div>
             <div class="book-shop-wrapper">
@@ -518,7 +518,7 @@
                 <div class="overlay"></div>
                 <div class="cta-content text-left">
                     <h2 class="text-white mb-40 wow fadeInUp" data-wow-delay=".3s">Book360 <br/> Thiên đường sách trực tuyến của bạn.</h2>
-                    <a href="" class="theme-btn white-bg wow fadeInUp" data-wow-delay=".5s">Cửa hàng<i
+                    <a href="{{ route('client.products.index') }}" class="theme-btn white-bg wow fadeInUp" data-wow-delay=".5s">Cửa hàng<i
                             class="fa-solid fa-arrow-right-long"></i></a>
                 </div>
             </div>
@@ -532,7 +532,7 @@
                 <div class="section-title">
                     <h2 class="wow fadeInUp" data-wow-delay=".3s">Có thể bạn quan tâm</h2>
                 </div>
-                <a href="" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Xem thêm <i
+                <a href="{{ route('client.products.index') }}" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Xem thêm <i
                         class="fa-solid fa-arrow-right-long"></i></a>
             </div>
             <div class="swiper book-slider">

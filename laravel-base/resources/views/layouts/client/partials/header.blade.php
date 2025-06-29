@@ -1,4 +1,8 @@
 <!-- Sticky Header Section start  -->
+@php
+    $categories = App\Models\Category::withCount('products')->where('is_active', 1)->get();
+    $publishers = App\Models\Publisher::withCount('products')->where('is_active', 1)->get();
+@endphp
 <header class="header-2 sticky-header">
     <div class="mega-menu-wrapper">
         <div class="header-main">
@@ -7,7 +11,7 @@
                     <div class="col-6 col-xl-9">
                         <div class="header-left">
                             <div class="logo">
-                                <a href="index.html" class="header-logo">
+                                <a href="{{ route('home') }}" class="header-logo">
                                     <img src="{{ asset('client/img/logo/black-logo.png') }}" alt="logo-img"
                                         style="max-width: 200px;">
                                 </a>
@@ -17,29 +21,24 @@
                                     <nav id="mobile-menu">
                                         <ul>
                                             <li>
-                                                <a href="index.html">
+                                                <a href="{{ route('home') }}">
                                                     Trang chủ
                                                 </a>
                                             </li>
                                             <li class="has-dropdown">
-                                                <a href="about.html">
+                                                <a href="{{ route('client.products.index') }}">
                                                     Cửa hàng
                                                     <i class="fas fa-angle-down"></i>
                                                 </a>
                                                 <ul class="submenu">
-                                                    <li><a href="about.html">Danh mục</a></li>
-                                                    <li class="has-dropdown">
-                                                        <a href="team.html">
-                                                            Author
-                                                            <i class="fas fa-angle-down"></i>
-                                                        </a>
-                                                        <ul class="submenu">
-                                                            <li><a href="team.html">Author</a></li>
-                                                            <li><a href="team-details.html">Author Profile</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="faq.html">Faq's</a></li>
-                                                    <li><a href="404.html">404 Page</a></li>
+                                                    @foreach ($categories as $category)
+                                                        <li>
+                                                            <a href="shop-details.html">
+                                                                <span>{{ $category->name }}</span>
+                                                                <span>({{ $category->products_count }})</span>
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
                                                 </ul>
                                             </li>
                                             <li>
@@ -122,7 +121,7 @@
     <div class="container">
         <div class="header-2-wrapper" style="justify-content: space-between">
             <div class="header-top-logo">
-                <a href="index.html">
+                <a href="{{ route('home') }}">
                     <img src="{{ asset('client/img/logo/black-logo.png') }}" alt="img" style="max-width: 200px;">
                 </a>
             </div>

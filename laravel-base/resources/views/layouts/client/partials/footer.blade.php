@@ -1,3 +1,16 @@
+@php
+    $categoriesFootrer = App\Models\Category::withCount('products')
+        ->where('is_active', 1)
+        ->orderByDesc('products_count')
+        ->take(5)
+        ->get();
+        
+    $publishersFootrer = App\Models\Publisher::withCount('products')
+        ->where('is_active', 1)
+        ->orderByDesc('products_count')
+        ->take(5)
+        ->get();
+@endphp
 <footer class="footer-section footer-bg">
     <div class="container">
         <div class="contact-info-area">
@@ -56,7 +69,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
                     <div class="single-footer-widget">
                         <div class="widget-head">
-                            <a href="index.html">
+                            <a href="{{ route('home') }}">
                                 <img src="{{ asset('client/img/logo/black-logo.png') }}" alt="logo-img"
                                     style="max-width: 200px;">
                             </a>
@@ -134,7 +147,7 @@
         <div class="container">
             <div class="footer-wrapper d-flex align-items-center justify-content-between">
                 <p class="wow fadeInLeft" data-wow-delay=".3s">
-                    © All Copyright 2024 by <a href="index.html">Bookle</a>
+                    © All Copyright 2025 by <a href="{{ route('home') }}">Book360</a>
                 </p>
                 <ul class="brand-logo wow fadeInRight" data-wow-delay=".5s">
                     <li>
