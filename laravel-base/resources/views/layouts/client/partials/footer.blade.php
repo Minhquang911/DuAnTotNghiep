@@ -95,7 +95,7 @@
                         <ul class="list-area">
                             @foreach ($publishersFootrer as $publisher)
                                 <li>
-                                    <a href="">
+                                    <a href="{{ route('client.products.index', array_merge(request()->except(['publisher_id', 'page']), ['publisher_id' => $publisher->id, 'page' => 1])) }}">
                                         <i class="fa-solid fa-chevrons-right"></i>
                                         <span>{{ $publisher->name }}</span>
                                         <span>({{ $publisher->products_count }})</span>
@@ -114,7 +114,7 @@
                         <ul class="list-area">
                             @foreach ($categoriesFootrer as $category)
                                 <li>
-                                    <a href="">
+                                    <a href="{{ route('client.products.index', array_merge(request()->except(['category_id', 'page']), ['category_id' => $category->id, 'page' => 1])) }}">
                                         <i class="fa-solid fa-chevrons-right"></i>
                                         <span>{{ $category->name }}</span>
                                         <span>({{ $category->products_count }})</span>

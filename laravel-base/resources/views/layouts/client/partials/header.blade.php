@@ -61,19 +61,11 @@
                                 <div class="icon">
                                     <i class="fa-user-pen fa-solid fa-grid-2"></i>
                                 </div>
-                                <select name="cate" class="category">
-                                    <option value="1">
-                                        Nhà xuất bản
-                                    </option>
-                                    @foreach ($publishers as $publisher)
-                                        <option value="{{ $publisher->id }}">
-                                            {{ $publisher->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <form action="#" class="search-toggle-box d-md-block">
+                                <form action="{{ route('client.products.index') }}"
+                                    class="search-toggle-box d-md-block" style="width: 500px">
                                     <div class="input-area">
-                                        <input type="text" placeholder="Tìm kiếm sách">
+                                        <input type="text" value="{{ old('search', e(request('search'))) }}"
+                                            name="search" placeholder="Tìm kiếm sách">
                                         <button class="cmn-btn">
                                             <i class="far fa-search"></i>
                                         </button>
@@ -110,8 +102,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 </header>
@@ -137,7 +127,8 @@
                                     <ul>
                                         @foreach ($categories as $category)
                                             <li>
-                                                <a href="shop-details.html">
+                                                <a
+                                                    href="{{ route('client.products.index', array_merge(request()->except(['category_id', 'page']), ['category_id' => $category->id, 'page' => 1])) }}">
                                                     <span>{{ $category->name }}</span>
                                                     <span>({{ $category->products_count }})</span>
                                                 </a>
@@ -148,9 +139,10 @@
                             </div>
                         </div>
                     </div>
-                    <form action="#" class="search-toggle-box d-md-block">
+                    <form action="{{ route('client.products.index') }}" class="search-toggle-box d-md-block">
                         <div class="input-area">
-                            <input type="text" placeholder="Tìm kiếm sách theo từ khóa">
+                            <input type="text" value="{{ old('search', e(request('search'))) }}" name="search"
+                                placeholder="Tìm kiếm sách theo từ khóa">
                             <button class="cmn-btn">
                                 <i class="far fa-search"></i>
                             </button>
