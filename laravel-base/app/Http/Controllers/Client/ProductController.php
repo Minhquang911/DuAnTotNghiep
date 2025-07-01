@@ -174,4 +174,20 @@ class ProductController extends Controller
             'priceRange'
         ));
     }
+
+    // Xon chi tiết sản phẩm
+    public function show($slug)
+    {
+        $product = Product::with(['category', 'publisher', 'albums'])
+            ->where('is_active', true)
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_active', true)
+            ->get();
+
+        return view('client.products.show', compact('product', 'relatedProducts'));
+    }
 }

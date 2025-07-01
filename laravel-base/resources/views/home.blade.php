@@ -200,7 +200,7 @@
                         <div class="swiper-slide">
                             <div class="shop-box-items style-2">
                                 <div class="book-thumb center">
-                                    <a href="">
+                                    <a href="{{ route('client.products.show',  $product->slug) }}">
                                         @if ($product->cover_image_url)
                                             <img src="{{ $product->cover_image_url }}" alt="img">
                                         @else
@@ -218,13 +218,13 @@
                                         @endif
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
+                                        <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
                                             To Cart</a>
                                     </div>
                                 </div>
                                 <div class="shop-content">
                                     <h5>{{ $product->publisher->name }} </h5>
-                                    <h3><a href="">{{ $product->title }}</a></h3>
+                                    <h3><a href="{{ route('client.products.show',  $product->slug) }}">{{ $product->title }}</a></h3>
                                     <ul class="price-list">
                                         <li>
                                             @if ($product->min_price && $product->max_price && $product->min_price != $product->max_price)
@@ -272,7 +272,7 @@
                         <div class="swiper-slide">
                             <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
                                 <div class="book-thumb center">
-                                    <a href="shop-details-2.html">
+                                    <a href="{{ route('client.products.show',  $product->slug) }}">
                                         @if ($product->cover_image_url)
                                             <img src="{{ $product->cover_image_url }}" alt="img">
                                         @else
@@ -290,7 +290,7 @@
                                             @endif
                                         </li>
                                     </ul>
-                                    <h3><a href="">{{ $product->title }}</a></h3>
+                                    <h3><a href="{{ route('client.products.show',  $product->slug) }}">{{ $product->title }}</a></h3>
                                     <ul class="author-post">
                                         <li class="authot-list">
                                             <span class="content">{{ $product->category->name }}</span>
@@ -316,7 +316,7 @@
                                             <p>{{ $product->view_count }} Lượt xem</p>
                                         </div>
                                         <div class="shop-btn">
-                                            <a href="">
+                                            <a href="{{ route('client.products.show',  $product->slug) }}">
                                                 <i class="fa-regular fa-basket-shopping"></i>
                                             </a>
                                         </div>
@@ -350,7 +350,7 @@
                 @foreach ($bestSellerProducts as $product)
                     <div class="shop-box-items style-3 wow fadeInUp" data-wow-delay=".2s">
                         <div class="book-thumb center">
-                            <a href="shop-details-2.html">
+                            <a href="{{ route('client.products.show',  $product->slug) }}">
                                 @if ($product->cover_image_url)
                                     <img src="{{ $product->cover_image_url }}" alt="img">
                                 @else
@@ -368,7 +368,7 @@
                                     @endif
                                 </li>
                             </ul>
-                            <h3><a href="">{{ $product->title }}</a></h3>
+                            <h3><a href="{{ route('client.products.show',  $product->slug) }}">{{ $product->title }}</a></h3>
                             <ul class="author-post">
                                 <li class="authot-list">
                                     <span class="content">{{ $product->publisher->name }}</span>
@@ -387,7 +387,7 @@
                                 </li>
                             </ul>
                             <div class="shop-button">
-                                <a href="" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i>
+                                <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i>
                                     Add To Cart</a>
                             </div>
                         </div>
@@ -455,7 +455,7 @@
                 @foreach ($newProducts as $product)
                 <div class="shop-box-items style-2 wow fadeInUp" data-wow-delay=".2s">
                     <div class="book-thumb center">
-                        <a href="">
+                        <a href="{{ route('client.products.show',  $product->slug) }}">
                             @if ($product->cover_image_url)
                                 <img src="{{ $product->cover_image_url }}" alt="img">
                             @else
@@ -473,13 +473,13 @@
                             @endif
                         </ul>
                         <div class="shop-button">
-                            <a href="" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
+                            <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
                                 To Cart</a>
                         </div>
                     </div>
                     <div class="shop-content">
                         <h5>{{ $product->publisher->name }} </h5>
-                        <h3><a href="">{{ $product->title }}</a></h3>
+                        <h3><a href="{{ route('client.products.show',  $product->slug) }}">{{ $product->title }}</a></h3>
                         <ul class="price-list">
                             <li>
                                 @if ($product->min_price && $product->max_price && $product->min_price != $product->max_price)
@@ -541,7 +541,7 @@
                         <div class="swiper-slide">
                             <div class="shop-box-items style-2">
                                 <div class="book-thumb center">
-                                    <a href="">
+                                    <a href="{{ route('client.products.show',  $product->slug) }}">
                                         @if ($product->cover_image_url)
                                             <img src="{{ $product->cover_image_url }}" alt="img">
                                         @else
@@ -559,13 +559,13 @@
                                         @endif
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
+                                        <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
                                             To Cart</a>
                                     </div>
                                 </div>
                                 <div class="shop-content">
                                     <h5>{{ $product->publisher->name }} </h5>
-                                    <h3><a href="">{{ $product->title }}</a></h3>
+                                    <h3><a href="{{ route('client.products.show',  $product->slug) }}">{{ $product->title }}</a></h3>
                                     <ul class="price-list">
                                         <li>
                                             @if ($product->min_price && $product->max_price && $product->min_price != $product->max_price)

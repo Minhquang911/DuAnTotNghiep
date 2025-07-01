@@ -36,7 +36,8 @@ Route::get('/login/google/callback', [GoogleLoginController::class, 'handleGoogl
 
 // Các route cho khách hàng chưa đăng nhập
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
+Route::get('/products',         [ClientProductController::class, 'index'])->name('client.products.index');
+Route::get('/products/{slug}',  [ClientProductController::class, 'show'])->name('client.products.show');
 
 // Các route cho admin
 Route::middleware(['auth', CheckRole::class . ':admin'])

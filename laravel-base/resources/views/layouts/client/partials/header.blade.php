@@ -33,7 +33,7 @@
                                                 <ul class="submenu">
                                                     @foreach ($categories as $category)
                                                         <li>
-                                                            <a href="shop-details.html">
+                                                            <a href="{{ route('client.products.index', array_merge(request()->except(['category_id', 'page']), ['category_id' => $category->id, 'page' => 1])) }}">
                                                                 <span>{{ $category->name }}</span>
                                                                 <span>({{ $category->products_count }})</span>
                                                             </a>

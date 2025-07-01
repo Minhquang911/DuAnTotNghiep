@@ -330,7 +330,7 @@
                                         <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
                                             <div class="shop-box-items">
                                                 <div class="book-thumb center">
-                                                    <a href="shop-details.html">
+                                                    <a href="{{ route('client.products.show',  $product->slug) }}">
                                                         @if ($product->cover_image_url)
                                                             <img src="{{ $product->cover_image_url }}" alt="img">
                                                         @else
@@ -350,11 +350,11 @@
                                                 </div>
                                                 <div class="shop-content">
                                                     <h3 class="text-center">
-                                                        <a href="shop-details.html">
+                                                        <a href="{{ route('client.products.show',  $product->slug) }}">
                                                             {{ \Illuminate\Support\Str::limit($product->title, 25) }}
                                                         </a>
                                                     </h3>
-                                                    <ul class="price-list ">
+                                                    <ul class="price-list">
                                                         <li
                                                             class="@if (!$product->average_rating) text-center w-100 @endif">
                                                             @if ($product->min_price && $product->max_price && $product->min_price != $product->max_price)
@@ -375,13 +375,12 @@
                                                         @endif
                                                     </ul>
                                                     <div class="shop-button">
-                                                        <a href="shop-details.html" class="theme-btn"><i
+                                                        <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i
                                                                 class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
                                                     </div>
                                                 </div>
 
                                             </div>
-
                                         </div>
                                     @endforeach
                                 </div>

@@ -7106,7 +7106,7 @@ span {
 }
 .shop-details-wrapper .shop-details-content .category-box .category-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   border-radius: 10px;
   background: rgba(248, 248, 248, 0.97);
