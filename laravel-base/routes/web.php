@@ -39,6 +39,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products',         [ClientProductController::class, 'index'])->name('client.products.index');
 Route::get('/products/{slug}',  [ClientProductController::class, 'show'])->name('client.products.show');
 
+// AJAX routes cho comments và ratings pagination
+Route::get('/products/{product}/comments', [ClientProductController::class, 'getComments'])->name('client.products.comments');
+Route::get('/products/{product}/ratings', [ClientProductController::class, 'getRatings'])->name('client.products.ratings');
+
 // Các route cho admin
 Route::middleware(['auth', CheckRole::class . ':admin'])
     ->prefix('admin')

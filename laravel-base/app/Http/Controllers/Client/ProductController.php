@@ -183,11 +183,42 @@ class ProductController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $relatedProducts = Product::where('category_id', $product->category_id)
-            ->where('id', '!=', $product->id)
-            ->where('is_active', true)
-            ->get();
+        $comments = $product->comments()
+            ->where('is_approved', true)
+            ->with('user')
+            ->latest()
+            ->paginate(5);
 
-        return view('client.products.show', compact('product', 'relatedProducts'));
+        $ratings = $product->ratings()
+            ->where('is_approved', true)
+            ->with('user')
+            ->latest()
+            ->paginate(5);
+
+        return view('client.products.show', compact('product', 'comments', 'ratings'));
+    }
+
+    // AJAX method để lấy comments với phân trang
+    public function getComments(Request $request, Product $product)
+    {
+        $comments = $product->comments()
+            ->where('is_approved', true)
+            ->with('user')
+            ->latest()
+            ->paginate(5);
+
+        return view('client.products.partials.comments', compact('comments'));
+    }
+
+    // AJAX method để lấy ratings với phân trang
+    public function getRatings(Request $request, Product $product)
+    {
+        $ratings = $product->ratings()
+            ->where('is_approved', true)
+            ->with('user')
+            ->latest()
+            ->paginate(5);
+
+        return view('client.products.partials.ratings', compact('ratings'));
     }
 }
