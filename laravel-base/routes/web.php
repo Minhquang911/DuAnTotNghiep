@@ -47,6 +47,10 @@ Route::get('/products/{product}/ratings', [ClientProductController::class, 'getR
 // Các route quản lý giỏ hàng
 Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('cart.')->group(function () {
     Route::get('/',             [CartController::class, 'index'])->name('index');
+    Route::get('/add/{id}',     [CartController::class, 'add'])->name('add');
+    Route::post('/update/{id}', [CartController::class, 'update'])->name('update');
+    Route::get('/remove/{id}',  [CartController::class, 'remove'])->name('remove');
+    Route::get('/clear',        [CartController::class, 'clear'])->name('clear');
 });
 
 // Các route cho admin
