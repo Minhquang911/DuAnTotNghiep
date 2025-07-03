@@ -1,4 +1,3 @@
-
 @extends('layouts.admin.AdminLayout')
 
 @section('content')
@@ -63,7 +62,6 @@
                                         <th class="text-center" style="width: 60px">STT</th>
                                         <th>Tên danh mục</th>
                                         <th>Slug</th>
-                                        <th>Danh mục cha</th>
                                         <th>Mô tả</th>
                                         <th class="text-center" style="width: 100px">Trạng thái</th>
                                         <th class="text-center" style="width: 150px">Thao tác</th>
@@ -71,14 +69,53 @@
                                 </thead>
                                 <tbody>
                                     @forelse($categories as $category)
-                                        @include('admin.categories.partials.category_row', [
-                                            'category' => $category,
-                                            'level' => 0,
-                                            'loop' => $loop,
-                                        ])
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-folder text-primary me-2"></i>
+                                                    <span class="category-name">{{ $category->name }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">{{ $category->slug }}</td>
+                                            <td>
+                                                <div class="category-description">
+                                                    {{ $category->description ?: 'Không có mô tả' }}
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input category-status-toggle" type="checkbox"
+                                                        data-category-id="{{ $category->id }}"
+                                                        {{ $category->is_active ? 'checked' : '' }}
+                                                        data-bs-toggle="tooltip"
+                                                        title="{{ $category->is_active ? 'Hoạt động' : 'Khóa' }}">
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ route('admin.categories.edit', $category->id) }}" 
+                                                    class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="tooltip" 
+                                                    title="Chỉnh sửa">
+                                                     <i class="fas fa-edit"></i>
+                                                 </a>
+                                                 <form action="{{ route('admin.categories.destroy', $category->id) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')"
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Xóa">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="text-center py-4">
+                                            <td colspan="6" class="text-center py-4">
                                                 <div class="text-muted">
                                                     <i class="fas fa-tags fa-2x mb-3"></i>
                                                     <p class="mb-0">Không có danh mục nào.</p>
@@ -211,26 +248,6 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-        }
-
-        .category-parent {
-            font-size: 0.875rem;
-            color: #6c757d;
-        }
-
-        .category-level {
-            margin-left: 1.5rem;
-            position: relative;
-        }
-
-        .category-level::before {
-            content: '';
-            position: absolute;
-            left: -1rem;
-            top: 50%;
-            width: 0.75rem;
-            height: 1px;
-            background-color: #dee2e6;
         }
     </style>
 @endpush

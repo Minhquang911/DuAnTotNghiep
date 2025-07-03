@@ -84,21 +84,6 @@
                                         @enderror
                                         <small class="text-muted">Slug được sử dụng trong URL, tự động tạo từ tên danh mục</small>
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="parent_id">Danh mục cha</label>
-                                        <select class="form-control @error('parent_id') is-invalid @enderror" id="parent_id"
-                                            name="parent_id">
-                                            <option value="">-- Không chọn --</option>
-                                            @foreach ($categories as $cat)
-                                                <option value="{{ $cat->id }}"
-                                                    {{ old('parent_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('parent_id')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">

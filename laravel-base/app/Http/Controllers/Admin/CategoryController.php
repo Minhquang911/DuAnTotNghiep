@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Category::whereNull('parent_id')->with('children');
+        $query = Category::query();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -27,19 +27,8 @@ class CategoryController extends Controller
         try {
             $isActive = $request->is_active;
 
-            // Nếu muốn bật (is_active = 1) và có cha bị khóa thì không cho phép
-            if ($isActive && $category->parent && !$category->parent->is_active) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Không thể bật danh mục khi danh mục cha đang bị khóa!'
-                ], 400);
-            }
-
-            // Cập nhật chính nó
+            // Cập nhật trạng thái
             $category->update(['is_active' => $isActive]);
-
-            // Đệ quy cập nhật tất cả con
-            $this->updateChildrenStatus($category, $isActive);
 
             return response()->json([
                 'success' => true,
@@ -55,8 +44,7 @@ class CategoryController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
-        return view('admin.categories.create', compact('categories'));
+        return view('admin.categories.create');
     }
 
     public function store(Request $request)
@@ -64,12 +52,10 @@ class CategoryController extends Controller
         try {
             $request->validate([
                 'name' => 'required|string|max:255',
-                'parent_id' => 'nullable|exists:categories,id',
             ], [
                 'name.required' => 'Tên danh mục là bắt buộc',
                 'name.string' => 'Tên danh mục phải là chuỗi',
                 'name.max' => 'Tên danh mục không được vượt quá 255 ký tự',
-                'parent_id.exists' => 'Danh mục cha không tồn tại',
             ]);
 
             $category = Category::create($request->all());
@@ -81,8 +67,7 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        $categories = Category::all();
-        return view('admin.categories.edit', compact('category', 'categories'));
+        return view('admin.categories.edit', compact('category'));
     }
 
     public function update(Request $request, Category $category)
@@ -90,12 +75,10 @@ class CategoryController extends Controller
         try {
             $request->validate([
                 'name' => 'required|string|max:255',
-                'parent_id' => 'nullable|exists:categories,id',
             ], [
                 'name.required' => 'Tên danh mục là bắt buộc',
                 'name.string' => 'Tên danh mục phải là chuỗi',
                 'name.max' => 'Tên danh mục không được vượt quá 255 ký tự',
-                'parent_id.exists' => 'Danh mục cha không tồn tại',
             ]);
 
             $category->update($request->all());
@@ -117,14 +100,6 @@ class CategoryController extends Controller
             return redirect()->route('admin.categories.index')->with('success', 'Xóa danh mục thành công!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa: ' . $e->getMessage());
-        }
-    }
-
-    private function updateChildrenStatus($category, $isActive)
-    {
-        foreach ($category->children as $child) {
-            $child->update(['is_active' => $isActive]);
-            $this->updateChildrenStatus($child, $isActive);
         }
     }
 }

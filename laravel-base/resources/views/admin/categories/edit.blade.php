@@ -44,7 +44,7 @@
                     <div class="card-header bg-gradient-primary">
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="card-title text-white fw-bold">
-                                <i class="fas fa-tags me-2"></i>Chỉnh sửa danh mục
+                                <i class="fas fa-tags me-2"></i>Thêm danh mục mới
                             </h3>
                             <a href="{{ route('admin.categories.index') }}" class="btn btn-light btn-sm">
                                 <i class="fas fa-arrow-left me-1"></i> Quay lại
@@ -63,15 +63,14 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('admin.categories.update', $category->id) }}" method="POST">
+                        <form action="{{ route('admin.categories.store') }}" method="POST">
                             @csrf
-                            @method('PUT')
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="name">Tên danh mục <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                            id="name" name="name" value="{{ old('name', $category->name) }}" placeholder="Nhập tên danh mục">
+                                            id="name" name="name" value="{{ old('name') }}" placeholder="Nhập tên danh mục">
                                         @error('name')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
@@ -79,35 +78,17 @@
                                     <div class="form-group mb-3">
                                         <label for="slug">Slug</label>
                                         <input type="text" class="form-control @error('slug') is-invalid @enderror"
-                                            id="slug" name="slug" value="{{ old('slug', $category->slug) }}" placeholder="Nhập slug" readonly>
+                                            id="slug" name="slug" value="{{ old('slug') }}" placeholder="Nhập slug" readonly>
                                         @error('slug')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                         <small class="text-muted">Slug được sử dụng trong URL, tự động tạo từ tên danh mục</small>
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="parent_id">Danh mục cha</label>
-                                        <select class="form-control @error('parent_id') is-invalid @enderror" id="parent_id"
-                                            name="parent_id">
-                                            <option value="">-- Không chọn --</option>
-                                            @foreach ($categories as $cat)
-                                                @if ($cat->id != $category->id)
-                                                    <option value="{{ $cat->id }}"
-                                                        {{ old('parent_id', $category->parent_id) == $cat->id ? 'selected' : '' }}>
-                                                        {{ $cat->name }}
-                                                    </option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                        @error('parent_id')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="description">Mô tả</label>
-                                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" placeholder="Nhập mô tả danh mục">{{ old('description', $category->description) }}</textarea>
+                                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" placeholder="Nhập mô tả danh mục">{{ old('description') }}</textarea>
                                         @error('description')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
@@ -116,11 +97,9 @@
                                         <label for="is_active">Trạng thái</label>
                                         <select class="form-control @error('is_active') is-invalid @enderror" id="is_active"
                                             name="is_active">
-                                            <option value="1"
-                                                {{ old('is_active', $category->is_active) == '1' ? 'selected' : '' }}>Hoạt
+                                            <option value="1" {{ old('is_active', 1) == '1' ? 'selected' : '' }}>Hoạt
                                                 động</option>
-                                            <option value="0"
-                                                {{ old('is_active', $category->is_active) == '0' ? 'selected' : '' }}>Khóa
+                                            <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>Khóa
                                             </option>
                                         </select>
                                         @error('is_active')
@@ -130,7 +109,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                <button type="submit" class="btn btn-primary">Thêm mới</button>
                                 <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Quay lại</a>
                             </div>
                         </form>
