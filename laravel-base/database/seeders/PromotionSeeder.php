@@ -16,6 +16,7 @@ class PromotionSeeder extends Seeder
     {
         $promotions = [
             [
+                'code' => 'WELCOME10',
                 'title' => 'Giảm 10% cho đơn hàng từ 500k',
                 'description' => 'Áp dụng cho tất cả khách hàng mới.',
                 'discount_type' => 'percent',
@@ -30,6 +31,7 @@ class PromotionSeeder extends Seeder
                 'image' => null,
             ],
             [
+                'code' => 'SAVE50K',
                 'title' => 'Giảm 50k cho đơn hàng từ 300k',
                 'description' => 'Chỉ áp dụng cho sách giáo khoa.',
                 'discount_type' => 'fixed',
@@ -44,6 +46,7 @@ class PromotionSeeder extends Seeder
                 'image' => null,
             ],
             [
+                'code' => 'FLASH20',
                 'title' => 'Flash Sale cuối tuần',
                 'description' => 'Giảm 20% tối đa 30k cho mọi đơn hàng.',
                 'discount_type' => 'percent',

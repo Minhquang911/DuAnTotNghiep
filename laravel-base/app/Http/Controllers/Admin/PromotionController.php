@@ -18,7 +18,8 @@ class PromotionController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%$search%")
-                    ->orWhere('description', 'like', "%$search%");
+                    ->orWhere('description', 'like', "%$search%")
+                    ->orWhere('code', 'like', "%$search%");
             });
         }
 
@@ -35,6 +36,7 @@ class PromotionController extends Controller
     {
         // Validate các trường bắt buộc và tùy chọn
         $validated = $request->validate([
+            'code' => 'required|string|max:50|unique:promotions,code',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'discount_type' => 'required|in:percent,fixed',
@@ -47,6 +49,10 @@ class PromotionController extends Controller
             'usage_limit' => 'nullable|integer|min:1',
             'is_active' => 'boolean'
         ], [
+            'code.required' => 'Vui lòng nhập mã khuyến mãi.',
+            'code.string' => 'Mã khuyến mãi phải là chuỗi.',
+            'code.max' => 'Mã khuyến mãi không được vượt quá 50 ký tự.',
+            'code.unique' => 'Mã khuyến mãi đã tồn tại.',
             'title.required' => 'Vui lòng nhập tiêu đề mã khuyến mãi.',
             'discount_type.required' => 'Vui lòng chọn loại giảm giá.',
             'discount_type.in' => 'Loại giảm giá không hợp lệ.',
@@ -96,6 +102,7 @@ class PromotionController extends Controller
     public function update(Request $request, Promotion $promotion)
     {
         $validated = $request->validate([
+            'code' => 'required|string|max:50|unique:promotions,code,' . $promotion->id,
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'discount_type' => 'required|in:percent,fixed',
@@ -108,6 +115,10 @@ class PromotionController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
             'is_active' => 'boolean'
         ], [
+            'code.required' => 'Vui lòng nhập mã khuyến mãi.',
+            'code.string' => 'Mã khuyến mãi phải là chuỗi.',
+            'code.max' => 'Mã khuyến mãi không được vượt quá 50 ký tự.',
+            'code.unique' => 'Mã khuyến mãi đã tồn tại.',
             'title.required' => 'Vui lòng nhập tiêu đề mã khuyến mãi.',
             'discount_type.required' => 'Vui lòng chọn loại giảm giá.',
             'discount_type.in' => 'Loại giảm giá không hợp lệ.',

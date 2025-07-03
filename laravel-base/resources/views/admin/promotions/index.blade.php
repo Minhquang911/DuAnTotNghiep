@@ -41,7 +41,7 @@
                                             <i class="fas fa-search text-muted"></i>
                                         </span>
                                         <input type="text" name="search" class="form-control"
-                                            placeholder="Tìm kiếm theo tiêu đề hoặc mô tả..."
+                                            placeholder="Tìm kiếm theo mã, tiêu đề hoặc mô tả..."
                                             value="{{ request('search') }}">
                                     </div>
                                 </div>
@@ -62,6 +62,7 @@
                                     <tr>
                                         <th class="text-center" style="width: 60px">STT</th>
                                         <th style="width: 120px">Hình ảnh</th>
+                                        <th style="width: 120px">Mã</th>
                                         <th>Tiêu đề</th>
                                         <th class="text-center">Loại</th>
                                         <th class="text-end">Giảm</th>
@@ -90,6 +91,9 @@
                                                             alt="No image" class="img-thumbnail banner-image">
                                                     @endif
                                                 </div>
+                                            </td>
+                                            <td>
+                                                <div class="fw-bold text-primary">{{ $promotion->code }}</div>
                                             </td>
                                             <td>
                                                 <div class="fw-semibold">{{ $promotion->title }}</div>
@@ -163,7 +167,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="10" class="text-center py-4">
+                                            <td colspan="12" class="text-center py-4">
                                                 <div class="text-muted">
                                                     <i class="fas fa-gift fa-2x mb-3"></i>
                                                     <p class="mb-0">Không có mã khuyến mãi nào.</p>

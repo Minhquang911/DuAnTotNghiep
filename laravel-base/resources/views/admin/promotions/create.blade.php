@@ -102,6 +102,17 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group mb-3">
+                                        <label for="code">Mã khuyến mãi <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control @error('code') is-invalid @enderror"
+                                            id="code" name="code" value="{{ old('code') }}"
+                                            placeholder="Nhập mã khuyến mãi (VD: WELCOME10)" maxlength="50">
+                                        @error('code')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <small class="text-muted">Mã khuyến mãi phải là duy nhất và không được trùng lặp</small>
+                                    </div>
+
+                                    <div class="form-group mb-3">
                                         <label for="title">Tiêu đề mã khuyến mãi <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('title') is-invalid @enderror"
