@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AlbumController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\FormatController;
 use App\Http\Controllers\Admin\RatingController;
@@ -42,6 +43,11 @@ Route::get('/products/{slug}',  [ClientProductController::class, 'show'])->name(
 // AJAX routes cho comments và ratings pagination
 Route::get('/products/{product}/comments', [ClientProductController::class, 'getComments'])->name('client.products.comments');
 Route::get('/products/{product}/ratings', [ClientProductController::class, 'getRatings'])->name('client.products.ratings');
+
+// Các route quản lý giỏ hàng
+Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('cart.')->group(function () {
+    Route::get('/',             [CartController::class, 'index'])->name('index');
+});
 
 // Các route cho admin
 Route::middleware(['auth', CheckRole::class . ':admin'])

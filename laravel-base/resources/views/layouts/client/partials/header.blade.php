@@ -73,7 +73,7 @@
                                 </form>
                             </div>
                             <div class="menu-cart">
-                                <a href="shop-cart.html" class="cart-icon">
+                                <a href="{{ route('cart.index') }}" class="cart-icon">
                                     <i class="fa-regular fa-cart-shopping"></i>
                                 </a>
                                 <div class="header-humbager ml-30">
@@ -161,7 +161,7 @@
                     </div>
                 </div>
                 <div class="menu-cart text-end">
-                    <a href="shop-cart.html" class="cart-icon">
+                    <a href="{{ route('cart.index') }}" class="cart-icon">
                         <i class="fa-regular fa-cart-shopping"></i>
                     </a>
                     <div class="header-humbager ml-30">
