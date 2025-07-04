@@ -170,7 +170,7 @@
                                         <p class="qty">
                                             <button class="qtyminus" aria-hidden="true">−</button>
                                             <input type="number" name="quantity" id="qty2" min="1"
-                                                max="{{ $variant->stock }}" step="1"
+                                                max="999" step="1"
                                                 value="{{ old('quantity', 1) }}">
                                             <button class="qtyplus" aria-hidden="true">+</button>
                                         </p>
@@ -500,14 +500,3 @@
         });
     </script>
 @endpush
-
-@if (session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-@endif
-@if (session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-@endif

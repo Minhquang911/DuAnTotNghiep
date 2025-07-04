@@ -35,7 +35,7 @@ class Cart extends Model
     public function totalPrice()
     {
         return $this->items->sum(function ($item) {
-            return $item->quantity * $item->product->gia;
+            return $item->totalPrice();
         });
     }
 }

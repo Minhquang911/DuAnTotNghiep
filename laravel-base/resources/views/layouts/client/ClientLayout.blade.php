@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="{{ asset('client/css/icomoon.css') }}">
     <!--<< Main.css >>-->
     <link rel="stylesheet" href="{{ asset('client/css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 
 <body>
@@ -78,6 +79,16 @@
     <!--<< Main.js >>-->
     <script src="{{ asset('client/js/main.js') }}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000"
+        };
+    </script>
+    
     @stack('scripts')
 </body>
 

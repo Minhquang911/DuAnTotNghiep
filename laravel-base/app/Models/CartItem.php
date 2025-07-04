@@ -24,12 +24,13 @@ class CartItem extends Model
     // Mỗi mục giỏ hàng chứa thông tin 1 sản phẩm
     public function productVariant()
     {
-        return $this->belongsTo(ProductVariant::class);
+        return $this->belongsTo(ProductVariant::class, 'variant_id');
     }
 
     // Tổng giá trị của mục này
     public function totalPrice()
     {
-        return $this->quantity * $this->product->gia;
+        $price = $this->productVariant->promotion_price ?? $this->productVariant->price;
+        return $this->quantity * $price;
     }
 }
