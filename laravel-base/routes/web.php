@@ -10,7 +10,6 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AlbumController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\FormatController;
 use App\Http\Controllers\Admin\RatingController;
@@ -22,8 +21,10 @@ use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PublisherController;
 use App\Http\Controllers\Auth\GoogleLoginController;
-use App\Http\Controllers\Client\UserProfileController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Client\UserProfileController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 
 // Route::get('/', function () {
@@ -48,9 +49,18 @@ Route::get('/products/{product}/ratings', [ClientProductController::class, 'getR
 Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('cart.')->group(function () {
     Route::get('/',                 [CartController::class, 'index'])->name('index');
     Route::post('/add',             [CartController::class, 'add'])->name('add');
-    Route::post('/update',           [CartController::class, 'update'])->name('update');
+    Route::post('/update',          [CartController::class, 'update'])->name('update');
     Route::delete('/remove/{id}',   [CartController::class, 'remove'])->name('remove');
     Route::delete('/clear',         [CartController::class, 'clear'])->name('clear');
+});
+
+// Các route quản lý đơn hàng
+Route::middleware(['auth'])->prefix('orders')->name('orders.')->group(function () {
+    Route::get('/add',              [ClientOrderController::class, 'add'])->name('add');
+    Route::post('/store',           [ClientOrderController::class, 'store'])->name('store'); // Thêm đơn hàng mới
+    Route::get('/success', function() {
+        return view('client.order.success');
+    });
 });
 
 // Các route cho admin

@@ -224,7 +224,9 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="checkout.html" class="theme-btn">Tiến hành thanh toán</a>
+                            <a href="{{ route('orders.add', ['promotion_code' => request('promotion_code')]) }}" class="theme-btn">
+                                Tiến hành thanh toán
+                            </a>
                         </div>
                     </div>
                 </div>
