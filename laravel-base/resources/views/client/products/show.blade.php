@@ -69,24 +69,43 @@
                 <div class="row g-4">
                     <div class="col-lg-5">
                         <div class="shop-details-image">
+                            @php
+                                $allImages = [];
+                                if ($product->cover_image_url) {
+                                    $allImages[] = [
+                                        'image' => $product->cover_image_url,
+                                        'is_cover' => true
+                                    ];
+                                }
+                                foreach ($product->albums as $album) {
+                                    $allImages[] = [
+                                        'image' => asset('storage/' . $album->image),
+                                        'is_cover' => false
+                                    ];
+                                }
+                            @endphp
                             <div class="tab-content">
-                                @foreach ($product->albums as $index => $album)
+                                @foreach ($allImages as $index => $img)
                                     <div id="thumb{{ $index + 1 }}"
                                         class="tab-pane fade {{ $index === 0 ? 'show active' : '' }}">
                                         <div class="shop-details-thumb">
-                                            <img src="{{ asset('storage/' . $album->image) }}" alt="img"
-                                                height="400px">
+                                            <img src="{{ $img['image'] }}" alt="img" height="400px">
+                                            @if($img['is_cover'])
+                                                <span class="badge bg-primary" style="position:absolute;top:10px;left:10px;">Ảnh đại diện</span>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
                             <ul class="nav">
-                                @foreach ($product->albums as $index => $album)
+                                @foreach ($allImages as $index => $img)
                                     <li class="nav-item">
                                         <a href="#thumb{{ $index + 1 }}" data-bs-toggle="tab"
                                             class="nav-link {{ $index === 0 ? 'active' : '' }}">
-                                            <img src="{{ asset('storage/' . $album->image) }}" alt="img"
-                                                height="120px">
+                                            <img src="{{ $img['image'] }}" alt="img" height="120px">
+                                            @if($img['is_cover'])
+                                                <span class="badge bg-primary" style="position:absolute;top:2px;left:2px;">Cover</span>
+                                            @endif
                                         </a>
                                     </li>
                                 @endforeach
@@ -139,7 +158,7 @@
                                 </h3>
                             </div>
 
-                            <form action="{{ route('cart.add') }}" method="POST">
+                            <form id="add-to-cart-form">
                                 @csrf
                                 <div class="social-icon">
                                     <h6>Chọn loại sách:</h6>
@@ -157,21 +176,13 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @if ($errors->has('variant_id'))
-                                    <span class="text-danger">{{ $errors->first('variant_id') }}</span>
-                                @endif
-
-                                @if ($errors->has('quantity'))
-                                    <span class="text-danger">{{ $errors->first('quantity') }}</span>
-                                @endif
 
                                 <div class="cart-wrapper">
                                     <div class="quantity-basket">
                                         <p class="qty">
                                             <button class="qtyminus" aria-hidden="true">−</button>
                                             <input type="number" name="quantity" id="qty2" min="1"
-                                                max="999" step="1"
-                                                value="{{ old('quantity', 1) }}">
+                                                max="999" step="1" value="{{ old('quantity', 1) }}">
                                             <button class="qtyplus" aria-hidden="true">+</button>
                                         </p>
                                     </div>
@@ -179,9 +190,6 @@
                                         <i class="fa-solid fa-basket-shopping"></i>
                                         Add To Cart
                                     </button>
-                                    @if (session('success'))
-                                        <span class="text-success">{{ session('success') }}</span>
-                                    @endif
                                 </div>
                             </form>
                             <div class="category-box">
@@ -275,8 +283,8 @@
                             $approvedRatings = $product->ratings()->where('is_approved', true)->count();
                         @endphp
                         <li class="nav-item" role="presentation">
-                            <a href="#comment" data-bs-toggle="tab" class="nav-link" aria-selected="false"
-                                tabindex="-1" role="tab">
+                            <a href="#comment" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1"
+                                role="tab">
                                 <h6>Bình luận ({{ $approvedComments }})</h6>
                             </a>
                         </li>
@@ -460,10 +468,8 @@
                     }
                 });
             }
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
+
+            // Xử lý số lượng sản phẩm khi thêm vào giỏ hàng
             const $variantSelect = $('#variant-select');
             const $priceDisplay = $('#variant-price');
             const originalPriceHtml = $priceDisplay.html(); // Lưu giá ban đầu (min-max)
@@ -495,8 +501,41 @@
                 }
             }
 
-            // Gắn sự kiện change bằng jQuery
             $variantSelect.on('change', updatePrice);
+
+
+            // Xử lý thêm sản phẩm vào giỏ hàng
+            $('#add-to-cart-form').on('submit', function(e) {
+                e.preventDefault();
+                var $form = $(this);
+                var formData = $form.serialize();
+
+                $.ajax({
+                    url: '{{ route('cart.add') }}', // Đặt route ở đây
+                    method: 'POST',
+                    data: formData,
+                    success: function(res) {
+                        if (res.success) {
+                            toastr.success(res.message);
+                            // Có thể cập nhật số lượng giỏ hàng ở header nếu muốn
+                            if (typeof res.cart_quantity !== 'undefined') {
+                                $('.cart-count').text(res.cart_quantity);
+                            }
+                        } else {
+                            toastr.error(res.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            toastr.error('Bạn cần đăng nhập để mua hàng!');
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            toastr.error(xhr.responseJSON.message);
+                        } else {
+                            toastr.error('Có lỗi xảy ra!');
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endpush

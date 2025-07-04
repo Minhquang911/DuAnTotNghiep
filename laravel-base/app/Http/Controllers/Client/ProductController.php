@@ -175,13 +175,15 @@ class ProductController extends Controller
         ));
     }
 
-    // Xon chi tiết sản phẩm
+    // Xem chi tiết sản phẩm
     public function show($slug)
     {
         $product = Product::with(['category', 'publisher', 'albums', 'variants.format', 'variants.language'])
             ->where('is_active', true)
             ->where('slug', $slug)
             ->firstOrFail();
+        
+        $product->increment('view_count');
 
         $variants = $product->variants;
 

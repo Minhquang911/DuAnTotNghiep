@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Client;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
-use Illuminate\Support\Facades\Auth;
-use App\Models\ProductVariant;
 use App\Models\Promotion;
+use Illuminate\Http\Request;
+use App\Models\ProductVariant;
 use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -72,9 +73,8 @@ class CartController extends Controller
     // Thêm sản phẩm vào giỏ
     public function add(Request $request)
     {
-        $user = Auth::user();
-        if (!$user) {
-            return redirect()->route('login');
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để mua hàng!'], 401);
         }
 
         $rules = [
@@ -82,24 +82,31 @@ class CartController extends Controller
             'quantity'   => 'required|integer|min:1',
         ];
         $messages = [
-            'variant_id.required' => 'Bạn chưa chọn biến thể sản phẩm!',
-            'variant_id.exists'   => 'Biến thể sản phẩm không tồn tại!',
+            'variant_id.required' => 'Bạn chưa chọn loại sách!',
+            'variant_id.exists'   => 'Loại sách không tồn tại!',
             'quantity.required'   => 'Vui lòng nhập số lượng!',
             'quantity.integer'    => 'Số lượng phải là số nguyên!',
             'quantity.min'        => 'Số lượng phải lớn hơn 0!',
         ];
 
-        $validated = $request->validate($rules, $messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-        // Kiểm tra tồn kho
-        $variant = ProductVariant::find($request->variant_id);
-        if ($request->quantity > $variant->stock) {
-            return back()
-                ->withErrors(['quantity' => 'Số lượng vượt quá số lượng trong kho!'])
-                ->withInput();
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ]);
         }
 
-        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $variant = ProductVariant::find($request->variant_id);
+        if ($request->quantity > $variant->stock) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Số lượng vượt quá số lượng trong kho!'
+            ]);
+        }
+
+        $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
         $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('variant_id', $request->variant_id)
             ->first();
@@ -107,9 +114,10 @@ class CartController extends Controller
         if ($cartItem) {
             $newQuantity = $cartItem->quantity + $request->quantity;
             if ($newQuantity > $variant->stock) {
-                return back()
-                    ->withErrors(['quantity' => 'Tổng số lượng vượt quá số lượng trong kho!'])
-                    ->withInput();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tổng số lượng vượt quá số lượng trong kho!'
+                ]);
             }
             $cartItem->quantity = $newQuantity;
             $cartItem->save();
@@ -120,8 +128,13 @@ class CartController extends Controller
                 'quantity'   => $request->quantity,
             ]);
         }
+        $cartQuantity = $cart->items()->sum('quantity');
 
-        return redirect()->back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã thêm sản phẩm vào giỏ hàng!',
+            'cart_quantity' => $cartQuantity
+        ]);
     }
 
     // Cập nhật số lượng sản phẩm

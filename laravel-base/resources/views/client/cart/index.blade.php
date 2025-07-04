@@ -297,7 +297,6 @@
                             toastr.success(res.message);
                             // Xóa dòng sản phẩm khỏi bảng
                             $btn.closest('tr').remove();
-                            // Có thể reload lại tổng tiền, hoặc reload trang nếu cần
                             setTimeout(function() {
                                 location.reload();
                             }, 1000);
