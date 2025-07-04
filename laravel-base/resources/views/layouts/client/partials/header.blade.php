@@ -2,6 +2,13 @@
 @php
     $categories = App\Models\Category::withCount('products')->where('is_active', 1)->get();
     $publishers = App\Models\Publisher::withCount('products')->where('is_active', 1)->get();
+    $cartQuantity = 0;
+    if (Auth::check()) {
+        $cart = \App\Models\Cart::where('user_id', Auth::id())->with('items')->first();
+        if ($cart) {
+            $cartQuantity = $cart->totalQuantity();
+        }
+    }
 @endphp
 <header class="header-2 sticky-header">
     <div class="mega-menu-wrapper">
@@ -33,7 +40,8 @@
                                                 <ul class="submenu">
                                                     @foreach ($categories as $category)
                                                         <li>
-                                                            <a href="{{ route('client.products.index', array_merge(request()->except(['category_id', 'page']), ['category_id' => $category->id, 'page' => 1])) }}">
+                                                            <a
+                                                                href="{{ route('client.products.index', array_merge(request()->except(['category_id', 'page']), ['category_id' => $category->id, 'page' => 1])) }}">
                                                                 <span>{{ $category->name }}</span>
                                                                 <span>({{ $category->products_count }})</span>
                                                             </a>
@@ -61,8 +69,8 @@
                                 <div class="icon">
                                     <i class="fa-user-pen fa-solid fa-grid-2"></i>
                                 </div>
-                                <form action="{{ route('client.products.index') }}"
-                                    class="search-toggle-box d-md-block" style="width: 500px">
+                                <form action="{{ route('client.products.index') }}" class="search-toggle-box d-md-block"
+                                    style="width: 500px">
                                     <div class="input-area">
                                         <input type="text" value="{{ old('search', e(request('search'))) }}"
                                             name="search" placeholder="Tìm kiếm sách">
@@ -75,6 +83,12 @@
                             <div class="menu-cart">
                                 <a href="{{ route('cart.index') }}" class="cart-icon">
                                     <i class="fa-regular fa-cart-shopping"></i>
+                                    @if ($cartQuantity > 0)
+                                        <span class="cart-count badge bg-danger"
+                                            style="position:absolute;top:-8px;right:-8px;">
+                                            {{ $cartQuantity }}
+                                        </span>
+                                    @endif
                                 </a>
                                 <div class="header-humbager ml-30">
                                     <a class="sidebar__toggle" href="javascript:void(0)">
@@ -163,6 +177,11 @@
                 <div class="menu-cart text-end">
                     <a href="{{ route('cart.index') }}" class="cart-icon">
                         <i class="fa-regular fa-cart-shopping"></i>
+                        @if (isset($cartQuantity) && $cartQuantity > 0)
+                            <span class="cart-count badge bg-danger" style="position:absolute;top:-8px;right:-8px;">
+                                {{ $cartQuantity }}
+                            </span>
+                        @endif
                     </a>
                     <div class="header-humbager ml-30">
                         <a class="sidebar__toggle" href="javascript:void(0)">

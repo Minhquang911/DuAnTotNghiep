@@ -178,10 +178,12 @@ class ProductController extends Controller
     // Xon chi tiết sản phẩm
     public function show($slug)
     {
-        $product = Product::with(['category', 'publisher', 'albums'])
+        $product = Product::with(['category', 'publisher', 'albums', 'variants.format', 'variants.language'])
             ->where('is_active', true)
             ->where('slug', $slug)
             ->firstOrFail();
+
+        $variants = $product->variants;
 
         $comments = $product->comments()
             ->where('is_approved', true)
@@ -195,7 +197,12 @@ class ProductController extends Controller
             ->latest()
             ->paginate(5);
 
-        return view('client.products.show', compact('product', 'comments', 'ratings'));
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_active', true)
+            ->get();
+
+        return view('client.products.show', compact('product', 'variants', 'comments', 'ratings', 'relatedProducts'));
     }
 
     // AJAX method để lấy comments với phân trang

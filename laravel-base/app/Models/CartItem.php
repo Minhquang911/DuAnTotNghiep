@@ -11,7 +11,7 @@ class CartItem extends Model
 
     protected $fillable = [
         'cart_id',
-        'product_id',
+        'variant_id',
         'quantity',
     ];
 
@@ -22,9 +22,9 @@ class CartItem extends Model
     }
 
     // Mỗi mục giỏ hàng chứa thông tin 1 sản phẩm
-    public function product()
+    public function productVariant()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(ProductVariant::class);
     }
 
     // Tổng giá trị của mục này

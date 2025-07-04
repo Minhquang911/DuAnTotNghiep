@@ -218,8 +218,8 @@
                                         @endif
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
-                                            To Cart</a>
+                                        <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn">
+                                            <i class="fa-solid fa-eye"></i> Xem chi tiết</a>
                                     </div>
                                 </div>
                                 <div class="shop-content">
@@ -317,7 +317,7 @@
                                         </div>
                                         <div class="shop-btn">
                                             <a href="{{ route('client.products.show',  $product->slug) }}">
-                                                <i class="fa-regular fa-basket-shopping"></i>
+                                                <i class="fa-regular fa-eye"></i>
                                             </a>
                                         </div>
 
@@ -360,7 +360,7 @@
                         </div>
                         <div class="shop-content">
                             <ul class="book-category">
-                                <li class="book-category-badge">{{ $product->publisher->name }}</li>
+                                <li class="book-category-badge">{{ $product->category->name }}</li>
                                 <li>
                                     @if ($product->average_rating)
                                         <i class="fa-solid fa-star"></i>
@@ -375,7 +375,7 @@
                                 </li>
                             </ul>
                             <ul class="price-list">
-                                <li>
+                                <li style="font-size: 18px; font-weight: 600;">
                                     @if ($product->min_price && $product->max_price && $product->min_price != $product->max_price)
                                         {{ number_format($product->min_price) }}₫
                                         - {{ number_format($product->max_price) }}₫
@@ -387,8 +387,9 @@
                                 </li>
                             </ul>
                             <div class="shop-button">
-                                <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i>
-                                    Add To Cart</a>
+                                <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn">
+                                    <i class="fa-solid fa-eye"></i>
+                                    Xem chi tiết</a>
                             </div>
                         </div>
                     </div>
@@ -473,8 +474,9 @@
                             @endif
                         </ul>
                         <div class="shop-button">
-                            <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
-                                To Cart</a>
+                            <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn">
+                                <i class="fa-solid fa-eye"></i>
+                                Xem chi tiết</a>
                         </div>
                     </div>
                     <div class="shop-content">
@@ -559,8 +561,9 @@
                                         @endif
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
-                                            To Cart</a>
+                                        <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn">
+                                            <i class="fa-solid fa-eye"></i>
+                                            Xem chi tiết</a>
                                     </div>
                                 </div>
                                 <div class="shop-content">

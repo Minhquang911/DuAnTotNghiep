@@ -1810,21 +1810,6 @@ span {
   border: 1px solid rgba(79, 83, 107, 0.3);
 }
 
-.header-2-wrapper .header-2-right .menu-cart .cart-icon::before {
-  position: absolute;
-  top: -7px;
-  left: 0;
-  content: "0";
-  width: 18px;
-  line-height: 18px;
-  height: 18px;
-  border-radius: 18px;
-  background-color: var(--theme);
-  color: var(--white);
-  font-size: 12px;
-  text-align: center;
-  font-weight: 500;
-}
 .header-2-wrapper .header-2-right .menu-cart .cart-icon i {
   color: var(--header);
 }
@@ -2879,21 +2864,7 @@ span {
     display: none;
   }
 }
-.header-2 .header-right .menu-cart .cart-icon::before {
-  position: absolute;
-  top: -7px;
-  left: 0;
-  content: "0";
-  width: 18px;
-  line-height: 18px;
-  height: 18px;
-  border-radius: 18px;
-  background-color: var(--theme);
-  color: var(--white);
-  font-size: 12px;
-  text-align: center;
-  font-weight: 500;
-}
+
 .header-2 .header-right .menu-cart .cart-icon i {
   color: var(--header);
 }

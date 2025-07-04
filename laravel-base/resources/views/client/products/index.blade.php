@@ -375,8 +375,10 @@
                                                         @endif
                                                     </ul>
                                                     <div class="shop-button">
-                                                        <a href="{{ route('client.products.show',  $product->slug) }}" class="theme-btn"><i
-                                                                class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
+                                                        <a href="{{ route('client.products.show',  $product->slug) }}"
+                                                            class="theme-btn">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                            Xem chi tiết</a>
                                                     </div>
                                                 </div>
 
