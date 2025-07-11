@@ -194,15 +194,20 @@ class PostController extends Controller
                 $imagePath = $request->file('image')->store('posts', 'public');
             }
 
-            // Cập nhật bài viết
-            $post->update([
+            // Tạo mảng dữ liệu cần cập nhật
+            $updateData = [
                 'user_id' => $user->id,
                 'title' => $request->title,
                 'slug' => Str::slug($request->title),
                 'content' => $request->content,
-                'image' => $imagePath,
                 'is_published' => $request->boolean('is_published'),
-            ]);
+            ];
+
+            if ($imagePath !== null) {
+                $updateData['image'] = $imagePath;
+            }
+
+            $post->update($updateData);
 
             DB::commit();
 

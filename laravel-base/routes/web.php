@@ -26,6 +26,7 @@ use App\Http\Controllers\Client\UserProfileController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\PostController as ClientPostController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -38,12 +39,20 @@ Route::get('/login/google/callback', [GoogleLoginController::class, 'handleGoogl
 
 // Các route cho khách hàng chưa đăng nhập
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/products',         [ClientProductController::class, 'index'])->name('client.products.index');
-Route::get('/products/{slug}',  [ClientProductController::class, 'show'])->name('client.products.show');
 
-// AJAX routes cho comments và ratings pagination
-Route::get('/products/{product}/comments', [ClientProductController::class, 'getComments'])->name('client.products.comments');
-Route::get('/products/{product}/ratings', [ClientProductController::class, 'getRatings'])->name('client.products.ratings');
+Route::prefix('products')->name('client.products.')->controller(ClientProductController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/{slug}', 'show')->name('show');
+
+    // AJAX routes cho comments và ratings pagination
+    Route::get('/{product}/comments', 'getComments')->name('comments');
+    Route::get('/{product}/ratings', 'getRatings')->name('ratings');
+});
+
+Route::prefix('posts')->name('client.posts.')->controller(ClientPostController::class)->group(function () {
+    Route::get('/', 'index')->name('index'); // Danh sách bài viết
+    Route::get('/{slug}', 'show')->name('show'); // Chi tiết bài viết theo slug
+});
 
 // Các route quản lý giỏ hàng
 Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('cart.')->group(function () {
@@ -58,7 +67,7 @@ Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('c
 Route::middleware(['auth'])->prefix('orders')->name('orders.')->group(function () {
     Route::get('/add',              [ClientOrderController::class, 'add'])->name('add');
     Route::post('/store',           [ClientOrderController::class, 'store'])->name('store'); // Thêm đơn hàng mới
-    Route::get('/success', function() {
+    Route::get('/success', function () {
         return view('client.order.success');
     });
 });

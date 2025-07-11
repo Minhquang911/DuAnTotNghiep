@@ -50,7 +50,7 @@
                                                 </ul>
                                             </li>
                                             <li>
-                                                <a href="news.html">
+                                                <a href="{{ route('client.posts.index') }}">
                                                     Bài viết
                                                 </a>
                                             </li>
