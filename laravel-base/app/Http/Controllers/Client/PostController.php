@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Http\Controllers\Client;
@@ -12,5 +13,12 @@ class PostController extends Controller
     {
         $posts = Post::where('is_published', true)->latest()->paginate(12);
         return view('client.posts.index', compact('posts'));
+    }
+
+    public function show($slug)
+    {
+        $post = Post::where('is_published', true)->where('slug', $slug)->firstOrFail();
+        $posts = Post::where('is_published', true)->where('id', '!=', $post->id)->latest()->paginate(5);
+        return view('client.posts.show', compact('post', 'posts'));
     }
 }

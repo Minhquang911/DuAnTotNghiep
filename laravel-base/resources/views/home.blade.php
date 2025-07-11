@@ -1,3 +1,4 @@
+
 @extends('layouts.client.ClientLayout')
 
 @section('title')
@@ -616,7 +617,7 @@
                                 <img src="{{ asset('storage/' . $post->image) }}" alt="img">
                                 <img src="{{ asset('storage/' . $post->image) }}" alt="img">
                                 <div class="post-box">
-                                    Activities
+                                    News
                                 </div>
                             </div>
                             <div class="news-content">
@@ -630,8 +631,8 @@
                                         By Admin
                                     </li>
                                 </ul>
-                                <h3><a href="">{{ $post->title }}</a></h3>
-                                <a href="" class="theme-btn-2">Chi tiết <i
+                                <h3><a href="{{ route('client.posts.show', $post->slug) }}">{{ $post->title }}</a></h3>
+                                <a href="{{ route('client.posts.show', $post->slug) }}" class="theme-btn-2">Chi tiết <i
                                         class="fa-regular fa-arrow-right-long"></i></a>
                             </div>
                         </div>
