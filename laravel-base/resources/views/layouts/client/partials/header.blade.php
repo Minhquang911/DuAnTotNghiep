@@ -20,7 +20,7 @@
                             <div class="logo">
                                 <a href="{{ route('home') }}" class="header-logo">
                                     <img src="{{ asset('client/img/logo/black-logo.png') }}" alt="logo-img"
-                                        style="max-width: 200px;">
+                                         style="max-width: 200px;">
                                 </a>
                             </div>
                             <div class="mean__menu-wrapper">
@@ -55,7 +55,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="contact.html">Liên hệ</a>
+                                                <a href="{{ route('client.contact.index') }}">Liên hệ</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -70,10 +70,10 @@
                                     <i class="fa-user-pen fa-solid fa-grid-2"></i>
                                 </div>
                                 <form action="{{ route('client.products.index') }}" class="search-toggle-box d-md-block"
-                                    style="width: 500px">
+                                      style="width: 500px">
                                     <div class="input-area">
                                         <input type="text" value="{{ old('search', e(request('search'))) }}"
-                                            name="search" placeholder="Tìm kiếm sách">
+                                               name="search" placeholder="Tìm kiếm sách">
                                         <button class="cmn-btn">
                                             <i class="far fa-search"></i>
                                         </button>
@@ -85,7 +85,7 @@
                                     <i class="fa-regular fa-cart-shopping"></i>
                                     @if ($cartQuantity > 0)
                                         <span class="cart-count badge bg-danger"
-                                            style="position:absolute;top:-8px;right:-8px;">
+                                              style="position:absolute;top:-8px;right:-8px;">
                                             {{ $cartQuantity }}
                                         </span>
                                     @endif
@@ -99,15 +99,15 @@
                                 </div>
                                 @if (auth()->check())
                                     <a href="{{ auth()->check() ? route('user.profile') : route('login') }}"
-                                        class="user-icon" title="Tài khoản">
+                                       class="user-icon" title="Tài khoản">
                                         <i class="fa-regular fa-user"></i>
                                     </a>
                                     <a href="{{ route('logout') }}" class="user-icon" title="Đăng xuất"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                       onclick="event.preventDefault(); if (confirm('Bạn có chắc chắn muốn đăng xuất?')) { document.getElementById('logout-form').submit(); }">
                                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        style="display: none;">
+                                          style="display: none;">
                                         @csrf
                                     </form>
                                 @endif
@@ -156,7 +156,7 @@
                     <form action="{{ route('client.products.index') }}" class="search-toggle-box d-md-block">
                         <div class="input-area">
                             <input type="text" value="{{ old('search', e(request('search'))) }}" name="search"
-                                placeholder="Tìm kiếm sách theo từ khóa">
+                                   placeholder="Tìm kiếm sách theo từ khóa">
                             <button class="cmn-btn">
                                 <i class="far fa-search"></i>
                             </button>
@@ -192,15 +192,15 @@
                     </div>
                     @if (auth()->check())
                         <a href="{{ auth()->check() ? route('user.profile') : route('login') }}" class="user-icon"
-                            title="Tài khoản">
+                           title="Tài khoản">
                             <i class="fa-regular fa-user"></i>
                         </a>
                         <a href="{{ route('logout') }}" class="user-icon" title="Đăng xuất"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                           onclick="event.preventDefault(); if (confirm('Bạn có chắc chắn muốn đăng xuất?')) { document.getElementById('logout-form').submit(); }">
                             <i class="fa-solid fa-arrow-right-from-bracket"></i>
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            style="display: none;">
+                              style="display: none;">
                             @csrf
                         </form>
                     @else

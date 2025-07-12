@@ -27,6 +27,7 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\PostController as ClientPostController;
+use App\Http\Controllers\Client\ContactController as ClientContactController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -54,6 +55,10 @@ Route::prefix('posts')->name('client.posts.')->controller(ClientPostController::
     Route::get('/{slug}', 'show')->name('show'); // Chi tiết bài viết theo slug
 });
 
+Route::prefix('contact')->name('client.contact.')->controller(ClientContactController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+});
+
 // Các route quản lý giỏ hàng
 Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('cart.')->group(function () {
     Route::get('/',                 [CartController::class, 'index'])->name('index');
@@ -64,7 +69,7 @@ Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('c
 });
 
 // Các route quản lý đơn hàng
-Route::middleware(['auth'])->prefix('orders')->name('orders.')->group(function () {
+Route::middleware(['auth', CheckRole::class . ':user'])->prefix('orders')->name('orders.')->group(function () {
     Route::get('/add',              [ClientOrderController::class, 'add'])->name('add');
     Route::post('/store',           [ClientOrderController::class, 'store'])->name('store'); // Thêm đơn hàng mới
     Route::get('/success', function () {
