@@ -16,4 +16,25 @@ class ContactController extends Controller
         return view('client.contact.index', compact('title'));
     }
 
+    // Lưu liên hệ
+    public function store(Request $request)
+    {
+        if (!Auth::check()) { 
+            return response()->json(['message' => 'Bạn cần đăng nhập để gửi yêu cầu.'], 401);
+        }
+
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'content' => 'required|string|min:10',
+        ]);
+
+        $contact = Contact::create([
+            'user_id' => Auth::id(),
+            'email' => $validated['email'],
+            'content' => $validated['content'],
+            'is_read' => false,
+        ]);
+
+        return response()->json(['message' => 'Gửi liên hệ thành công!']);
+    }
 }

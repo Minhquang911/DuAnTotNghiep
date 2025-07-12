@@ -56,7 +56,8 @@ Route::prefix('posts')->name('client.posts.')->controller(ClientPostController::
 });
 
 Route::prefix('contact')->name('client.contact.')->controller(ClientContactController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
+    Route::get('/', 'index')->name('index'); 
+    Route::post('/store', 'store')->middleware('auth')->name('store'); 
 });
 
 // Các route quản lý giỏ hàng

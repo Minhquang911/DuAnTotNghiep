@@ -92,8 +92,8 @@
                                 nhất. <br />
                                 Chúng tôi luôn trân trọng mọi phản hồi từ bạn để không ngừng hoàn thiện và phát triển.
                             </p>
-                            <form action="" id="contact-form" method="POST"
-                                  class="contact-form-items">
+                            <form action="{{ route('client.contact.store') }}" id="contact-form" method="POST"
+                                class="contact-form-items">
                                 <div class="row g-4">
                                     <div class="col-lg-12 wow fadeInUp" data-wow-delay=".3s">
                                         <div class="form-clt">
@@ -132,3 +132,63 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#contact-form').on('submit', function(e) {
+                e.preventDefault();
+
+                // Lấy dữ liệu
+                var email = $('input[name="email"]').val().trim();
+                var content = $('textarea[name="content"]').val().trim();
+                var errors = [];
+
+                // Validate client
+                if (!email) {
+                    errors.push('Vui lòng nhập email.');
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    errors.push('Email không hợp lệ.');
+                }
+                if (!content) {
+                    errors.push('Vui lòng nhập nội dung.');
+                }
+
+                if (errors.length > 0) {
+                    errors.forEach(function(msg) {
+                        toastr.error(msg);
+                    });
+                    return;
+                }
+
+                // Gửi AJAX
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: {
+                        email: email,
+                        content: content,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(res) {
+                        toastr.success(res.message || 'Gửi liên hệ thành công!');
+                        $('#contact-form')[0].reset();
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            toastr.error('Bạn cần đăng nhập để gửi yêu cầu.');
+                        } else if (xhr.status === 422) {
+                            // Lỗi validate từ server
+                            var errors = xhr.responseJSON.errors;
+                            Object.values(errors).forEach(function(msgArr) {
+                                toastr.error(msgArr[0]);
+                            });
+                        } else {
+                            toastr.error('Đã có lỗi xảy ra, vui lòng thử lại.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
