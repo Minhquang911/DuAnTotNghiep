@@ -11,14 +11,31 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\OrderSuccessMail;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
     public function add(Request $request)
     {
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->with('items.productVariant.product')->first();
-        $totalPrice = $cart ? $cart->totalPrice() : 0;
+        $selectedItems = json_decode($request->input('selected_items_json', '[]'), true);
+
+        $cart = Cart::where('user_id', $user->id)
+            ->with(['items' => function ($q) use ($selectedItems) {
+                if (!empty($selectedItems)) {
+                    $q->whereIn('id', $selectedItems);
+                }
+            }, 'items.productVariant.product'])
+            ->first();
+        // Tính lại tổng tiền chỉ dựa trên các item đã chọn
+        $totalPrice = 0;
+        if ($cart && $cart->items) {
+            foreach ($cart->items as $item) {
+                $price = $item->productVariant->promotion_price ?? $item->productVariant->price;
+                $totalPrice += $price * $item->quantity;
+            }
+        }
 
         $promotionCode = $request->get('promotion_code');
         $promotion = null;
@@ -64,14 +81,84 @@ class OrderController extends Controller
         // Lấy người dùng hiện tại
         $user = Auth::user();
 
-        $coupon_code = $request->get('promotion_code');
+        $selectedItems = $request->input('product_variant_id');
 
         // Lấy giỏ hàng
-        $cart = Cart::where('user_id', $user->id)->with('items.productVariant.product')->first();
+        $cart = Cart::where('user_id', $user->id)
+            ->with(['items' => function ($q) use ($selectedItems) {
+                if (!empty($selectedItems)) {
+                    $q->whereIn('id', $selectedItems);
+                }
+            }, 'items.productVariant.product'])
+            ->first();
 
         if (!$cart || $cart->items->isEmpty()) {
             return redirect()->back()->with('error', 'Giỏ hàng trống.');
         }
+
+        // 1. Kiểm tra số lượng tồn kho
+        foreach ($cart->items as $item) {
+            if ($item->quantity > $item->productVariant->stock) {
+                $msg = 'Sản phẩm "'
+                    . $item->productVariant->product->title . ' - '
+                    . $item->productVariant->format->name . ' - '
+                    . $item->productVariant->language->name
+                    . '" không đủ số lượng trong kho!';
+                if ($request->ajax()) {
+                    return response()->json(['success' => false, 'message' => $msg]);
+                }
+                return redirect()->back()->with('error', $msg);
+            }
+        }
+
+        // 2. Kiểm tra điều kiện khuyến mãi (nếu có)
+        $promotionCode = $request->input('coupon_code');
+        if ($promotionCode) {
+            $promotion = \App\Models\Promotion::where('code', $promotionCode)->first();
+            $totalPrice = $cart->items->sum(function ($item) {
+                return ($item->productVariant->promotion_price ?? $item->productVariant->price) * $item->quantity;
+            });
+
+            if (!$promotion) {
+                $msg = 'Mã khuyến mãi không tồn tại!';
+            } elseif (!$promotion->is_active) {
+                $msg = 'Mã khuyến mãi không còn hiệu lực!';
+            } elseif ($promotion->start_date && $promotion->start_date->isFuture()) {
+                $msg = 'Mã khuyến mãi chưa bắt đầu!';
+            } elseif ($promotion->end_date && $promotion->end_date->isPast()) {
+                $msg = 'Mã khuyến mãi đã hết hạn!';
+            } elseif ($promotion->usage_limit !== null && $promotion->used_count >= $promotion->usage_limit) {
+                $msg = 'Mã khuyến mãi đã hết lượt sử dụng!';
+            } elseif ($promotion->min_order_value && $totalPrice < $promotion->min_order_value) {
+                $msg = 'Đơn hàng chưa đủ điều kiện áp dụng mã khuyến mãi!';
+            }
+
+            if (isset($msg)) {
+                if ($request->ajax()) {
+                    return response()->json(['success' => false, 'message' => $msg]);
+                }
+                return redirect()->back()->with('error', $msg);
+            }
+        }
+
+        $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_email' => 'required|email',
+            'customer_phone' => 'required',
+            'customer_province' => 'required',
+            'customer_district' => 'required',
+            'customer_ward' => 'required',
+            'customer_address' => 'required',
+        ], [
+            'customer_name.required' => 'Vui lòng nhập họ tên',
+            'customer_email.required' => 'Vui lòng nhập email',
+            'customer_email.email' => 'Email không đúng định dạng',
+            'customer_phone.required' => 'Vui lòng nhập số điện thoại',
+            'customer_province.required' => 'Vui lòng chọn Tỉnh/Thành phố',
+            'customer_district.required' => 'Vui lòng chọn Quận/Huyện',
+            'customer_ward.required' => 'Vui lòng chọn Phường/Xã',
+            'customer_address.required' => 'Vui lòng nhập địa chỉ chi tiết',
+        ]);
 
         DB::beginTransaction();
         try {
@@ -98,28 +185,44 @@ class OrderController extends Controller
             ];
             // Tạo đơn hàng
             $order = Order::create($orderCreate);
-            
+
             // Tạo từng mục đơn hàng từ giỏ hàng
             foreach ($cart->items as $item) {
                 $orderItem = [
-                    'order_id' => $order->id ?? null,
-                    'product_id' => $item->productVariant->id,
-                    'product_variant_id' => $item->variant_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->productVariant->promotion_price ?? $item->productVariant->price,
-                    'sku' => $item->productVariant->sku,
-                    'product_name' => $item->productVariant->product->title,
-                    'product_variant_name' => $item->productVariant->format->name . ' - ' . $item->productVariant->language->name,
-                    'product_image' => $item->productVariant->product->cover_image ?? null,
-                    'total' => ($item->productVariant->promotion_price ?? $item->productVariant->price) * $item->quantity,
+                    'order_id'              => $order->id ?? null,
+                    'product_id'            => $item->productVariant->product->id,
+                    'product_variant_id'    => $item->variant_id,
+                    'quantity'              => $item->quantity,
+                    'price'                 => $item->productVariant->promotion_price ?? $item->productVariant->price,
+                    'sku'                   => $item->productVariant->sku,
+                    'product_name'          => $item->productVariant->product->title,
+                    'product_variant_name'  => $item->productVariant->format->name . ' - ' . $item->productVariant->language->name,
+                    'product_image'         => $item->productVariant->product->cover_image ?? null,
+                    'total'                 => ($item->productVariant->promotion_price ?? $item->productVariant->price) * $item->quantity,
                 ];
                 OrderItem::create($orderItem);
+
+                // Trừ số lượng tồn kho của variant
+                $productVariant = $item->productVariant;
+                $productVariant->stock = max(0, $productVariant->stock - $item->quantity);
+                $productVariant->save();
+            }
+            // Nếu có mã khuyến mãi, tăng used_count
+            if (!empty($promotionCode) && isset($promotion)) {
+                $promotion->used_count = ($promotion->used_count ?? 0) + 1;
+                $promotion->save();
             }
             // Xóa giỏ hàng sau khi đặt hàng
-            $cart->items()->delete();
+            // Xóa các sản phẩm đã mua khỏi giỏ hàng
+            if (!empty($selectedItems)) {
+                $cart->items()->whereIn('id', $selectedItems)->delete();
+            }
 
             DB::commit();
 
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'redirect_url' => route('orders.success')]);
+            }
             return redirect()->route('orders.success');
         } catch (\Exception $e) {
             DB::rollback();
