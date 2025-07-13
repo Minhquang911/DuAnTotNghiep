@@ -19,9 +19,15 @@ class CartController extends Controller
     {
         $cart = Cart::where('user_id', Auth::user()->id)->with('items.productVariant.product')->first();
         $cartItems = $cart ? $cart->items : collect();
-        $totalPrice = $cart ? $cart->totalPrice() : 0;
+
+        $selectedItems = $request->get('selected_items', []);
+
+        $totalPrice = $cartItems->whereIn('id', $selectedItems)->sum(function ($item) {
+            return ($item->productVariant->promotion_price ?? $item->productVariant->price) * $item->quantity;
+        });
 
         $promotionCode = $request->get('promotion_code');
+
         $promotion = null;
         $promotionError = null;
         $discountAmount = 0;
@@ -66,7 +72,8 @@ class CartController extends Controller
             'promotion',
             'promotionError',
             'discountAmount',
-            'finalTotal'
+            'finalTotal',
+            'selectedItems'
         ));
     }
 
@@ -164,8 +171,13 @@ class CartController extends Controller
 
         // Tính lại tổng từng dòng và tổng giỏ hàng
         $itemTotal = ($variant->promotion_price ?? $variant->price) * $cartItem->quantity;
-        $cart = $cartItem->cart;
-        $cartTotal = $cart->totalPrice();
+
+        $selectedItems = $request->get('selected_items', []);
+        $cart = $cartItem->cart->items;
+
+        $cartTotal = $cart->whereIn('id', $selectedItems)->sum(function ($item) {
+            return ($item->productVariant->promotion_price ?? $item->productVariant->price) * $item->quantity;
+        });
 
         // Tính lại giảm giá nếu có mã khuyến mãi
         $promotionCode = session('promotion_code'); // hoặc lấy từ request nếu bạn truyền lên
@@ -199,9 +211,9 @@ class CartController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Cập nhật thành công!',
-            'item_total' => number_format($itemTotal),
-            'cart_total' => number_format($cartTotal),
-            'final_total' => number_format($finalTotal),
+            'item_total' => number_format($itemTotal, 0, '', '.'),
+            'cart_total' => number_format($cartTotal, 0, '', '.'),
+            'final_total' => number_format($finalTotal, 0, '', '.'),
         ]);
     }
 

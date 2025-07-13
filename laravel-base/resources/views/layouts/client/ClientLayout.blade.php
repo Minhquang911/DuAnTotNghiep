@@ -36,6 +36,16 @@
     <!--<< Main.css >>-->
     <link rel="stylesheet" href="{{ asset('client/css/main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+        .toast {
+            min-width: 400px;
+            /* hoặc 500px, tùy bạn */
+            max-width: 100%;
+            /* đảm bảo không bị tràn */
+            word-wrap: break-word;
+            /* để nội dung không tràn hàng */
+        }
+    </style>
 </head>
 
 <body>
@@ -88,7 +98,7 @@
             "timeOut": "3000"
         };
     </script>
-    
+
     @stack('scripts')
 </body>
 

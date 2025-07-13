@@ -59,7 +59,7 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            <input type="checkbox" name="" data-bs-toggle="tooltip"
+                                            <input type="checkbox" id="select-all" data-bs-toggle="tooltip"
                                                 title="Chọn tất cả">
                                         </th>
                                         <th>Sản phẩm</th>
@@ -77,7 +77,9 @@
                                     @forelse($cartItems as $item)
                                         <tr>
                                             <td>
-                                                <input type="checkbox" name="" data-bs-toggle="tooltip"
+                                                <input type="checkbox" class="select-item" name="selected_items[]"
+                                                    value="{{ $item->id }}" data-bs-toggle="tooltip"
+                                                    {{ in_array($item->id, request()->input('selected_items', [])) ? 'checked' : '' }}
                                                     title="Chọn mua">
                                             </td>
                                             <td>
@@ -145,7 +147,8 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn-remove-item" data-id="{{ $item->id }}">
+                                                <button type="button" class="btn-remove-item"
+                                                    data-id="{{ $item->id }}">
                                                     <img src="{{ asset('client/img/icon/icon-9.svg') }}" alt="img">
                                                 </button>
                                             </td>
@@ -166,11 +169,11 @@
                                     <button type="submit" class="theme-btn">
                                         Áp dụng
                                     </button>
+                                    <button class="theme-btn">
+                                        Cập nhật giỏ hàng
+                                    </button>
                                 </div>
                             </form>
-                            <a href="" class="theme-btn">
-                                Cập nhật
-                            </a>
                         </div>
                         @if ($promotionError)
                             <div class="text-danger">{{ $promotionError }}</div>
@@ -224,9 +227,11 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="{{ route('orders.add', ['promotion_code' => request('promotion_code')]) }}" class="theme-btn">
-                                Tiến hành thanh toán
-                            </a>
+                            <form id="checkout-form" method="GET" action="{{ route('orders.add') }}">
+                                <input type="hidden" name="promotion_code" value="{{ request('promotion_code') }}">
+                                <input type="hidden" name="selected_items_json" id="selected_items_json">
+                                <button type="submit" class="theme-btn">Tiến hành thanh toán</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -257,13 +262,19 @@
                 var itemId = $input.data('item-id');
                 var quantity = $input.val();
 
+                // Lấy danh sách id các sản phẩm đang được chọn
+                var selectedItems = $('.select-item:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
                 $.ajax({
                     url: '{{ route('cart.update') }}',
                     method: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
                         item_id: itemId,
-                        quantity: quantity
+                        quantity: quantity,
+                        selected_items: selectedItems
                     },
                     success: function(res) {
                         if (res.success) {
@@ -330,6 +341,48 @@
                     error: function() {
                         toastr.error('Có lỗi xảy ra!');
                     }
+                });
+            });
+
+            // Chọn tất cả
+            $('#select-all').on('change', function() {
+                $('.select-item').prop('checked', $(this).prop('checked'));
+            });
+            // Nếu bỏ chọn 1 item thì bỏ chọn "chọn tất cả"
+            $('.select-item').on('change', function() {
+                if ($('.select-item:checked').length === $('.select-item').length) {
+                    $('#select-all').prop('checked', true);
+                } else {
+                    $('#select-all').prop('checked', false);
+                }
+            });
+
+            $('#checkout-form').on('submit', function(e) {
+                // Lấy tất cả checkbox được chọn nằm ngoài form
+                let selected = $('.select-item:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                if (selected.length === 0) {
+                    e.preventDefault();
+                    alert('Vui lòng chọn ít nhất một sản phẩm để thanh toán!');
+                    return false;
+                }
+
+                // Gán mảng ID vào input hidden
+                $('#selected_items_json').val(JSON.stringify(selected));
+            });
+
+            $('form[action="{{ route('cart.index') }}"]').on('submit', function() {
+                const form = $(this);
+                form.find('input[name="selected_items[]"]').remove();
+
+                $('.select-item:checked').each(function() {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'selected_items[]',
+                        value: $(this).val()
+                    }).appendTo(form);
                 });
             });
         });

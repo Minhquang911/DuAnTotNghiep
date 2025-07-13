@@ -75,7 +75,7 @@ Route::middleware(['auth', CheckRole::class . ':user'])->prefix('orders')->name(
     Route::post('/store',           [ClientOrderController::class, 'store'])->name('store'); // Thêm đơn hàng mới
     Route::get('/success', function () {
         return view('client.order.success');
-    });
+    })->name('success');
 });
 
 // Các route cho admin
