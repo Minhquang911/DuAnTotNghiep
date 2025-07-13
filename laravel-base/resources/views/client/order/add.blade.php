@@ -144,6 +144,7 @@
                                 </div>
                                 @if ($cart && $cart->items->count())
                                     @foreach ($cart->items as $item)
+                                        <input type="hidden" name="product_variant_id[]" value="{{ $item->id }}">
                                         <div class="checkout-item d-flex align-items-center justify-content-between">
                                             <div class="align-items-center justify-content-between">
                                                 <p>{{ $item->productVariant->product->title }} x {{ $item->quantity }}</p>
@@ -215,6 +216,7 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="theme-btn w-100">Xác nhận đặt hàng</button>
+                                <a href="{{ route('orders.success') }}">test</a>
                             </div>
                         </div>
                     </div>
@@ -299,6 +301,41 @@
                 const selectedText = $('#customer_ward option:selected').text();
                 $('#customer_ward_name').val(selectedText);
             });
+
+            $('form[action="{{ route('orders.store') }}"]').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function(res) {
+                        if (res.success === false) {
+                            toastr.error(res.message);
+                        } else {
+                            // Thành công, chuyển trang hoặc hiển thị thông báo thành công
+                            window.location.href = res.redirect_url || '/';
+                        }
+                    },
+                    error: function(xhr) {
+                        // Xử lý lỗi validate của Laravel (422)
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            Object.values(errors).forEach(function(msgArr) {
+                                toastr.error(msgArr[0]);
+                            });
+                        } else {
+                            toastr.error('Có lỗi xảy ra!');
+                        }
+                    }
+                });
+            });
+
+            function validateEmail(email) {
+                // Định dạng email chuẩn
+                var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
         });
     </script>
 @endpush
