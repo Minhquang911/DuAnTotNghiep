@@ -46,8 +46,8 @@ Route::prefix('products')->name('client.products.')->controller(ClientProductCon
     Route::get('/{slug}', 'show')->name('show');
 
     // AJAX routes cho comments và ratings pagination
-    Route::get('/{product}/comments', 'getComments')->name('comments');
-    Route::get('/{product}/ratings', 'getRatings')->name('ratings');
+    Route::get('/{slug}/comments', 'getComments')->name('comments');
+    Route::get('/{slug}/ratings', 'getRatings')->name('ratings');
 });
 
 Route::prefix('posts')->name('client.posts.')->controller(ClientPostController::class)->group(function () {

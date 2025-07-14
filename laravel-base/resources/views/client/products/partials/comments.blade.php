@@ -1,3 +1,4 @@
+<div id="comments-container" data-product-slug="{{ isset($product) ? $product->slug : '' }}">
 @forelse($comments as $index => $comment)
     <div class="review-items mb-4">
         <div class="review-wrap-area d-flex gap-4">
@@ -37,3 +38,4 @@
         {{ $comments->links('pagination::bootstrap-5') }}
     </div>
 @endif 
+</div> 

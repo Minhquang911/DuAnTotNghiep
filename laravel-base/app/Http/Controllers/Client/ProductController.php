@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\Format;
+use App\Models\Rating;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Language;
+use App\Models\OrderItem;
 use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -208,8 +211,9 @@ class ProductController extends Controller
     }
 
     // AJAX method để lấy comments với phân trang
-    public function getComments(Request $request, Product $product)
+    public function getComments(Request $request, $slug)
     {
+        $product = Product::where('slug', $slug)->firstOrFail();
         $comments = $product->comments()
             ->where('is_approved', true)
             ->with('user')
@@ -220,14 +224,15 @@ class ProductController extends Controller
     }
 
     // AJAX method để lấy ratings với phân trang
-    public function getRatings(Request $request, Product $product)
+    public function getRatings(Request $request, $slug)
     {
+        $product = Product::where('slug', $slug)->firstOrFail();
         $ratings = $product->ratings()
             ->where('is_approved', true)
             ->with('user')
             ->latest()
             ->paginate(5);
 
-        return view('client.products.partials.ratings', compact('ratings'));
+        return view('client.products.partials.ratings', compact('ratings', 'product'));
     }
 }

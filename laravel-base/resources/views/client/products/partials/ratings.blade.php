@@ -1,3 +1,4 @@
+<div id="ratings-container" data-product-slug="{{ isset($product) ? $product->slug : '' }}">
 @forelse($ratings as $index => $rating)
     <div class="review-items mb-4">
         <div class="review-wrap-area d-flex gap-4">
@@ -48,4 +49,5 @@
     <div class="ratings-pagination pagination-container">
         {{ $ratings->links('pagination::bootstrap-5') }}
     </div>
-@endif 
+@endif
+</div> 

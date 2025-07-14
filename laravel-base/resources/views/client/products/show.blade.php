@@ -426,8 +426,10 @@
                     '<div class="loading-spinner"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Đang tải...</span></div><p class="mt-2">Đang tải bình luận...</p></div>'
                 );
 
+                var productSlug = window.location.pathname.split('/')[2];
+
                 $.ajax({
-                    url: '/products/{{ $product->id }}/comments?page=' + page,
+                    url: '/products/' + productSlug + '/comments?page=' + page,
                     type: 'GET',
                     success: function(data) {
                         $('#comments-container').html(data);
@@ -451,8 +453,10 @@
                     '<div class="loading-spinner"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Đang tải...</span></div><p class="mt-2">Đang tải đánh giá...</p></div>'
                 );
 
+                var productSlug = window.location.pathname.split('/')[2];
+
                 $.ajax({
-                    url: '/products/{{ $product->id }}/ratings?page=' + page,
+                    url: '/products/' + productSlug + '/ratings?page=' + page,
                     type: 'GET',
                     success: function(data) {
                         $('#ratings-container').html(data);
