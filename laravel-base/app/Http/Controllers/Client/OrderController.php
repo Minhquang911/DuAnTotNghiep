@@ -218,6 +218,9 @@ class OrderController extends Controller
                 $cart->items()->whereIn('id', $selectedItems)->delete();
             }
 
+            // Gửi mail thông báo đặt hàng thành công qua queue
+            Mail::to($order->customer_email)->queue(new OrderSuccessMail($order));
+
             DB::commit();
 
             if ($request->ajax()) {
