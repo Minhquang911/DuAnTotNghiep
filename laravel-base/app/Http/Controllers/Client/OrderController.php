@@ -32,6 +32,68 @@ class OrderController extends Controller
         return view('client.order.show', compact('order'));
     }
 
+    public function cancel(Order $order)
+    {
+        try {
+            DB::beginTransaction();
+            
+            // Kiểm tra trạng thái hiện tại
+            if (!in_array($order->status, ['pending', 'processing'])) {
+                throw new \Exception('Không thể hủy đơn hàng ở trạng thái này');
+            }
+
+            // Validate lý do hủy
+            $cancelReason = request('cancel_reason');
+            if (empty($cancelReason)) {
+                throw new \Exception('Vui lòng nhập lý do hủy đơn hàng');
+            }
+
+            $oldStatus = $order->status;
+            
+            // Cập nhật trạng thái đơn hàng
+            $order->update([
+                'status' => 'cancelled',
+                'cancel_reason' => $cancelReason,
+                'cancelled_at' => now()
+            ]);
+
+            // Gửi email thông báo
+            SendOrderStatusEmail::dispatch($order, $oldStatus, 'cancelled');
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Hủy đơn hàng thành công'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    /**
+     * Xác nhận đã nhận hàng - chỉ cho phép khi trạng thái là 'completed'
+     */
+    public function confirmReceived(Order $order)
+    {
+        if (!in_array($order->status, ['completed'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Chỉ có thể xác nhận khi đơn hàng ở trạng thái đã giao.'
+            ], 400);
+        }
+        $order->status = 'finished';
+        $order->save();
+        // Có thể gửi email thông báo ở đây nếu cần
+        return response()->json([
+            'success' => true,
+            'message' => 'Xác nhận nhận hàng thành công!'
+        ]);
+    }
+
     public function add(Request $request)
     {
         $user = Auth::user();

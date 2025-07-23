@@ -73,6 +73,8 @@ Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('c
 Route::middleware(['auth', CheckRole::class . ':user'])->prefix('orders')->name('orders.')->group(function () {
     Route::get('/',                 [ClientOrderController::class, 'index'])->name('index');
     Route::get('/{order}',          [ClientOrderController::class, 'show'])->name('show');
+    Route::post('/{order}/cancel',  [ClientOrderController::class, 'cancel'])->name('cancel');
+    Route::post('/{order}/confirm-received', [ClientOrderController::class, 'confirmReceived'])->name('confirm-received');
     Route::get('/add',              [ClientOrderController::class, 'add'])->name('add');
     Route::post('/store',           [ClientOrderController::class, 'store'])->name('store'); // Thêm đơn hàng mới
     Route::get('/success', function () {
