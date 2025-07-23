@@ -8,14 +8,24 @@ use App\Models\OrderItem;
 use App\Models\Promotion;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Mail\OrderSuccessMail;
+use App\Jobs\SendOrderStatusEmail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Mail\OrderSuccessMail;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
+    public function index()
+    {
+        $orders = Order::where('user_id', Auth::id())
+                        ->orderBy('ordered_at', 'desc')
+                        ->paginate(5);
+
+        return view('client.order.index', compact('orders'));
+    }
+
     public function add(Request $request)
     {
         $user = Auth::user();

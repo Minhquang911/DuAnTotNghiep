@@ -58,6 +58,9 @@
                         <a href="{{ route('user.profile.password') }}" class="list-group-item list-group-item-action active">
                             <i class="fas fa-lock me-2"></i> Đổi mật khẩu
                         </a>
+                        <a href="{{ route('orders.index') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-history me-2"></i> Lịch sử mua hàng
+                        </a>
                     </div>
                 </div>
             </div>

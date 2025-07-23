@@ -265,7 +265,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{ number_format($order->total_amount) }} VNĐ</td>
+                                    <td>{{ number_format($order->amount_due) }} VNĐ</td>
                                     <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                     <td>
                                         @php
