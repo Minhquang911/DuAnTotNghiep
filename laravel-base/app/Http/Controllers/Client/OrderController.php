@@ -26,6 +26,12 @@ class OrderController extends Controller
         return view('client.order.index', compact('orders'));
     }
 
+    public function show(Order $order)
+    {
+        $order->load(['user', 'orderItems.product', 'orderItems.productVariant']);
+        return view('client.order.show', compact('order'));
+    }
+
     public function add(Request $request)
     {
         $user = Auth::user();

@@ -72,6 +72,7 @@ Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('c
 // Các route quản lý đơn hàng
 Route::middleware(['auth', CheckRole::class . ':user'])->prefix('orders')->name('orders.')->group(function () {
     Route::get('/',                 [ClientOrderController::class, 'index'])->name('index');
+    Route::get('/{order}',          [ClientOrderController::class, 'show'])->name('show');
     Route::get('/add',              [ClientOrderController::class, 'add'])->name('add');
     Route::post('/store',           [ClientOrderController::class, 'store'])->name('store'); // Thêm đơn hàng mới
     Route::get('/success', function () {
