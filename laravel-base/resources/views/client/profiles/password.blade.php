@@ -86,7 +86,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('user.profile.password') }}" method="POST">
+                    <form action="{{ route('user.profile.password.change') }}" method="POST">
                         @csrf
                         @method('PUT')
                         
