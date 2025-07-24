@@ -75,21 +75,36 @@
                         <div class="card shadow mb-4">
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                 <h6 class="m-0 font-weight-bold text-primary">Thông tin đơn hàng</h6>
-                                @if (
-                                    $order->status !== 'finished' &&
-                                        $order->status !== 'cancelled' &&
-                                        in_array($order->status, ['pending', 'processing']))
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#cancelOrderModal">
-                                        <i class="fas fa-times"></i> Hủy đơn hàng
-                                    </button>
-                                @endif
+                                <div>
+                                    @if (
+                                        $order->status !== 'finished' &&
+                                            $order->status !== 'cancelled' &&
+                                            in_array($order->status, ['pending', 'processing']))
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#cancelOrderModal">
+                                            <i class="fas fa-times"></i> Hủy đơn hàng
+                                        </button>
+                                    @endif
 
-                                @if ($order->status === 'completed')
-                                    <button id="btn-confirm-received" type="button" class="btn btn-success btn-sm">
-                                        <i class="fas fa-check"></i> Xác nhận nhận hàng
-                                    </button>
-                                @endif
+
+
+                                    @if ($order->status === 'completed')
+                                        <button id="btn-confirm-received" type="button" class="btn btn-success btn-sm">
+                                            <i class="fas fa-check"></i> Xác nhận nhận hàng
+                                        </button>
+                                    @endif
+
+                                    @if ($order->payment_status === \App\Models\Order::PAYMENT_STATUS_UNPAID && $order->payment_method === 'bank_transfer')
+                                        <button id="btn-continue-payment" class="btn btn-primary btn-sm"
+                                            data-order-id="{{ $order->id }}">Tiếp tục thanh toán</button>
+                                        <form action="{{ route('orders.continue-payment', $order->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-primary btn-sm">Tiếp tục thanh
+                                                toán</button>
+                                        </form>
+                                    @endif
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row mb-4">
@@ -136,9 +151,10 @@
                                                                 @endif
                                                                 @if ($order->status === 'finished' && !$item->is_rated)
                                                                     <div class="mt-2">
-                                                                        <button class="btn btn-warning btn-sm btn-rate-product" 
-                                                                            data-product-id="{{ $item->product_id }}" 
-                                                                            data-product-variant-id="{{ $item->product_variant_id }}" 
+                                                                        <button
+                                                                            class="btn btn-warning btn-sm btn-rate-product"
+                                                                            data-product-id="{{ $item->product_id }}"
+                                                                            data-product-variant-id="{{ $item->product_variant_id }}"
                                                                             data-order-item-id="{{ $item->id }}">
                                                                             <i class="fas fa-star"></i> Đánh giá
                                                                         </button>
@@ -278,6 +294,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -314,7 +331,8 @@
         </div>
     </div>
     <!-- Modal Đánh giá sản phẩm -->
-    <div class="modal fade" id="rateProductModal" tabindex="-1" aria-labelledby="rateProductModalLabel" aria-hidden="true">
+    <div class="modal fade" id="rateProductModal" tabindex="-1" aria-labelledby="rateProductModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" style="max-width: 500px;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -330,14 +348,16 @@
                             <label class="form-label">Đánh giá của bạn</label>
                             <div id="rate-stars" class="mb-2">
                                 @for ($i = 1; $i <= 5; $i++)
-                                    <i class="fa-star fa-regular rate-star" data-value="{{ $i }}" style="font-size: 1.5rem; color: #ffc107; cursor: pointer;"></i>
+                                    <i class="fa-star fa-regular rate-star" data-value="{{ $i }}"
+                                        style="font-size: 1.5rem; color: #ffc107; cursor: pointer;"></i>
                                 @endfor
                             </div>
                             <input type="hidden" name="rating" id="rate_rating" value="0">
                         </div>
                         <div class="mb-3">
                             <label for="rate_comment" class="form-label">Nhận xét</label>
-                            <textarea class="form-control" id="rate_comment" name="comment" rows="3" placeholder="Nhập nhận xét của bạn..."></textarea>
+                            <textarea class="form-control" id="rate_comment" name="comment" rows="3"
+                                placeholder="Nhập nhận xét của bạn..."></textarea>
                         </div>
                     </form>
                 </div>
@@ -396,7 +416,8 @@
 
         $(document).ready(function() {
             $('#btn-confirm-received').on('click', function() {
-                if (!confirm('Bạn có chắc chắn đã nhận được hàng? Hành động này không thể hoàn tác.')) return;
+                if (!confirm('Bạn có chắc chắn đã nhận được hàng? Hành động này không thể hoàn tác.'))
+                    return;
                 $.ajax({
                     url: '{{ route('orders.confirm-received', $order->id) }}',
                     type: 'POST',
@@ -414,7 +435,8 @@
                         }
                     },
                     error: function(xhr) {
-                        let msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Đã có lỗi xảy ra.';
+                        let msg = xhr.responseJSON && xhr.responseJSON.message ? xhr
+                            .responseJSON.message : 'Đã có lỗi xảy ra.';
                         toastr.error(msg);
                     }
                 });
@@ -479,14 +501,50 @@
                         if (response.success) {
                             toastr.success(response.message);
                             $('#rateProductModal').modal('hide');
-                            setTimeout(function() { location.reload(); }, 1000);
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
                         } else {
                             toastr.error(response.message);
                         }
                     },
                     error: function(xhr) {
-                        let msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Đã có lỗi xảy ra.';
+                        let msg = xhr.responseJSON && xhr.responseJSON.message ? xhr
+                            .responseJSON.message : 'Đã có lỗi xảy ra.';
                         toastr.error(msg);
+                    }
+                });
+            });
+
+            // Xử lý tiếp tụ thanh toán online
+            $('#btn-continue-payment').on('click', function(e) {
+                e.preventDefault();
+                var orderId = $(this).data('order-id');
+                var $btn = $(this);
+                $btn.prop('disabled', true);
+
+                $.ajax({
+                    url: '/orders/' + orderId + '/continue-payment',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success && response.redirect_url) {
+                            window.location.href = response.redirect_url;
+                        } else if (response.success === false && response.message) {
+                            toastr.error(response.message);
+                        } else {
+                            toastr.error('Đã có lỗi xảy ra.');
+                        }
+                    },
+                    error: function(xhr) {
+                        let msg = xhr.responseJSON && xhr.responseJSON.message ? xhr
+                            .responseJSON.message : 'Đã có lỗi xảy ra.';
+                        toastr.error(msg);
+                    },
+                    complete: function() {
+                        $btn.prop('disabled', false);
                     }
                 });
             });

@@ -216,7 +216,6 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="theme-btn w-100">Xác nhận đặt hàng</button>
-                                <a href="{{ route('orders.success') }}">test</a>
                             </div>
                         </div>
                     </div>

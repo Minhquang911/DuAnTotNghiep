@@ -19,7 +19,7 @@
         </p>
         <div style="display: flex; gap: 16px; justify-content: center;">
             <a href="{{ route('home') }}" class="btn btn-primary" style="min-width: 140px;">Về trang chủ</a>
-            <a href="" class="btn btn-outline-success" style="min-width: 140px;">Xem đơn hàng của tôi</a>
+            <a href="{{ route('orders.index') }}" class="btn btn-outline-success" style="min-width: 140px;">Xem đơn hàng của tôi</a>
         </div>
     </div>
 </div>

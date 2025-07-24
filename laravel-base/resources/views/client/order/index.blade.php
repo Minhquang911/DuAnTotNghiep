@@ -131,7 +131,7 @@
                                                         $paymentMethodText =
                                                             [
                                                                 'cod' => 'Thanh toán khi nhận hàng',
-                                                                'bank_transfer' => 'Chuyển khoản ngân hàng',
+                                                                'bank_transfer' => 'Thanh toán online',
                                                             ][$order->payment_method] ?? 'Không xác định';
                                                     @endphp
                                                     <span class="text text-{{ $paymentStatusClass }} mb-1">
