@@ -12,6 +12,7 @@ class Order extends Model
     // Các trường cho phép gán hàng loạt
     protected $fillable = [
         'order_code',
+        'order_number',
         'user_id',
         'customer_name',
         'customer_email',
@@ -21,6 +22,9 @@ class Order extends Model
         'customer_district',
         'customer_ward',
         'total_amount',
+        'subtotal',
+        'tax_amount',
+        'shipping_amount',
         'shipping_fee',
         'discount_amount',
         'amount_due',
@@ -32,7 +36,14 @@ class Order extends Model
         'cancelled_at',
         'coupon_code',
         'note',
-        'ordered_at'
+        'notes',
+        'ordered_at',
+        // ZaloPay fields
+        'zalopay_app_trans_id',
+        'zalopay_zp_trans_token',
+        'zalopay_response_code',
+        'zalopay_app_id',
+        'zalopay_embed_data'
     ];
 
     // Kiểu dữ liệu đặc biệt
@@ -40,6 +51,9 @@ class Order extends Model
         'paid_at'    => 'datetime',
         'ordered_at' => 'datetime',
         'total_amount'    => 'decimal:2',
+        'subtotal'    => 'decimal:2',
+        'tax_amount'    => 'decimal:2',
+        'shipping_amount'    => 'decimal:2',
         'shipping_fee'    => 'decimal:2',
         'discount_amount' => 'decimal:2',
         'amount_due'      => 'decimal:2',
@@ -61,7 +75,7 @@ class Order extends Model
 
     // Các phương thức thanh toán
     const PAYMENT_METHOD_COD = 'cod';           // Thanh toán khi nhận hàng
-    const PAYMENT_METHOD_BANK_TRANSFER = 'bank_transfer'; // Chuyển khoản ngân hàng
+    const PAYMENT_METHOD_BANK_TRANSFER = 'bank_transfer'; // Thanh toán online
 
     // Mối quan hệ: Một đơn hàng có nhiều order item
     public function orderItems(): HasMany
@@ -103,7 +117,7 @@ class Order extends Model
     {
         return [
             self::PAYMENT_METHOD_COD => 'Thanh toán khi nhận hàng',
-            self::PAYMENT_METHOD_BANK_TRANSFER => 'Chuyển khoản ngân hàng'
+            self::PAYMENT_METHOD_BANK_TRANSFER => 'Thanh toán online'
         ];
     }
 

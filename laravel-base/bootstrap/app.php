@@ -14,6 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'checkRole' => \App\Http\Middleware\CheckRole::class,
         ]);
+        
+        // Bỏ qua CSRF cho ZaloPay callback
+        $middleware->validateCsrfTokens(except: [
+            'client/checkout/zalopay-callback',
+            'test-callback',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

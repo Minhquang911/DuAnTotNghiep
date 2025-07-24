@@ -41,6 +41,40 @@ Route::get('/login/google/callback', [GoogleLoginController::class, 'handleGoogl
 // Các route cho khách hàng chưa đăng nhập
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// ZaloPay routes (không cần authentication)
+Route::post('/client/checkout/zalopay-callback', [ClientOrderController::class, 'handleZaloPayCallback'])->name('zalopay.callback');
+Route::get('/client/checkout/zalopay-return', [ClientOrderController::class, 'handleZaloPayReturn'])->name('zalopay.return');
+
+// Test route to debug
+Route::get('/test-zalopay-return', function() {
+    return response()->json([
+        'message' => 'ZaloPay return route is working',
+        'url' => url('/client/checkout/zalopay-return'),
+        'route_url' => route('zalopay.return'),
+        'app_url' => config('app.url')
+    ]);
+});
+
+// Test route to check if ZaloPay actually redirects here
+Route::get('/zalopay-test', function() {
+    return response()->json([
+        'message' => 'ZaloPay Test Route Accessed!',
+        'timestamp' => now(),
+        'all_params' => request()->all()
+    ]);
+});
+
+// Test callback manually
+Route::post('/test-callback', function() {
+    return response()->json([
+        'message' => 'Test Callback Accessed!',
+        'method' => request()->method(),
+        'content_type' => request()->header('Content-Type'),
+        'all_data' => request()->all(),
+        'raw_content' => request()->getContent()
+    ]);
+});
+
 Route::prefix('products')->name('client.products.')->controller(ClientProductController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/{slug}', 'show')->name('show');
@@ -59,8 +93,8 @@ Route::prefix('posts')->name('client.posts.')->controller(ClientPostController::
 });
 
 Route::prefix('contact')->name('client.contact.')->controller(ClientContactController::class)->group(function () {
-    Route::get('/', 'index')->name('index'); 
-    Route::post('/store', 'store')->middleware('auth')->name('store'); 
+    Route::get('/', 'index')->name('index');
+    Route::post('/store', 'store')->middleware('auth')->name('store');
 });
 
 // Các route quản lý giỏ hàng
@@ -72,10 +106,11 @@ Route::middleware(['auth', CheckRole::class . ':user'])->prefix('cart')->name('c
     Route::delete('/clear',         [CartController::class, 'clear'])->name('clear');
 });
 
+
+
 // Các route quản lý đơn hàng
 Route::middleware(['auth', CheckRole::class . ':user'])->prefix('orders')->name('orders.')->group(function () {
     Route::get('/',                 [ClientOrderController::class, 'index'])->name('index');
-    Route::get('/{order}',          [ClientOrderController::class, 'show'])->name('show');
     Route::post('/{order}/cancel',  [ClientOrderController::class, 'cancel'])->name('cancel');
     Route::post('/{order}/confirm-received', [ClientOrderController::class, 'confirmReceived'])->name('confirm-received');
     Route::get('/add',              [ClientOrderController::class, 'add'])->name('add');
@@ -83,6 +118,9 @@ Route::middleware(['auth', CheckRole::class . ':user'])->prefix('orders')->name(
     Route::get('/success', function () {
         return view('client.order.success');
     })->name('success');
+    Route::post('/{order}/continue-payment', [ClientOrderController::class, 'continuePayment'])->name('continue-payment');
+
+    Route::get('/{order}',          [ClientOrderController::class, 'show'])->name('show');
 });
 
 // Các route cho admin
@@ -194,5 +232,5 @@ Route::middleware(['auth', CheckRole::class . ':user'])
         Route::get('/profile', [UserProfileController::class, 'profile'])->name('profile');
         Route::get('/profile/password', [UserProfileController::class, 'password'])->name('profile.password');
         Route::put('/profile', [UserProfileController::class, 'updateProfile'])->name('profile.update');
-        Route::put('/profile/password', [UserProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::put('/profile/password', [UserProfileController::class, 'updatePassword'])->name('profile.password.change');
     });

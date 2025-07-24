@@ -200,7 +200,7 @@
                             <option value="cod" {{ request('payment_method') == 'cod' ? 'selected' : '' }}>Thanh toán
                                 khi nhận hàng</option>
                             <option value="bank_transfer"
-                                {{ request('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Chuyển khoản ngân hàng
+                                {{ request('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Thanh toán online
                             </option>
                         </select>
                     </div>
@@ -311,7 +311,7 @@
                                                 $paymentMethodText =
                                                     [
                                                         'cod' => 'Thanh toán khi nhận hàng',
-                                                        'bank_transfer' => 'Chuyển khoản ngân hàng',
+                                                        'bank_transfer' => 'Thanh toán online',
                                                     ][$order->payment_method] ?? 'Không xác định';
                                             @endphp
                                             <span class="text text-{{ $paymentStatusClass }} mb-1">
