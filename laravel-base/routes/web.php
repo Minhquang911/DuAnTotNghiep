@@ -48,6 +48,9 @@ Route::prefix('products')->name('client.products.')->controller(ClientProductCon
     // AJAX routes cho comments và ratings pagination
     Route::get('/{slug}/comments', 'getComments')->name('comments');
     Route::get('/{slug}/ratings', 'getRatings')->name('ratings');
+
+    // Route cho việc đánh giá sản phẩm (chỉ dành cho người dùng đã đăng nhập)
+    Route::middleware(['auth', CheckRole::class . ':user'])->post('/rate', 'storeRating')->name('store-rating');
 });
 
 Route::prefix('posts')->name('client.posts.')->controller(ClientPostController::class)->group(function () {

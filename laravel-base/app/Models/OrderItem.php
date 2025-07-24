@@ -20,11 +20,13 @@ class OrderItem extends Model
         'price',
         'quantity',
         'total',
+        'is_rated'
     ];
 
     protected $casts = [
         'price'  => 'decimal:2',
         'total'  => 'decimal:2',
+        'is_rated' => 'boolean',
     ];
 
     // Mối quan hệ: OrderItem thuộc về một Order

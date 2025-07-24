@@ -235,4 +235,37 @@ class ProductController extends Controller
 
         return view('client.products.partials.ratings', compact('ratings', 'product'));
     }
+
+    /**
+     * Lưu đánh giá sản phẩm từ đơn hàng
+     */
+    public function storeRating(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'product_variant_id' => 'nullable|exists:product_variants,id',
+            'order_item_id' => 'required|exists:order_items,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ]);
+
+        $user = Auth::user();
+        $orderItem = OrderItem::findOrFail($request->order_item_id);
+        if ($orderItem->is_rated) {
+            return response()->json(['success' => false, 'message' => 'Sản phẩm này đã được đánh giá!'], 400);
+        }
+        // Lưu đánh giá
+        $rating = Rating::create([
+            'user_id' => $user->id,
+            'product_id' => $request->product_id,
+            'product_variant_id' => $request->product_variant_id,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+            'is_approved' => true,
+        ]);
+        // Đánh dấu order item đã được đánh giá
+        $orderItem->is_rated = true;
+        $orderItem->save();
+        return response()->json(['success' => true, 'message' => 'Đánh giá của bạn đã được gửi thành công!']);
+    }
 }
