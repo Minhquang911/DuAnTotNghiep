@@ -28,7 +28,7 @@
         data-accordion="false"
       >
         <li class="nav-item">
-          <a href="{{ route('admin.dashboard') }}" class="nav-link">
+          <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Route::is('admin.dashboard') ? 'active' : '' }}">
             <i class="nav-icon bi bi-palette"></i>
             <p>Dashboard</p>
           </a>
@@ -56,7 +56,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="#" class="nav-link {{ Route::is('admin.formats.*') || Route::is('admin.languages.*') || Route::is('admin.products.*') ? 'active' : '' }}">
             <i class="nav-icon bi bi-book"></i>
             <p>
               Quản lý sách
@@ -65,19 +65,19 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="{{ route('admin.formats.index') }}" class="nav-link">
+              <a href="{{ route('admin.formats.index') }}" class="nav-link {{ Route::is('admin.formats.*') ? 'active' : '' }}">
                 <i class="nav-icon bi bi-book"></i>
                 <p>Định dạng sách</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.languages.index') }}" class="nav-link">
+              <a href="{{ route('admin.languages.index') }}" class="nav-link {{ Route::is('admin.languages.*') ? 'active' : '' }}">
                 <i class="nav-icon bi bi-translate"></i>
                 <p>Ngôn ngữ</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.products.index') }}" class="nav-link">
+              <a href="{{ route('admin.products.index') }}" class="nav-link {{ Route::is('admin.products.*') ? 'active' : '' }}">
                 <i class="nav-icon bi bi-box"></i>
                 <p>Danh sách sách</p>
               </a>
@@ -86,7 +86,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="{{ route('admin.orders.index') }}" class="nav-link">
+          <a href="{{ route('admin.orders.index') }}" class="nav-link {{ Route::is('admin.orders.*') ? 'active' : '' }}">
             <i class="nav-icon bi bi-cart"></i>
             <p>Quản lý đơn hàng</p>
           </a>

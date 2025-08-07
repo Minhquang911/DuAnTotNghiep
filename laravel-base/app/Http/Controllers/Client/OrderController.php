@@ -42,8 +42,8 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             // Kiểm tra trạng thái hiện tại
-            if (!in_array($order->status, ['pending', 'processing'])) {
-                throw new \Exception('Không thể hủy đơn hàng ở trạng thái này');
+            if (!in_array($order->status, ['pending'])) {
+                throw new \Exception('Chỉ có thể hủy đơn hàng ở trạng thái chờ xử lý');
             }
 
             // Validate lý do hủy
@@ -259,7 +259,6 @@ class OrderController extends Controller
             'customer_email' => 'required|email',
             'customer_phone' => 'required',
             'customer_province' => 'required',
-            'customer_district' => 'required',
             'customer_ward' => 'required',
             'customer_address' => 'required',
         ], [
@@ -268,7 +267,6 @@ class OrderController extends Controller
             'customer_email.email' => 'Email không đúng định dạng',
             'customer_phone.required' => 'Vui lòng nhập số điện thoại',
             'customer_province.required' => 'Vui lòng chọn Tỉnh/Thành phố',
-            'customer_district.required' => 'Vui lòng chọn Quận/Huyện',
             'customer_ward.required' => 'Vui lòng chọn Phường/Xã',
             'customer_address.required' => 'Vui lòng nhập địa chỉ chi tiết',
         ]);
@@ -286,7 +284,6 @@ class OrderController extends Controller
                 'customer_phone'    => $request->input('customer_phone'),
                 'customer_address'  => $request->input('customer_address'),
                 'customer_province' => $request->input('customer_province_name'),
-                'customer_district' => $request->input('customer_district_name'),
                 'customer_ward'     => $request->input('customer_ward_name'),
                 'total_amount'      => $request->input('total_amount'),
                 'shipping_fee'      => $shippingFee,

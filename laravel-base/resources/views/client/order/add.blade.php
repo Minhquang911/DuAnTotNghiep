@@ -81,8 +81,8 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-4">
-                                            <div class="input-single">
+                                        <div class="col-lg-6">
+                                            <div class="input-single" style="width: fit-content;">
                                                 <span>Thành phố/Tỉnh</span><span class="text-danger">*</span>
                                                 <input type="hidden" name="customer_province_name"
                                                     id="customer_province_name">
@@ -92,19 +92,8 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-4">
-                                            <div class="input-single">
-                                                <span>Quận/Huyện</span><span class="text-danger">*</span>
-                                                <input type="hidden" name="customer_district_name"
-                                                    id="customer_district_name">
-                                                <select name="customer_district" id="customer_district">
-                                                    <option value="">-- Chọn Quận/Huyện --</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-4">
-                                            <div class="input-single">
+                                        <div class="col-lg-6">
+                                            <div class="input-single" style="width: fit-content;">
                                                 <span>Phường/Xã</span><span class="text-danger">*</span>
                                                 <input type="hidden" name="customer_ward_name" id="customer_ward_name">
                                                 <select name="customer_ward" id="customer_ward">
@@ -179,9 +168,9 @@
                                         @if ($promotion)
                                             <div class="form-check d-flex align-items-center from-customradio">
                                                 <label class="form-check-label">
-                                                    <input type="hidden" name=""
+                                                    <input type="hidden" name="coupon_code"
                                                         value="{{ request('promotion_code') }}">
-                                                    <input type="hidden" name=""
+                                                    <input type="hidden" name="discount_amount"
                                                         value="{{ $discountAmount }}">
                                                     Khuyến mãi: {{ number_format($discountAmount) }}₫
                                                 </label>
@@ -229,71 +218,57 @@
     <script>
         $(document).ready(function() {
             $('#customer_province').niceSelect();
-            $('#customer_district').niceSelect();
             $('#customer_ward').niceSelect();
 
             // Load tỉnh
-            fetch('https://provinces.open-api.vn/api/?depth=1')
+            fetch('https://sapnhap.bando.com.vn/pcotinh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded' // hoặc 'application/json' nếu API yêu cầu
+                    },
+                    body: '' // Nếu API không yêu cầu tham số, để rỗng
+                })
                 .then(res => res.json())
                 .then(provinces => {
                     const provinceSelect = document.getElementById('customer_province');
                     provinceSelect.innerHTML = '<option value="">-- Chọn Thành phố/Tỉnh --</option>';
                     provinces.forEach(province => {
                         const option = document.createElement('option');
-                        option.value = province.code;
-                        option.textContent = province.name;
+                        option.value = province.mahc;
+                        option.textContent = province.tentinh;
                         provinceSelect.appendChild(option);
                     });
                     $('#customer_province').niceSelect('update');
                 });
+
 
             // Khi chọn tỉnh
             $('#customer_province').on('change', function() {
                 const selectedText = $('#customer_province option:selected').text();
                 $('#customer_province_name').val(selectedText);
                 const provinceCode = $(this).val();
-                const districtSelect = document.getElementById('customer_district');
                 const wardSelect = document.getElementById('customer_ward');
-                districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
                 wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
-                $('#customer_district').niceSelect('update');
                 $('#customer_ward').niceSelect('update');
                 if (!provinceCode) return;
-                fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (!data.districts) return;
-                        data.districts.forEach(district => {
-                            const option = document.createElement('option');
-                            option.value = district.code;
-                            option.textContent = district.name;
-                            districtSelect.appendChild(option);
-                        });
-                        $('#customer_district').niceSelect('update');
+                // Gọi API xã/phường
+                fetch('https://sapnhap.bando.com.vn/ptracuu', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'id=' + encodeURIComponent(provinceCode)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(ward => {
+                        const option = document.createElement('option');
+                        option.value = ward.maxa;
+                        option.textContent = ward.loai + ' ' + ward.tenhc;
+                        wardSelect.appendChild(option);
                     });
-            });
-
-            // Khi chọn quận
-            $('#customer_district').on('change', function() {
-                const selectedText = $('#customer_district option:selected').text();
-                $('#customer_district_name').val(selectedText);
-                const districtCode = $(this).val();
-                const wardSelect = document.getElementById('customer_ward');
-                wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
-                $('#customer_ward').niceSelect('update');
-                if (!districtCode) return;
-                fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (!data.wards) return;
-                        data.wards.forEach(ward => {
-                            const option = document.createElement('option');
-                            option.value = ward.code;
-                            option.textContent = ward.name;
-                            wardSelect.appendChild(option);
-                        });
-                        $('#customer_ward').niceSelect('update');
-                    });
+                    $('#customer_ward').niceSelect('update');
+                });
             });
 
             $('#customer_ward').on('change', function() {

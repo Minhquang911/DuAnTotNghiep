@@ -100,7 +100,8 @@
                                         <form action="{{ route('orders.continue-payment', $order->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
-                                            <button type="submit" class="btn btn-primary btn-sm"></button>
+                                            <button type="submit" class="btn btn-primary btn-sm">Tiếp tục thanh
+                                                toán</button>
                                         </form>
                                     @endif
                                 </div>
@@ -287,7 +288,6 @@
                                     <strong>
                                         {{ $order->customer_address }},
                                         {{ $order->customer_ward }},
-                                        {{ $order->customer_district }},
                                         {{ $order->customer_province }}
                                     </strong>
                                 </div>

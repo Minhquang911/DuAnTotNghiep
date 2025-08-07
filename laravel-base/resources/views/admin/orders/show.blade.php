@@ -179,7 +179,6 @@
                         <strong>
                             {{ $order->customer_address }}, 
                             {{ $order->customer_ward }}, 
-                            {{ $order->customer_district }}, 
                             {{ $order->customer_province }}
                         </strong>
                     </div>
@@ -190,7 +189,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Cập nhật trạng thái</h6>
-                    @if($order->status !== 'finished' && $order->status !== 'cancelled' && in_array($order->status, ['pending', 'processing']))
+                    @if($order->status !== 'finished' && $order->status !== 'cancelled' && in_array($order->status, ['pending']))
                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
                             <i class="fas fa-times"></i> Hủy đơn hàng
                         </button>

@@ -23,44 +23,39 @@ class OrderController extends Controller
                         ->orWhere('customer_phone', 'like', "%{$search}%");
                 });
             })
-            ->when($request->filled('status'), function ($q) use ($request) {
-                $q->where('status', $request->status);
-            })
-            ->when($request->filled('payment_status'), function ($q) use ($request) {
-                $q->where('payment_status', $request->payment_status);
-            })
-            ->when($request->filled('payment_method'), function ($q) use ($request) {
-                $q->where('payment_method', $request->payment_method);
-            })
-            ->when($request->filled('date_from'), function ($q) use ($request) {
-                $q->whereDate('created_at', '>=', $request->date_from);
-            })
-            ->when($request->filled('date_to'), function ($q) use ($request) {
-                $q->whereDate('created_at', '<=', $request->date_to);
-            })
+            ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
+            ->when($request->filled('payment_status'), fn($q) => $q->where('payment_status', $request->payment_status))
+            ->when($request->filled('payment_method'), fn($q) => $q->where('payment_method', $request->payment_method))
+            ->when($request->filled('date_from'), fn($q) => $q->whereDate('created_at', '>=', $request->date_from))
+            ->when($request->filled('date_to'), fn($q) => $q->whereDate('created_at', '<=', $request->date_to))
             ->latest();
 
         $orders = $query->paginate(10)->withQueryString();
 
+        // Áp dụng điều kiện cho thống kê
+        $filteredQuery = Order::query()
+            ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
+            ->when($request->filled('payment_status'), fn($q) => $q->where('payment_status', $request->payment_status))
+            ->when($request->filled('payment_method'), fn($q) => $q->where('payment_method', $request->payment_method))
+            ->when($request->filled('date_from'), fn($q) => $q->whereDate('created_at', '>=', $request->date_from))
+            ->when($request->filled('date_to'), fn($q) => $q->whereDate('created_at', '<=', $request->date_to));
+
         $orderStats = [
-            'total' => Order::count(),
-            'pending' => Order::where('status', 'pending')->count(),
-            'processing' => Order::where('status', 'processing')->count(),
-            'delivering' => Order::where('status', 'delivering')->count(),
-            'completed' => Order::where('status', 'completed')->count(),
-            'finished' => Order::where('status', 'finished')->count(),
-            'cancelled' => Order::where('status', 'cancelled')->count(),
-            'failed' => Order::where('status', 'failed')->count(),
-            'pending_paid' => Order::where('status', 'pending')
-                ->where('payment_status', 'paid')
-                ->count(),
-            'pending_unpaid' => Order::where('status', 'pending')
-                ->where('payment_status', 'unpaid')
-                ->count(),
+            'total' => (clone $filteredQuery)->count(),
+            'pending' => (clone $filteredQuery)->where('status', 'pending')->count(),
+            'processing' => (clone $filteredQuery)->where('status', 'processing')->count(),
+            'delivering' => (clone $filteredQuery)->where('status', 'delivering')->count(),
+            'completed' => (clone $filteredQuery)->where('status', 'completed')->count(),
+            'finished' => (clone $filteredQuery)->where('status', 'finished')->count(),
+            'cancelled' => (clone $filteredQuery)->where('status', 'cancelled')->count(),
+            'failed' => (clone $filteredQuery)->where('status', 'failed')->count(),
+            'pending_paid' => (clone $filteredQuery)->where('status', 'pending')->where('payment_status', 'paid')->count(),
+            'pending_unpaid' => (clone $filteredQuery)->where('status', 'pending')->where('payment_status', 'unpaid')->count(),
         ];
 
         return view('admin.orders.index', compact('orders', 'orderStats'));
     }
+
 
     public function show(Order $order)
     {
@@ -72,14 +67,14 @@ class OrderController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             // Kiểm tra trạng thái hiện tại
             if ($order->status !== 'pending') {
                 throw new \Exception('Chỉ có thể xác nhận đơn hàng đang ở trạng thái chờ xác nhận');
             }
 
             $oldStatus = $order->status;
-            
+
             // Cập nhật trạng thái đơn hàng
             $order->update([
                 'status' => 'processing',
@@ -106,10 +101,10 @@ class OrderController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             // Kiểm tra trạng thái hiện tại
-            if (!in_array($order->status, ['pending', 'processing'])) {
-                throw new \Exception('Không thể hủy đơn hàng ở trạng thái này');
+            if (!in_array($order->status, ['pending'])) {
+                throw new \Exception('Chỉ có thể hủy đơn hàng ở trạng thái chờ xử lý');
             }
 
             // Validate lý do hủy
@@ -119,7 +114,7 @@ class OrderController extends Controller
             }
 
             $oldStatus = $order->status;
-            
+
             // Cập nhật trạng thái đơn hàng
             $order->update([
                 'status' => 'cancelled',
@@ -244,4 +239,4 @@ class OrderController extends Controller
             ], 400);
         }
     }
-} 
+}
