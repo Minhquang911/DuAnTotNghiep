@@ -100,8 +100,7 @@
                                         <form action="{{ route('orders.continue-payment', $order->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
-                                            <button type="submit" class="btn btn-primary btn-sm">Tiếp tục thanh
-                                                toán</button>
+                                            <button type="submit" class="btn btn-primary btn-sm"></button>
                                         </form>
                                     @endif
                                 </div>

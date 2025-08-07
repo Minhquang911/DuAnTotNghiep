@@ -179,9 +179,9 @@
                                         @if ($promotion)
                                             <div class="form-check d-flex align-items-center from-customradio">
                                                 <label class="form-check-label">
-                                                    <input type="hidden" name="coupon_code"
+                                                    <input type="hidden" name=""
                                                         value="{{ request('promotion_code') }}">
-                                                    <input type="hidden" name="discount_amount"
+                                                    <input type="hidden" name=""
                                                         value="{{ $discountAmount }}">
                                                     Khuyến mãi: {{ number_format($discountAmount) }}₫
                                                 </label>
