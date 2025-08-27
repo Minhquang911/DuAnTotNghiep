@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -48,22 +49,26 @@ class CategoryController extends Controller
     }
 
     public function store(Request $request)
-    {
-        try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-            ], [
-                'name.required' => 'Tên danh mục là bắt buộc',
-                'name.string' => 'Tên danh mục phải là chuỗi',
-                'name.max' => 'Tên danh mục không được vượt quá 255 ký tự',
-            ]);
+{
+    try {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ], [
+            'name.required' => 'Tên danh mục là bắt buộc',
+            'name.string' => 'Tên danh mục phải là chuỗi',
+            'name.max' => 'Tên danh mục không được vượt quá 255 ký tự',
+        ]);
 
-            $category = Category::create($request->all());
-            return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được tạo thành công');
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage());
-        }
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name, '-'); 
+
+        $category = Category::create($data);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được tạo thành công');
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors($e->getMessage());
     }
+}
 
     public function edit(Category $category)
     {
@@ -71,22 +76,27 @@ class CategoryController extends Controller
     }
 
     public function update(Request $request, Category $category)
-    {
-        try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-            ], [
-                'name.required' => 'Tên danh mục là bắt buộc',
-                'name.string' => 'Tên danh mục phải là chuỗi',
-                'name.max' => 'Tên danh mục không được vượt quá 255 ký tự',
-            ]);
+{
+    try {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ], [
+            'name.required' => 'Tên danh mục là bắt buộc',
+            'name.string' => 'Tên danh mục phải là chuỗi',
+            'name.max' => 'Tên danh mục không được vượt quá 255 ký tự',
+        ]);
 
-            $category->update($request->all());
-            return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được cập nhật thành công');
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage());
-        }
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name, '-'); 
+
+        $category->update($data);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được cập nhật thành công');
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors($e->getMessage());
     }
+}
+
 
     public function destroy(Category $category)
     {
