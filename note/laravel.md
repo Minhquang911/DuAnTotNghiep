@@ -30,5 +30,18 @@ Cách 2: Thêm seeder vào file DatabaseSeeder để chạy
 
 Tạo controller: php artisan make:controller TenBangController --resource
 
+Lệnh chạy song song để gửi mail: php artisan queue:work
 
-
+Lấy source về
+- Cài xampp tối thiểu php 8.2
+- Cài composer 
+- Mở terminal chạy Composer i
+- php artisan ser
+- Tạo db tên là db_book360
+- php artisan migrate (tạo bảng)
+- php artisan db:seed (fake data)
+- php artisan migrate:fresh --seed (chạy lại bảng và data)
+- php artisan storage:link (link file)
+Đăng nhập: http://127.0.0.1:8000/login
+ - User: admin@gmail.com
+ - Pass: admin@gmail.com

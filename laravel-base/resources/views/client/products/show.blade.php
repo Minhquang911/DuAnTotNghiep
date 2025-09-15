@@ -91,7 +91,7 @@
                                         <div class="shop-details-thumb">
                                             <img src="{{ $img['image'] }}" alt="img" height="400px">
                                             @if($img['is_cover'])
-                                                <span class="badge bg-primary" style="position:absolute;top:10px;left:10px;">Ảnh đại diện</span>
+                                                <span class="badge bg-primary" style="position:absolute;top:10px;left:10px;"></span>
                                             @endif
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@
                                             class="nav-link {{ $index === 0 ? 'active' : '' }}">
                                             <img src="{{ $img['image'] }}" alt="img" height="120px">
                                             @if($img['is_cover'])
-                                                <span class="badge bg-primary" style="position:absolute;top:2px;left:2px;">Cover</span>
+                                                <span class="badge bg-primary" style="position:absolute;top:2px;left:2px;"></span>
                                             @endif
                                         </a>
                                     </li>
